@@ -1,0 +1,59 @@
+xsd2php:
+  namespaces:
+    'http://signering.posten.no/schema/v1': 'Digipost\Signature\API\XML'
+    'http://www.w3.org/2000/09/xmldsig#': 'Digipost\Signature\API\XML\Thirdparty\XMLdSig'
+    'http://uri.etsi.org/2918/v1.2.1#': 'Digipost\Signature\API\XML\Thirdparty\ASiCe'
+    'http://uri.etsi.org/01903/v1.3.2#': 'Digipost\Signature\API\XML\Thirdparty\XAdES'
+  destinations_php:
+    'Digipost\Signature\API\XML': soap/src/Digipost/Signature/API/XML
+    'Digipost\Signature\API\XML\Thirdparty\XMLdSig': soap/src/Digipost/Signature/API/XML/Thirdparty/XMLdSig
+    'Digipost\Signature\API\XML\Thirdparty\ASiCe': soap/src/Digipost/Signature/API/XML/Thirdparty/ASiCe
+    'Digipost\Signature\API\XML\Thirdparty\XAdES': soap/src/Digipost/Signature/API/XML/Thirdparty/XAdES
+  destinations_jms:
+    'Digipost\Signature\API\XML': soap/metadata/Digipost/Signature/API/XML
+    'Digipost\Signature\API\XML\Thirdparty\XMLdSig': soap/metadata/Digipost/Signature/API/XML/Thirdparty/XMLdSig
+    'Digipost\Signature\API\XML\Thirdparty\ASiCe': soap/metadata/Digipost/Signature/API/XML/Thirdparty/ASiCe
+    'Digipost\Signature\API\XML\Thirdparty\XAdES': soap/metadata/Digipost/Signature/API/XML/Thirdparty/XAdES
+  aliases:
+    'http://signering.posten.no/schema/v1':
+      'authentication-level': 'XMLAuthenticationLevel'
+      'availability': 'XMLAvailability'
+      'direct-document': 'XMLDirectDocument'
+      'direct-signature-job-manifest': 'XMLDirectSignatureJobManifest'
+      'direct-signature-job-request': 'XMLDirectSignatureJobRequest'
+      'direct-signature-job-response': 'XMLDirectSignatureJobResponse'
+      'direct-signature-job-status': 'XMLDirectSignatureJobStatus'
+      'direct-signature-job-status-response': 'XMLDirectSignatureJobStatusResponse'
+      'direct-signer': 'XMLDirectSigner'
+      'email': 'XMLEmail'
+      'enabled': 'XMLEnabled'
+      'error': 'XMLError'
+      'exit-urls': 'XMLExitUrls'
+      'identifier-in-signed-documents': 'XMLIdentifierInSignedDocuments'
+      'notifications': 'XMLNotifications'
+      'notifications-using-lookup': 'XMLNotificationsUsingLookup'
+      'portal-document': 'XMLPortalDocument'
+      'portal-signature-job-manifest': 'XMLPortalSignatureJobManifest'
+      'portal-signature-job-request': 'XMLPortalSignatureJobRequest'
+      'portal-signature-job-response': 'XMLPortalSignatureJobResponse'
+      'portal-signature-job-status': 'XMLPortalSignatureJobStatus'
+      'portal-signature-job-status-response': 'XMLPortalSignatureJobStatusResponse'
+      'portal-signer': 'XMLPortalSigner'
+      'sender': 'XMLSender'
+      'signature': 'XMLSignature'
+      'signatures': 'XMLSignatures'
+      'signature-status': 'XMLSignatureStatus'
+      'signature-type': 'XMLSignatureType'
+      'signer-specific-url': 'XMLSignerSpecificUrl'
+      'signer-status': 'XMLSignerStatus'
+      'signing-on-behalf-of': 'XMLSigningOnBehalfOf'
+      'sms': 'XMLSms'
+      'status-retrieval-method': 'XMLStatusRetrievalMethod'
+#      'signer-identifier': ''
+#    'http://www.w3.org/2000/09/xmldsig#':
+#      DigestMethod: 'MyCustomPHPType'
+#      MyCustomXSDType:  'MyCustomMappedPHPType'
+#    'http://www.w3.org/2001/XMLSchema':
+#      anyType: 'MyCustomAnyTypeHandler'
+#      anySimpleType: 'MyCustomAnySimpleTypeHandler'
+  naming_strategy: short

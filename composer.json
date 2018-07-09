@@ -1,0 +1,71 @@
+{
+  "name": "digipost/signature-api-client-php",
+  "description": "Client library for Digipost Signature API",
+  "version": "0.1",
+  "type": "library",
+  "license": "Apache2",
+  "authors": [
+    {
+      "name": "Bendik R. Brenne",
+      "email": "bendik@konstant.no"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "path",
+      "url": "lib/time-unit-php"
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "digipost/signature-api-specification",
+        "version": "2.2",
+        "dist": {
+          "url": "https://github.com/digipost/signature-api-specification/archive/2.2.zip",
+          "type": "zip"
+        },
+        "source": {
+          "url": "https://github.com/digipost/signature-api-specification.git",
+          "type": "git",
+          "reference": "tag/2.2"
+        }
+      }
+    }
+  ],
+  "require": {
+    "myclabs/php-enum": "^1.6",
+    "php-ds/php-ds": "^1.2",
+    "indigophp/doctrine-annotation-autoload": "^0.1.0",
+    "jms/serializer": "^1.12",
+    "marcelxyz/php-xml-digital-signature": "^1.0",
+    "guzzlehttp/guzzle": "^6.3",
+    "guzzlehttp/psr7": "^1.4",
+    "phpseclib/phpseclib": "^2.0",
+    "robrichards/xmlseclibs": "^3.0",
+    "goetas-webservices/xsd-reader": "v0.2.6",
+    "goetas-webservices/xsd2php-runtime": "^0.2.8",
+    "cweagans/composer-patches": "^1.6"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.5",
+    "goetas-webservices/xsd2php": "^0.3.2",
+    "digipost/signature-api-specification": "^2.2"
+  },
+  "extra": {
+    "patches": {
+      "digipost/signature-api-specification": {
+        "Specify schemaLocation for xmldsig namespace in XAdES.xsd": "digipost-signature-api-specification_Specify-schema-location-for-xmldsig-namespace.patch"
+      }
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "Digipost\\": ["src/Digipost"]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Digipost\\": ["src/Digipost", "tests/Digipost/Tests"]
+    }
+  }
+}
