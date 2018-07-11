@@ -44,47 +44,47 @@ use JMS\Serializer\Annotation as Serializer;
  *   "pgenCounter"
  * })
  */
-class DSAKeyValue {
+class DSAKeyValue extends KeyValueType {
 
   /**
    * @var String
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    */
   protected $p;
 
   /**
    * @var String
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    */
   protected $q;
 
   /**
    * @var String
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    */
   protected $g;
 
   /**
    * @var String
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    */
   protected $y;
 
   /**
    * @var String
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    */
   protected $j;
 
   /**
    * @var String
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    */
   protected $seed;
 
   /**
    * @var null String
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    */
   protected $pgenCounter;
 
@@ -97,7 +97,6 @@ class DSAKeyValue {
     $this->j = $j;
     $this->seed = $seed;
     $this->pgenCounter = $pgenCounter;
-    return $this;
   }
 
   public function getP() {

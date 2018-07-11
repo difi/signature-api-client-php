@@ -2,6 +2,8 @@
 
 namespace Digipost\Signature\API\XML;
 
+use Doctrine\Common\Annotations\Annotation\Required;
+use Ds\Set;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
@@ -26,7 +28,7 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @package Digipost\Signature\API\XML
  *
- * @Serializer\XmlRoot(name="direct-signature-job-response")
+ * @Serializer\XmlRoot(name="direct-signature-job-response", namespace="http://signering.posten.no/schema/v1")
  * @Serializer\AccessorOrder("custom", custom={
  *   "signatureJobId",
  *   "redirectUrls",
@@ -35,13 +37,26 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class XMLDirectSignatureJobResponse {
 
+  /**
+   * @var int
+   * @Serializer\Type("int")
+   * @Serializer\XmlElement()
+   * @Serializer\SerializedName("signature-job-id")
+   */
   protected $signatureJobId;
 
   /**
    * @Serializer\Type("array<Digipost\Signature\API\XML\XMLSignerSpecificUrl>")
+   * @Serializer\XmlList(inline=true, entry="redirect-url")
    */
   protected $redirectUrls;
 
+  /**
+   * @var String
+   * @Serializer\Type("string")
+   * @Serializer\XmlElement()
+   * @Serializer\SerializedName("status-url")
+   */
   protected $statusUrl;
 
   function __construct(int $signatureJobId = NULL,
@@ -64,6 +79,8 @@ class XMLDirectSignatureJobResponse {
     if (($this->redirectUrls === NULL)) {
       $this->redirectUrls = [];
     }
+    //return new Set($this->redirectUrls);
+    //return new \ArrayObject($this->redirectUrls);
     return $this->redirectUrls;
   }
 

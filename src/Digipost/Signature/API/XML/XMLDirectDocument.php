@@ -3,6 +3,7 @@
 namespace Digipost\Signature\API\XML;
 
 use Digipost\Signature\JAXB\XMLDocument;
+use Doctrine\Common\Annotations\Annotation\Required;
 use JMS\Serializer\Annotation as Serializer;
 
 
@@ -56,18 +57,17 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @package Digipost\Signature\API\XML
  *
- * @Serializer\XmlRoot("document")
  * @Serializer\AccessorOrder("custom", custom={"title", "description"})
  */
 class XMLDirectDocument implements XMLDocument {
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    */
   protected $title;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    */
   protected $description;
 
@@ -78,6 +78,7 @@ class XMLDirectDocument implements XMLDocument {
 
   /**
    * @Serializer\XmlAttribute
+   *
    */
   protected $mime;
 

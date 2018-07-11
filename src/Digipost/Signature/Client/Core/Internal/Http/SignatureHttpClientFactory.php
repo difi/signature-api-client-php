@@ -16,6 +16,7 @@ class SignatureHttpClientFactory {
     //      ->build();
     $params = $config->getGuzzleConfiguration();
     $guzzleClient = new Client($params);
+    //$guzzleClient->getCommand
     return new DefaultClient($guzzleClient, $config->getServiceRoot());
   }
 }

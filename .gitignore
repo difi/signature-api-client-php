@@ -1,2 +1,6 @@
 src/**/*.java
-
+vendor
+*.crt
+*.p12
+*.cer
+*.pem

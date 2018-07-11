@@ -20,21 +20,42 @@ class DirectJob implements JOB, WithExitUrls {
   /** @var DirectSigner[] $signers */
   private $signers;
 
+  /**
+   * @var DirectDocument
+   */
   private $document;
 
+  /**
+   * @var String
+   */
   private $completionUrl;
 
+  /**
+   * @var String
+   */
   private $rejectionUrl;
 
+  /**
+   * @var String
+   */
   private $errorUrl;
 
+  /**
+   * @var Sender
+   */
   private $sender;
 
+  /**
+   * @var StatusRetrievalMethod
+   */
   private $statusRetrievalMethod;
 
   /** @var AuthenticationLevel $requiredAuthentication */
   private $requiredAuthentication;
 
+  /**
+   * @var IdentifierInSignedDocuments
+   */
   private $identifierInSignedDocuments;
 
   function __construct(array $signers, DirectDocument $document,
@@ -94,16 +115,16 @@ class DirectJob implements JOB, WithExitUrls {
   /**
    * Create a new DirectJob.
    *
-   * @param \Digipost\Signature\Client\Direct\DirectDocument $document
-   * @param \Digipost\Signature\Client\Direct\WithExitUrls   $hasExitUrls
-   * @param \Digipost\Signature\Client\Direct\DirectSigner[] $signers
+   * @param DirectDocument $document
+   * @param WithExitUrls   $hasExitUrls
+   * @param DirectSigner[] $signers
    *
-   * @return \Digipost\Signature\Client\Direct\DirectJobBuilder
+   * @return DirectJobBuilder
    * @see DirectJob#builder(DirectDocument, WithExitUrls, List)
    */
   public static function builder(DirectDocument $document,
                                  WithExitUrls $hasExitUrls,
-                                 DirectSigner... $signers) {
+                                 $signers) {
     //return $this->builder($document, $hasExitUrls, Arrays . asList(signers));
     return new DirectJobBuilder(
       $signers,
@@ -120,37 +141,37 @@ class DirectJob implements JOB, WithExitUrls {
   }
 
   /**
-   * @param mixed $sender
+   * @param Sender $sender
    */
-  public function setSender($sender) {
+  public function setSender(Sender $sender) {
     $this->sender = $sender;
   }
 
   /**
-   * @param mixed $identifierInSignedDocuments
+   * @param IdentifierInSignedDocuments $identifierInSignedDocuments
    */
-  public function setIdentifierInSignedDocuments($identifierInSignedDocuments) {
+  public function setIdentifierInSignedDocuments(IdentifierInSignedDocuments $identifierInSignedDocuments) {
     $this->identifierInSignedDocuments = $identifierInSignedDocuments;
   }
 
   /**
-   * @param mixed $requiredAuthentication
+   * @param AuthenticationLevel $requiredAuthentication
    */
-  public function setRequiredAuthentication($requiredAuthentication) {
+  public function setRequiredAuthentication(AuthenticationLevel $requiredAuthentication) {
     $this->requiredAuthentication = $requiredAuthentication;
   }
 
   /**
    * @param mixed $statusRetrievalMethod
    */
-  public function setStatusRetrievalMethod($statusRetrievalMethod) {
+  public function setStatusRetrievalMethod(StatusRetrievalMethod $statusRetrievalMethod) {
     $this->statusRetrievalMethod = $statusRetrievalMethod;
   }
 }
 
 class DirectJobBuilder implements JobCustomizations {
 
-  /** @var \Digipost\Signature\Client\Direct\DirectJob */
+  /** @var DirectJob */
   private $target;
 
   private $built = FALSE;

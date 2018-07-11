@@ -45,12 +45,15 @@ class QualifyingProperties {
   protected $unsignedProperties;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute()
    */
   protected $target;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute()
+   * @Serializer\SerializedName("ID")
    */
   protected $id;
 

@@ -22,11 +22,12 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @package Digipost\Signature\API\XML\Thirdparty\ASiCe
  *
- * @Serializer\XmlRoot(namespace="Extension")
+ * @Serializer\XmlRoot(name="Extension")
  */
 class Extension extends AnyType {
 
   /**
+   * @Serializer\Type("boolean")
    * @Serializer\XmlAttribute()
    */
   protected $critical;

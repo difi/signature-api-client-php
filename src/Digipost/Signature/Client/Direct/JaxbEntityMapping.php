@@ -2,34 +2,18 @@
 
 namespace Digipost\Signature\Client\Direct;
 
-//import no.digipost.signature.api.xml.XMLDirectSignatureJobRequest;
-//import no.digipost.signature.api.xml.XMLDirectSignatureJobResponse;
-//import no.digipost.signature.api.xml.XMLDirectSignatureJobStatusResponse;
-//import no.digipost.signature.api.xml.XMLExitUrls;
-//import no.digipost.signature.api.xml.XMLSignerSpecificUrl;
-//import no.digipost.signature.api.xml.XMLSignerStatus;
-//import no.digipost.signature.client.core.ConfirmationReference;
-//import no.digipost.signature.client.core.PAdESReference;
-//import no.digipost.signature.client.core.Sender;
-//import no.digipost.signature.client.core.XAdESReference;
-//import no.digipost.signature.client.direct.RedirectUrls.RedirectUrl;
-//import no.digipost.signature.client.core.DeleteDocumentsUrl;
-//
-//import java.time.Instant;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Optional;
-//import java.util.function.Predicate;
-//
-//import static java.util.stream.Collectors.toList;
-//import static no.digipost.signature.client.core.internal.ActualSender.getActualSender;
 use Digipost\Signature\API\XML\XMLDirectSignatureJobRequest;
 use Digipost\Signature\API\XML\XMLDirectSignatureJobResponse;
+use Digipost\Signature\API\XML\XMLDirectSignatureJobStatusResponse;
 use Digipost\Signature\API\XML\XMLExitUrls;
 use Digipost\Signature\API\XML\XMLSignerSpecificUrl;
+use Digipost\Signature\API\XML\XMLSignerStatus;
+use Digipost\Signature\Client\Core\ConfirmationReference;
+use Digipost\Signature\Client\Core\DeleteDocumentsUrl;
 use Digipost\Signature\Client\Core\Internal\ActualSender;
+use Digipost\Signature\Client\Core\PAdESReference;
 use Digipost\Signature\Client\Core\Sender;
-use Digipost\Signature\Client\Direct\StatusRetrievalMethod;
+use Digipost\Signature\Client\Core\XAdESReference;
 
 class JaxbEntityMapping {
 
@@ -40,6 +24,11 @@ class JaxbEntityMapping {
     $jobRequest = new XMLDirectSignatureJobRequest();
     $xmlExitUrls = new XMLExitUrls();
 
+    $statusRetrievalMethod = $signatureJob->getStatusRetrievalMethod();
+    if (isset($statusRetrievalMethod)) {
+      $jobRequest->setStatusRetrievalMethod($statusRetrievalMethod->getXmlEnumValue());
+    }
+
     return $jobRequest
       ->withReference($signatureJob->getReference())
       ->withExitUrls(
@@ -48,52 +37,58 @@ class JaxbEntityMapping {
           ->withRejectionUrl($signatureJob->getRejectionUrl())
           ->withErrorUrl($signatureJob->getErrorUrl())
       )
-      ->withStatusRetrievalMethod($signatureJob->getStatusRetrievalMethod() || NULL)
       ->withPollingQueue($actualSender->getPollingQueue()->value);
   }
 
-  static function fromJaxb(XMLDirectSignatureJobResponse $xmlSignatureJobResponse) {
-    $redirectUrls = $xmlSignatureJobResponse->getRedirectUrls();
-    //  ->map(RedirectUrl::fromJaxb)
-    //  ->collect(toList());
+  static function fromJaxb($xmlObject) {
+    switch (get_class($xmlObject)) {
+      case XMLDirectSignatureJobResponse::class:
+        return self::fromJaxb_XMLDirectSignatureJobResponse($xmlObject);
+      case XMLDirectSignatureJobStatusResponse::class:
+
+      default:
+        throw new \InvalidArgumentException("No method to handle fromJaxb for " . get_class($xmlObject));
+    }
+  }
+
+  static function fromJaxb_XMLDirectSignatureJobResponse(XMLDirectSignatureJobResponse $xmlSignatureJobResponse) {
+    $redirectUrls = array_map('RedirectUrl::fromJaxb',
+                              $xmlSignatureJobResponse->getRedirectUrls());
 
     return new DirectJobResponse($xmlSignatureJobResponse->getSignatureJobId(),
                                  $redirectUrls,
                                  $xmlSignatureJobResponse->getStatusUrl());
   }
 
-  /*
-  static function fromJaxb(XMLDirectSignatureJobStatusResponse statusResponse, Instant nextPermittedPollTime) {
-      List<Signature> signatures = new ArrayList<>();
-      for (XMLSignerStatus signerStatus : statusResponse.getStatuses()) {
-          String xAdESUrl = statusResponse.getXadesUrls().stream()
-                  .filter(forSigner(signerStatus.getSigner()))
-                  .findFirst()
-                  .map(XMLSignerSpecificUrl::getValue)
-                  .orElse(null);
+  static function fromJaxb_XMLDirectSignatureJobStatusResponse(XMLDirectSignatureJobStatusResponse $statusResponse,
+                                                               $nextPermittedPollTime) {
+    $signatures = [];
+    foreach ($statusResponse->getStatuses() as $signerStatus) {
+      /** @var XMLSignerSpecificUrl[] $xAdESUrls */
+      /** @var XMLSignerStatus $signerStatus */
+      $xAdESUrls = array_filter($statusResponse->getXadesUrls(),
+        function ($url) use ($signerStatus) {
+          /** @var XMLSignerSpecificUrl $url */
+          return $url->getSigner() === $signerStatus->getSigner();
+        });
+      $xAdESUrl = array_shift($xAdESUrls);
+      $xAdESUrl = $xAdESUrl ? $xAdESUrl->getValue() : NULL;
 
-          signatures.add(new Signature(
-                  signerStatus.getSigner(),
-                  SignerStatus.fromXmlType(signerStatus.getValue()),
-                  signerStatus.getSince().toInstant(),
-                  XAdESReference.of(xAdESUrl)
-          ));
-      }
+      $signatures[] = new Signature(
+        $signerStatus->getSigner(),
+        SignerStatus::fromXmlType($signerStatus->getValue()),
+        new \DateTime($signerStatus->getSince()->getTimestamp()),
+        XAdESReference::of($xAdESUrl)
+      );
+    }
 
-      return new DirectJobStatusResponse(
-              statusResponse.getSignatureJobId(),
-              DirectJobStatus.fromXmlType(statusResponse.getSignatureJobStatus()),
-              ConfirmationReference.of(statusResponse.getConfirmationUrl()),
-              DeleteDocumentsUrl.of(statusResponse.getDeleteDocumentsUrl()),
-              signatures,
-              PAdESReference.of(statusResponse.getPadesUrl()),
-              nextPermittedPollTime);
-  }
-  */
-
-  private static function forSigner(String $signer) {
-    //return url -> url.getSigner().equals(signer);
-
-    return TRUE;
+    return new DirectJobStatusResponse(
+      $statusResponse->getSignatureJobId(),
+      DirectJobStatus::fromXmlType($statusResponse->getSignatureJobStatus()),
+      ConfirmationReference::of($statusResponse->getConfirmationUrl()),
+      DeleteDocumentsUrl::of($statusResponse->getDeleteDocumentsUrl()),
+      $signatures,
+      PAdESReference::of($statusResponse->getPadesUrl()),
+      $nextPermittedPollTime);
   }
 }

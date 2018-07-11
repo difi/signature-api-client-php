@@ -29,13 +29,13 @@ use JMS\Serializer\Annotation as Serializer;
 class DigestMethod {
 
   /**
+   * @Serializer\Type("array<any>")
    * @Serializer\XmlList(entry="DigestMethod", inline=true)
    */
   protected $content;
 
   /**
-   * @Serializer\XmlAttribute
-   * @Serializer\SerializedName("Algorithm")
+   * @Serializer\XmlAttribute(namespace="{http://www.w3.org/2001/XMLSchema}anyURI")
    */
   protected $algorithm;
 

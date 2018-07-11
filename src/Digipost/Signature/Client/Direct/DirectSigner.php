@@ -9,16 +9,19 @@ use Digipost\Signature\Client\Core\Internal\PersonalIdentificationNumbers;
 
 class DirectSigner {
 
-  protected $personalIdentificationNumber;  // String
+  protected $personalIdentificationNumber;
 
-  protected $customIdentifier;  // String
+  protected $customIdentifier;
 
   /**
    * @var SignatureType
    */
-  protected $signatureType;  // Optional<SignatureType>
+  protected $signatureType;
 
-  protected $onBehalfOf;  // Optional<OnBehalfOf>
+  /**
+   * @var OnBehalfOf
+   */
+  protected $onBehalfOf;
 
   public static function withPersonalIdentificationNumber($personalIdentificationNumber) {
     return new DirectSignerBuilder($personalIdentificationNumber, NULL);
@@ -37,7 +40,6 @@ class DirectSigner {
     $this->customIdentifier = $customIdentifier;
     $this->signatureType = $signatureType;
     $this->onBehalfOf = $onBehalfOf;
-    return $this;
   }
 
   public function isIdentifiedByPersonalIdentificationNumber() {

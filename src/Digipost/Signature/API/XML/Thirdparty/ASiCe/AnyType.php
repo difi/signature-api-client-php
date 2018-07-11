@@ -23,6 +23,8 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @package Digipost\Signature\API\XML\Thirdparty\ASiCe
  * @see \Digipost\Signature\API\XML\Thirdparty\ASiCe\Extension
+ *
+ * @Serializer\AccessorOrder("custom", custom={"content"})
  */
 class AnyType {
 

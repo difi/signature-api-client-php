@@ -126,7 +126,7 @@ class ObjectFactory {
   }
 
   public function createObject() {
-    return new XMLObject();
+    return new ObjectType();
   }
 
   public function createManifest() {

@@ -1,4 +1,5 @@
 <?php
+
 namespace Digipost\Signature\API\XML;
 
 use MyCLabs\Enum\Enum;
@@ -24,8 +25,20 @@ use MyCLabs\Enum\Enum;
  *
  */
 class XMLDirectSignatureJobStatus extends Enum {
-	const IN_PROGRESS = 0;
-	const COMPLETED_SUCCESSFULLY = 1;
-	const FAILED = 2;
-}
 
+  /**
+   * At least one signer has not yet performed any action to the document.
+   */
+  const IN_PROGRESS = 'IN_PROGRESS';
+
+  /**
+   * All signers have successfully signed the document.
+   */
+  const COMPLETED_SUCCESSFULLY = 'COMPLETED_SUCCESSFULLY';
+
+  /**
+   * All signers have performed an action to the document, but at least one
+   * have a non successful status (e.g. rejected, expired or failed).
+   */
+  const FAILED = 'FAILED';
+}

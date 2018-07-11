@@ -2,6 +2,7 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XMLdSig;
 
+use Doctrine\Common\Annotations\Annotation\Required;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
@@ -33,42 +34,47 @@ use JMS\Serializer\Annotation as Serializer;
  *   "digestMethod",
  *   "digestValue"
  * })
+ * @Serializer\XmlRoot(name="Reference")
  */
 class Reference {
 
   /**
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transforms")
-   * @Serializer\SerializedName("Transforms")
    */
   protected $transforms;
 
   /**
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod")
-   * @Serializer\SerializedName("DigestMethod")
+   * @Required()
    */
   protected $digestMethod;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\SerializedName("DigestValue")
+   * @Serializer\XmlElement()
+   * @Serializer\Type("string")
+   * @Required()
    */
-  protected $digestValue;  // byte[]
+  protected $digestValue;
 
   /**
    * @Serializer\XmlAttribute()
-   * @Serializer\SerializedName("ID")
+   * @Serializer\Type("string")
+   * @Serializer\SerializedName("Id")
    */
-  protected $id;  // String
+  protected $id;
 
   /**
-   * @Serializer\XmlAttribute
+   * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    * @Serializer\SerializedName("URI")
    */
-  protected $uri;  // String
+  protected $uri;
 
   /**
-   * @Serializer\XmlAttribute
-   * @Serializer\SerializedName("Type")
+   * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    */
   protected $type;
 

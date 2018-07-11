@@ -35,19 +35,20 @@ use JMS\Serializer\Annotation as Serializer;
 class SignedProperties {
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\SignedSignatureProperties")
    */
   protected $signedSignatureProperties;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\SignedDataObjectProperties")
    */
   protected $signedDataObjectProperties;
 
   /**
    * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    */
   protected $id;
 

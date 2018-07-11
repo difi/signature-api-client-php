@@ -5,7 +5,7 @@ namespace Digipost\Signature\Client\Core\Internal;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\CanonicalizationMethod;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\KeyInfo;
-use Digipost\Signature\API\XML\Thirdparty\XMLdSig\XMLObject;
+use Digipost\Signature\API\XML\Thirdparty\XMLdSig\ObjectType;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\Reference;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\Signature;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\SignatureMethod;
@@ -147,7 +147,7 @@ class XMLSignatureFactory {
                                String $mimeType = NULL,
                                String $encoding = NULL) {
 
-    $xmlObject = new XMLObject($content, $id, $mimeType, $encoding);
+    $xmlObject = new ObjectType($content, $id, $mimeType, $encoding);
     return $xmlObject;
   }
 

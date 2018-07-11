@@ -33,23 +33,26 @@ use JMS\Serializer\Annotation as Serializer;
 class ReferenceInfo {
 
   /**
-   * @Serializer\XmlElement(cdata=false, namespace="http://www.w3.org/2000/09/xmldsig#")
+   * @Serializer\XmlElement(namespace="http://www.w3.org/2000/09/xmldsig#")
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod")
    */
-  protected $digestMethod;  // DigestMethod
+  protected $digestMethod;
 
   /**
-   * @Serializer\XmlElement(cdata=false, namespace="http://www.w3.org/2000/09/xmldsig#")
+   * @Serializer\XmlElement(namespace="http://www.w3.org/2000/09/xmldsig#")
+   * @Serializer\Type("string")
    */
   protected $digestValue;
 
   /**
    * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    */
   protected $id;
 
   /**
    * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    * @Serializer\SerializedName("URI")
    */
   protected $uri;

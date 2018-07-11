@@ -3,6 +3,7 @@
 namespace Digipost\Signature\Client\Core;
 
 use Digipost\Signature\API\XML\XMLIdentifierInSignedDocuments;
+use Digipost\Signature\Client\Core\Internal\MarshallableEnum;
 use MyCLabs\Enum\Enum;
 
 /**
@@ -14,7 +15,7 @@ use MyCLabs\Enum\Enum;
  * @method static IdentifierInSignedDocuments DATE_OF_BIRTH_AND_NAME
  * @method static IdentifierInSignedDocuments NAME
  */
-class IdentifierInSignedDocuments extends Enum {
+class IdentifierInSignedDocuments extends Enum implements MarshallableEnum {
   const PERSONAL_IDENTIFICATION_NUMBER_AND_NAME = XMLIdentifierInSignedDocuments::PERSONAL_IDENTIFICATION_NUMBER_AND_NAME;
 
   const DATE_OF_BIRTH_AND_NAME = XMLIdentifierInSignedDocuments::DATE_OF_BIRTH_AND_NAME;

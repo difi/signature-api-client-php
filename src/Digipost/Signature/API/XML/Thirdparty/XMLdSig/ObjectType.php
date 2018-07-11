@@ -27,26 +27,30 @@ use JMS\Serializer\Annotation as Serializer;
  * @package Digipost\Signature\API\XML\Thirdparty\XMLdSig
  *          
  * @Serializer\XmlRoot(name="Object")
+ * @Serializer\AccessorOrder("custom", custom={"content"})
  */
-class XMLObject {
+class ObjectType {
 
   /**
    * @Serializer\XmlList(inline=true)
-   * @Serializer\Type("array<any>")
+   * @Serializer\Type("array<object>")
    */
   protected $content;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute()
    */
   protected $id;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute()
    */
   protected $mimeType;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute()
    */
   protected $encoding;

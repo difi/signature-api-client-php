@@ -31,8 +31,8 @@ class KeyValue {
 
   /**
    * @var array
-   * @Serializer\XmlElement(cdata=false, namespace="http://www.w3.org/2000/09/xmldsig#")
-   * @Serializer\Type("array<any>")
+   * @Serializer\XmlElement(namespace="http://www.w3.org/2000/09/xmldsig#")
+   * @Serializer\Type("array<Digipost\Signature\API\XML\Thirdparty\XMLdSig\KeyValueType>")
    */
   protected $content;
 

@@ -28,12 +28,12 @@ class Any {
 
   /**
    * @Serializer\XmlElement()
-   * @Serializer\Type("array<any>")
+   * @Serializer\Type("array<object>")
    */
-  protected $content;  // array<Object>
+  protected $content;
 
   /**
-   * @Serializer\Type("array<")
+   * @Serializer\Type("array<QName, string>")
    * @Serializer\XmlAttributeMap()
    */
   protected $otherAttributes;  // array<QName, String>

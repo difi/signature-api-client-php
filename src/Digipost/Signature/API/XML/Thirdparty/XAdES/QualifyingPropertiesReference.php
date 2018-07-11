@@ -2,6 +2,7 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
+use Doctrine\Common\Annotations\Annotation\Required;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
@@ -27,13 +28,17 @@ use JMS\Serializer\Annotation as Serializer;
 class QualifyingPropertiesReference {
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute()
    * @Serializer\SerializedName("URI")
+   * @Required()
    */
   protected $uri;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute()
+   * @Serializer\SerializedName("Id")
    */
   protected $id;
 

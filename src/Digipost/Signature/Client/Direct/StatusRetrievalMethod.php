@@ -18,6 +18,6 @@ class StatusRetrievalMethod extends Enum implements MarshallableEnum {
 	const POLLING = XMLStatusRetrievalMethod::POLLING;
 
   public function getXmlEnumValue() {
-    return $this->value;
+    return new XMLStatusRetrievalMethod($this->value);
   }
 }

@@ -14,7 +14,7 @@ use JMS\Serializer\Annotation as Serializer;
  * <pre>
  * <complexType name="signer-specific-url">
  *   <simpleContent>
- *     <extension base="<http://signering.posten.no/schema/v1>url">
+ *     <extension base="{http://signering.posten.no/schema/v1}url">
  *       <attribute name="signer" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     </extension>
  *   </simpleContent>
@@ -26,11 +26,13 @@ use JMS\Serializer\Annotation as Serializer;
 class XMLSignerSpecificUrl {
 
   /**
-   * @Serializer\XmlValue(cdata=false)
+   * @Serializer\Type("string")
+   * @Serializer\XmlValue()
    */
   protected $value;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute()
    */
   protected $signer;

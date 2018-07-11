@@ -58,14 +58,13 @@ class XMLDirectSigner implements XMLSigner {
   protected $personalIdentificationNumber;
 
   /**
-   * @Serializer\Type("Digipost\Signature\API\XML\XMLSignatureType")
+   * @Serializer\Type("string")
    * @Serializer\XmlElement()
-   * @Serializer\SkipWhenEmpty()
    */
   protected $signatureType;
 
   /**
-   * @Serializer\Type("Digipost\Signature\API\XML\XMLSigningOnBehalfOf")
+   * @Serializer\Type("string")
    * @Serializer\XmlElement()
    */
   protected $onBehalfOf;

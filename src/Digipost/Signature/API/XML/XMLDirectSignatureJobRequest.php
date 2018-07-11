@@ -29,7 +29,7 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @package Digipost\Signature\API\XML
  *
- * @Serializer\XmlRoot(name="direct-signature-job-request")
+ * @Serializer\XmlRoot(name="direct-signature-job-request", namespace="http://signering.posten.no/schema/v1")
  * @Serializer\AccessorOrder("custom", custom={
  *   "reference",
  *   "exitUrls",
@@ -46,7 +46,6 @@ class XMLDirectSignatureJobRequest {
 
   /**
    * @Serializer\Type("Digipost\Signature\API\XML\XMLExitUrls")
-   * @Serializer\SerializedName("exit-urls")
    */
   protected $exitUrls;
 
@@ -62,9 +61,8 @@ class XMLDirectSignatureJobRequest {
    *
    * Defaults to WAIT_FOR_CALLBACK if omitted.
    *
-   * @Serializer\Type("Digipost\Signature\API\XML\XMLStatusRetrievalMethod")
-   * @Serializer\SerializedName("status-retrieval-method")
-   * @Serializer\Exclude()
+   * @Serializer\Type("string")
+   * @Serializer\SkipWhenEmpty()
    */
   protected $statusRetrievalMethod;
 
@@ -80,17 +78,16 @@ class XMLDirectSignatureJobRequest {
    * for the default queue.
    *
    * @Serializer\XmlElement()
-   * @Serializer\SerializedName("polling-queue")
    */
   protected $pollingQueue;
 
   /**
    * XMLDirectSignatureJobRequest constructor.
    *
-   * @param String $reference
-   * @param XMLExitUrls $exitUrls
+   * @param String                   $reference
+   * @param XMLExitUrls              $exitUrls
    * @param XMLStatusRetrievalMethod $statusRetrievalMethod
-   * @param String $pollingQueue
+   * @param String                   $pollingQueue
    */
   function __construct(String $reference = NULL, XMLExitUrls $exitUrls = NULL,
                        XMLStatusRetrievalMethod $statusRetrievalMethod = NULL,
@@ -123,8 +120,7 @@ class XMLDirectSignatureJobRequest {
     return $this->statusRetrievalMethod;
   }
 
-  public function setStatusRetrievalMethod($value) // [XMLStatusRetrievalMethod value]
-  {
+  public function setStatusRetrievalMethod(XMLStatusRetrievalMethod $value) {
     $this->statusRetrievalMethod = $value;
   }
 

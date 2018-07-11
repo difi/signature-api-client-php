@@ -22,20 +22,23 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @package Digipost\Signature\API\XML\Thirdparty\ASiCe
  *
- * @Serializer\XmlRoot(namespace="SigReference")
+ * @Serializer\XmlRoot(name="SigReference")
  */
 class SigReference {
 
   /**
    * @var String
-   * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
+   * @Serializer\XmlAttribute(namespace="{http://www.w3.org/2001/XMLSchema}anyURI")
    * @Serializer\SerializedName("URI")
    */
   protected $uri;
 
   /**
    * @var String
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute()
+   * @Serializer\SerializedName("MimeType")
    */
   protected $mimeType;
 

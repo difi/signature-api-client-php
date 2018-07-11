@@ -26,8 +26,8 @@ use JMS\Serializer\Annotation as Serializer;
 class DocumentationReferencesType {
 
   /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("array<String>")
+   * @Serializer\XmlElement()
+   * @Serializer\Type("array<string>")
    * @Serializer\SerializedName("DocumentationReference")
    */
   protected $documentationReferences;

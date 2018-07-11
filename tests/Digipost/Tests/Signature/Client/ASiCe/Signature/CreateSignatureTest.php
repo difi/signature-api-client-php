@@ -10,13 +10,17 @@ namespace Digipost\Signature\Client\ASiCe\Signature;
 
 use Digipost\Signature\Client\ClientConfiguration;
 use Digipost\Signature\Client\Core\DocumentFileType;
+use Digipost\Signature\Client\Core\IdentifierInSignedDocuments;
+use Digipost\Signature\Client\Core\OnBehalfOf;
 use Digipost\Signature\Client\Core\Sender;
+use Digipost\Signature\Client\Core\SignatureType;
 use Digipost\Signature\Client\Direct\DirectClient;
 use Digipost\Signature\Client\Direct\DirectDocument;
 use Digipost\Signature\Client\Direct\DirectJob;
 use Digipost\Signature\Client\Direct\DirectJobBuilder;
 use Digipost\Signature\Client\Direct\DirectSigner;
 use Digipost\Signature\Client\Direct\ExitUrls;
+use Digipost\Signature\Client\Direct\StatusRetrievalMethod;
 use Digipost\Signature\Client\TestKonfigurasjon;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +32,7 @@ class CreateSignatureTest extends TestCase {
   private static function strToByteArray($str) {
     return unpack('C*', $str);
   }
+
   private static function byteArrayToString($byteArray) {
     return call_user_func_array('pack', array_merge(['C*'], $byteArray));
   }
@@ -52,11 +57,19 @@ class CreateSignatureTest extends TestCase {
       ->fileType(DocumentFileType::TXT())
       ->build();
 
-    $signer1 = DirectSigner::withCustomIdentifier('Bendik Brenne sin')->build();
-    $directJob = DirectJob::builder($document, ExitUrls::of("http://localhost/signed",
-                                                      "http://localhost/canceled",
-                                                      "http://localhost/failed"),
-                              $signer1)->build();
+    $signer1 = DirectSigner::withCustomIdentifier('Bendik Brenne sin')
+      ->withSignatureType(SignatureType::AUTHENTICATED_SIGNATURE())
+      ->onBehalfOf(OnBehalfOf::OTHER());
+    $signers = [$signer1->build()];
+    $directJob = DirectJob::builder($document,
+                                    ExitUrls::of("http://localhost/signed",
+                                                 "http://localhost/canceled",
+                                                 "http://localhost/failed"),
+                                    $signers)
+      ->withReference('123-ABC')
+      ->withIdentifierInSignedDocuments(IdentifierInSignedDocuments::NAME())
+      //->retrieveStatusBy(StatusRetrievalMethod::WAIT_FOR_CALLBACK())
+      ->build();
     $client->create($directJob);
   }
 }

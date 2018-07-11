@@ -59,31 +59,33 @@ class XMLDirectSignatureJobManifest implements XMLManifest {
 
   /**
    * @Serializer\Type("Digipost\Signature\API\XML\XMLDirectDocument")
+   * @Serializer\XmlElement()
+   * @Serializer\SerializedName("direct-document")
    */
   protected $document;
 
   /**
-   * @Serializer\Type("Digipost\Signature\API\XML\XMLAuthenticationLevel")
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\Type("string")
+   * @Serializer\XmlElement()
    */
   protected $requiredAuthentication;
 
   /**
-   * @Serializer\Type("Digipost\Signature\API\XML\XMLIdentifierInSignedDocuments")
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\Type("string")
+   * @Serializer\XmlElement()
    */
   protected $identifierInSignedDocuments;
 
   /**
    * Fully-initialising value constructor
    *
-   * @param XMLDirectSigner                $signers
+   * @param XMLDirectSigner[]              $signers
    * @param XMLSender                      $sender
    * @param XMLDirectDocument              $document
    * @param XMLAuthenticationLevel         $requiredAuthentication
    * @param XMLIdentifierInSignedDocuments $identifierInSignedDocuments
    */
-  public function __construct(XMLDirectSigner $signers = NULL,
+  public function __construct(array $signers = NULL,
                               XMLSender $sender = NULL,
                               XMLDirectDocument $document = NULL,
                               XMLAuthenticationLevel $requiredAuthentication = NULL,

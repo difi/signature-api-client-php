@@ -295,7 +295,11 @@ class BodyPart {
   function __construct($entity, $mediaType) {
     if (isset($entity) && !is_string($entity)) {
       $contents = NULL;
-      Marshalling::marshal($entity, $contents);
+      $naming_strategy = new \JMS\Serializer\Naming\SerializedNameAnnotationStrategy(
+        new \JMS\Serializer\Naming\CamelCaseNamingStrategy('-')
+      );
+      Marshalling::marshal($entity, $contents, NULL, $naming_strategy);
+      $contents->xmlStandalone = TRUE;
       $this->entity = $contents->saveXML();
     } else {
       $this->entity = $entity;
@@ -378,9 +382,15 @@ class UsingBodyParts {
             'multipart' => $multiPart->toArray(),
           ]);
       } catch (ClientException $e) {
-        print $e->getMessage() . "\n";
+        //print $e->getMessage() . "\n";
         //print_r($e->getResponse()->getBody());
+        print "Request:\n";
         print $e->getRequest()->getBody();
+        print "\n---\nResponse:\n";
+        print $e->getResponse()->getBody();
+        print "\n";
+        print_r($e->getResponse()->getHeaders());
+        throw new \RuntimeException("Something went wrong", 0, $e);
       }
 
       return $this->parent->parseResponse($response, $responseType);

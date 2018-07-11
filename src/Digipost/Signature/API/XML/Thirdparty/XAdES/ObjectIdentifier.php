@@ -35,21 +35,22 @@ use JMS\Serializer\Annotation as Serializer;
 class ObjectIdentifier {
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\IdentifierType")
    */
   protected $identifier;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
+   * @Serializer\Type("string")
    */
   protected $description;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\DocumentationReferencesType")
    */
-  protected $documentationReferences;  // DocumentationReferencesType
+  protected $documentationReferences;
 
   public function __construct(IdentifierType $identifier = NULL,
                               String $description = NULL,

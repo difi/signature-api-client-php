@@ -27,7 +27,7 @@ use JMS\Serializer\Annotation as Serializer;
  * @Serializer\XmlRoot(name="RSAKeyValue")
  * @Serializer\AccessorOrder("custom", custom={"modulus","exponent"})
  */
-class RSAKeyValue {
+class RSAKeyValue extends KeyValueType {
 
   /**
    * @var string

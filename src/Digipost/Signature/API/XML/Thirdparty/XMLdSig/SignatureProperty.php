@@ -31,20 +31,22 @@ class SignatureProperty {
 
   /**
    * @var array
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("array<any>")
+   * @Serializer\XmlElement()
+   * @Serializer\Type("array<object>")
    */
   protected $content;
 
   /**
    * @var String
    * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    */
   protected $target;
 
   /**
    * @var String
    * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    */
   protected $id;
 

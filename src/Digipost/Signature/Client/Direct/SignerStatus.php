@@ -46,7 +46,7 @@ class SignerStatus {
     return $this;
   }
 
-  protected static function fromXmlType($xmlSignerStatus)
+  public static function fromXmlType($xmlSignerStatus)
   {
     foreach (self::$KNOWN_STATUSES as $status) {
       /** @var SignerStatus $status */

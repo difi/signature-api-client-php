@@ -25,19 +25,22 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @package Digipost\Signature\API\XML\Thirdparty\XMLdSig
  *
+ * @Serializer\AccessorOrder("custom",custom={"transforms"})
  * @Serializer\XmlRoot(name="RetrievalMethod")
  */
 class RetrievalMethod {
 
   /**
    * @var Transforms
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
+   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transforms")
    */
   protected $transforms;
 
   /**
    * @var String
    * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    * @Serializer\SerializedName("URI")
    */
   protected $uri;
@@ -45,6 +48,7 @@ class RetrievalMethod {
   /**
    * @var String
    * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    */
   protected $type;
 

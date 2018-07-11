@@ -30,19 +30,20 @@ use JMS\Serializer\Annotation as Serializer;
 class CertIDType {
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType")
    */
   protected $certDigest;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType")
    */
   protected $issuerSerial;
 
   /**
    * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    * @Serializer\SerializedName("URI")
    */
   protected $uri;

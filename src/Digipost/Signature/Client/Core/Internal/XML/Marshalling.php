@@ -2,6 +2,9 @@
 
 namespace Digipost\Signature\Client\Core\Internal\XML;
 
+use Digipost\Signature\API\XML\XMLDirectSignatureJobResponse;
+use Digipost\Signature\JAXB\SignatureMarshalling;
+use Digipost\Signature\JAXB\SignatureObjectConstructor;
 use GuzzleHttp\Psr7\AppendStream;
 use JMS\Serializer\SerializerBuilder;
 use phpDocumentor\Reflection\Types\Resource_;
@@ -19,7 +22,8 @@ final class Marshalling {
   public static function marshal($object, &$output, $context = NULL, $naming_strategy = NULL) {
     // Make sure we've got a DOMNode instance
     if (!isset($output)) {
-      $output = new \DOMDocument();
+      $output = new \DOMDocument('1.0', 'UTF-8');
+      $output->xmlStandalone = TRUE;
     }
     if (!isset($naming_strategy)) {
       $naming_strategy = new \JMS\Serializer\Naming\SerializedNameAnnotationStrategy(
@@ -47,9 +51,16 @@ final class Marshalling {
     return $xmlData;
   }
 
-  public static function unmarshal($entityStream) // [InputStream entityStream]
+  public static function unmarshal($entityStream, $responseType)
   {
     //$SignatureJaxb2Marshaller->ForResponsesOfAllApis->singleton()->unmarshal(new StreamSource($entityStream));
+    //SignatureMarshalling::allApiResponseClasses()->
+    //$objectConstructor = new S
+    $serializer = SerializerBuilder::create()
+      ->setObjectConstructor(SignatureObjectConstructor::fromClassSet(SignatureMarshalling::allApiResponseClasses()))
+      ->build();
+    $object = $serializer->deserialize($entityStream, $responseType,'xml');
+    return $object;
   }
 }
 

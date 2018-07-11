@@ -54,6 +54,11 @@ class CreateDirectManifest extends ManifestCreator {
     if ($requiredAuthentication) {
       $xmlSignatureJobManifest->withRequiredAuthentication($requiredAuthentication->getXmlEnumValue());
     }
+    $identifierInSignedDocuments = $job->getIdentifierInSignedDocuments();
+    if ($identifierInSignedDocuments) {
+      $xmlSignatureJobManifest->withIdentifierInSignedDocuments($identifierInSignedDocuments->getXmlEnumValue());
+    }
+
     return $xmlSignatureJobManifest
       ->withSigners($signers)
       ->withSender($xmlSender->withOrganizationNumber($sender->getOrganizationNumber()))
@@ -62,7 +67,6 @@ class CreateDirectManifest extends ManifestCreator {
                        ->withDescription($document->getMessage())
                        ->withHref($document->getFileName())
                        ->withMime($document->getMimeType())
-      )
-      ->withIdentifierInSignedDocuments($job->getIdentifierInSignedDocuments());
+      );
   }
 }

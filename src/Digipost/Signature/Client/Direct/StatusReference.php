@@ -27,7 +27,7 @@ class StatusReference {
 
   public function __construct(String $statusUrl, String $statusQueryToken) {
     $this->statusUrl = $statusUrl;
-    $this->statusQueryToken = !is_null($statusQueryToken) ? self::$STATUS_QUERY_TOKEN_PARAM_NAME : NULL;
+    $this->statusQueryToken = (isset($statusQueryToken) && isset(self::$STATUS_QUERY_TOKEN_PARAM_NAME)) ? $statusQueryToken : NULL;
   }
 
   public function getStatusUrl() {

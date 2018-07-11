@@ -4,6 +4,7 @@ namespace Digipost\Signature\API\XML\Thirdparty\XMLdSig;
 
 use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
 use Digipost\Signature\Client\Core\Internal\XMLSignContext;
+use Doctrine\Common\Annotations\Annotation\Enum;
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -42,30 +43,37 @@ use JMS\Serializer\Annotation as Serializer;
 class Signature {
 
   /**
-   * @Serializer\XmlList(entry="SignedInfo", inline=false)
+   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\SignedInfo")
+   * @Serializer\XmlElement()
    * @Serializer\SerializedName("SignedInfo")
    */
   protected $signedInfo;
 
   /**
-   * @Serializer\XmlList(entry="SignatureValue", inline=true)
+   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\SignatureValue")
+   * @Serializer\XmlElement()
    */
   protected $signatureValue;
 
   /**
-   * @Serializer\XmlList(entry="KeyInfo", inline=true)
+   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\KeyInfo")
+   * @Serializer\XmlElement()
    */
   protected $keyInfo;
 
   /**
-   * @Serializer\XmlList(entry="XMLObject", inline=true)
+   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\ObjectType")
+   * @Serializer\XmlElement()
+   * @Serializer\SerializedName("Object")
    */
   protected $objects;
 
   /**
-   * @Serializer\XmlAttribute
+   * @Serializer\Type("string")
+   * @Serializer\XmlAttribute()
+   * @Serializer\SerializedName("ID")
    */
-  protected $id = "Signature";
+  protected $id;
 
   /**
    * Fully-initialising value constructor
@@ -204,7 +212,7 @@ class Signature {
 
     $objects = $this->getObjects();
     foreach ($objects as $object) {
-      /** @var XMLObject $object */
+      /** @var ObjectType $object */
       $signatureIdMap[$object->getId()] = $object;
       $content = $object->getContent();
       foreach ($content as $contentItem) {

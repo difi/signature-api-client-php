@@ -35,8 +35,7 @@ class Transform {
   protected $content;
 
   /**
-   * @Serializer\XmlAttribute
-   * @Serializer\SerializedName("Algorithm")
+   * @Serializer\XmlAttribute()
    */
   protected $algorithm;
 

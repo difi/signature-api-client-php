@@ -40,37 +40,38 @@ use JMS\Serializer\Annotation as Serializer;
 class SignedSignatureProperties {
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("DateTime")
    */
   protected $signingTime;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\SigningCertificate")
    */
   protected $signingCertificate;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\SignaturePolicyIdentifier")
    */
   protected $signaturePolicyIdentifier;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\SignatureProductionPlace")
    */
   protected $signatureProductionPlace;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement()
    * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\SignerRole")
    */
   protected $signerRole;
 
   /**
    * @Serializer\XmlAttribute()
+   * @Serializer\Type("string")
    */
   protected $id;
 

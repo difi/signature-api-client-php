@@ -27,7 +27,7 @@ class ExtensionsListType {
 
   /**
    * @var Extension[] $extensions
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlMap(entry="Extension", inline=true)
    * @Serializer\Type("array<Digipost\Signature\API\XML\Thirdparty\ASiCe\Extension>")
    */
   protected $extensions;
