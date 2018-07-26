@@ -1,0 +1,37 @@
+Digipost\Signature\API\XML\Thirdparty\ASiCe\ASiCManifestType:
+    properties:
+        sigReference:
+            expose: true
+            access_type: public_method
+            serialized_name: SigReference
+            xml_element:
+                namespace: 'http://uri.etsi.org/2918/v1.2.1#'
+            accessor:
+                getter: getSigReference
+                setter: setSigReference
+            type: Digipost\Signature\API\XML\Thirdparty\ASiCe\SigReference
+        dataObjectReference:
+            expose: true
+            access_type: public_method
+            serialized_name: DataObjectReference
+            accessor:
+                getter: getDataObjectReference
+                setter: setDataObjectReference
+            xml_list:
+                inline: true
+                entry_name: DataObjectReference
+                namespace: 'http://uri.etsi.org/2918/v1.2.1#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\ASiCe\DataObjectReference>
+        aSiCManifestExtensions:
+            expose: true
+            access_type: public_method
+            serialized_name: ASiCManifestExtensions
+            accessor:
+                getter: getASiCManifestExtensions
+                setter: setASiCManifestExtensions
+            type: array<Digipost\Signature\API\XML\Thirdparty\ASiCe\Extension>
+            xml_list:
+                inline: false
+                entry_name: Extension
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/2918/v1.2.1#'

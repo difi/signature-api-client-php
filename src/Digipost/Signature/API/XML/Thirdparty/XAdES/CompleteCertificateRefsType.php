@@ -2,72 +2,103 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class CompleteCertificateRefsType
+ * Class representing CompleteCertificateRefsType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="CompleteCertificateRefsType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element name="CertRefs" type="{http://uri.etsi.org/01903/v1.3.2#}CertIDListType"/>
- *       </sequence>
- *       <attribute name="Id" type="{http://www.w3.org/2001/XMLSchema}ID" />
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
+ * XSD Type: CompleteCertificateRefsType
  */
-class CompleteCertificateRefsType {
+class CompleteCertificateRefsType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\SigningCertificate")
-   */
-  protected $certRefs;
+    /**
+     * @property string $id
+     */
+    private $id = null;
 
-  /**
-   * @Serializer\XmlAttribute()
-   * @Serializer\SerializedName("Id")
-   */
-  protected $id;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\CertIDType[] $certRefs
+     */
+    private $certRefs = null;
 
-  public function __construct(SigningCertificate $certRefs = NULL,
-                              String $id = NULL) {
-    $this->certRefs = $certRefs;
-    $this->id = $id;
-  }
+    /**
+     * Gets as id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-  public function getCertRefs() {
-    return $this->certRefs;
-  }
+    /**
+     * Sets a new id
+     *
+     * @param string $id
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
-  public function setCertRefs(SigningCertificate $value) {
-    $this->certRefs = $value;
-  }
+    /**
+     * Adds as cert
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\CertIDType $cert
+     */
+    public function addToCertRefs(\Digipost\Signature\API\XML\Thirdparty\XAdES\CertIDType $cert)
+    {
+        $this->certRefs[] = $cert;
+        return $this;
+    }
 
-  public function withCertRefs(SigningCertificate $value) {
-    $this->setCertRefs($value);
-    return $this;
-  }
+    /**
+     * isset certRefs
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetCertRefs($index)
+    {
+        return isset($this->certRefs[$index]);
+    }
 
-  public function getId() {
-    return $this->id;
-  }
+    /**
+     * unset certRefs
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetCertRefs($index)
+    {
+        unset($this->certRefs[$index]);
+    }
 
-  public function setId(String $value) {
-    $this->id = $value;
-  }
+    /**
+     * Gets as certRefs
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\CertIDType[]
+     */
+    public function getCertRefs()
+    {
+        return $this->certRefs;
+    }
 
-  public function withId(String $value) {
-    $this->setId($value);
-    return $this;
-  }
+    /**
+     * Sets a new certRefs
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\CertIDType[] $certRefs
+     * @return self
+     */
+    public function setCertRefs(array $certRefs)
+    {
+        $this->certRefs = $certRefs;
+        return $this;
+    }
+
+
 }
 

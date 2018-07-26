@@ -1,0 +1,12 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\SigningTime:
+    xml_root_name: SigningTime
+
+    properties:
+        __value:
+            expose: true
+            xml_value: true
+            access_type: public_method
+            accessor:
+                getter: value
+                setter: value
+            type: GoetasWebservices\Xsd\XsdToPhp\XMLSchema\DateTime

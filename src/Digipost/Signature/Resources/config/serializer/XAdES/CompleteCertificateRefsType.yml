@@ -1,0 +1,24 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\CompleteCertificateRefsType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        certRefs:
+            expose: true
+            access_type: public_method
+            serialized_name: CertRefs
+            accessor:
+                getter: getCertRefs
+                setter: setCertRefs
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CertIDType>
+            xml_list:
+                inline: false
+                entry_name: Cert
+                skip_when_empty: false
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'

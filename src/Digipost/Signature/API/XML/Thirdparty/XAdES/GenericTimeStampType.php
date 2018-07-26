@@ -2,172 +2,321 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use Digipost\Signature\API\XML\Thirdparty\XMLdSig\CanonicalizationMethod;
-use Ds\Map;
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class GenericTimeStampType
+ * Class representing GenericTimeStampType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * ```xml
- * <complexType name="GenericTimeStampType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <choice minOccurs="0">
- *           <element ref="{http://uri.etsi.org/01903/v1.3.2#}Include" maxOccurs="unbounded" minOccurs="0"/>
- *           <element ref="{http://uri.etsi.org/01903/v1.3.2#}ReferenceInfo" maxOccurs="unbounded"/>
- *         </choice>
- *         <element ref="{http://www.w3.org/2000/09/xmldsig#}CanonicalizationMethod" minOccurs="0"/>
- *         <choice maxOccurs="unbounded">
- *           <element name="EncapsulatedTimeStamp" type="{http://uri.etsi.org/01903/v1.3.2#}EncapsulatedPKIDataType"/>
- *           <element name="XMLTimeStamp" type="{http://uri.etsi.org/01903/v1.3.2#}AnyType"/>
- *         </choice>
- *       </sequence>
- *       <attribute name="Id" type="{http://www.w3.org/2001/XMLSchema}ID" />
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * ```
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
- * @see     XAdESTimeStampType
- * @see     OtherTimeStamp
- *
- * @Serializer\AccessorOrder("custom", custom={
- *   "referenceInfos",
- *   "includes",
- *   "canonicalizationMethod",
- *   "encapsulatedTimeStampsAndXMLTimeStamps"
- * })
+ * XSD Type: GenericTimeStampType
  */
-class GenericTimeStampType {
+class GenericTimeStampType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("array<Digipost\Signature\API\XML\Thirdparty\XAdES\ReferenceInfo>")
-   * @Serializer\SerializedName("ReferenceInfo")
-   */
-  protected $referenceInfos;
+    /**
+     * @property string $id
+     */
+    private $id = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("array<Digipost\Signature\API\XML\Thirdparty\XAdES\IncludeType>")
-   * @Serializer\SerializedName("Include")
-   */
-  protected $includes;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\IncludeXsd[] $include
+     */
+    private $include = array(
+        
+    );
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\CanonicalizationMethod")
-   */
-  protected $canonicalizationMethod;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\ReferenceInfo[] $referenceInfo
+     */
+    private $referenceInfo = array(
+        
+    );
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("array<any>")
-   */
-  protected $encapsulatedTimeStampsAndXMLTimeStamps;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XMLdSig\CanonicalizationMethod $canonicalizationMethod
+     */
+    private $canonicalizationMethod = null;
 
-  /**
-   * @Serializer\XmlAttribute()
-   * @Serializer\SerializedName("Id")
-   */
-  protected $id;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[] $encapsulatedTimeStamp
+     */
+    private $encapsulatedTimeStamp = array(
+        
+    );
 
-  public function __construct(array $referenceInfos = NULL,
-                              array $includes = NULL,
-                              CanonicalizationMethod $canonicalizationMethod = NULL,
-                              array $encapsulatedTimeStampsAndXMLTimeStamps = NULL,
-                              String $id = NULL) {
-    $this->referenceInfos = $referenceInfos;
-    $this->includes = $includes;
-    $this->canonicalizationMethod = $canonicalizationMethod;
-    $this->encapsulatedTimeStampsAndXMLTimeStamps = $encapsulatedTimeStampsAndXMLTimeStamps;
-    $this->id = $id;
-    return $this;
-  }
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[] $xMLTimeStamp
+     */
+    private $xMLTimeStamp = array(
+        
+    );
 
-  public function &getReferenceInfos() {
-    if ($this->referenceInfos === NULL) {
-      $this->referenceInfos = [];
+    /**
+     * Gets as id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
     }
-    return $this->referenceInfos;
-  }
 
-  public function withReferenceInfos(array $values) {
-    $content =& $this->getReferenceInfos();
-
-    if ($values !== NULL) {
-      foreach ($values as $value) {
-        $content[] = $value;
-      }
+    /**
+     * Sets a new id
+     *
+     * @param string $id
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
     }
-    return $this;
-  }
 
-  public function &getIncludes() {
-    if ($this->includes === NULL) {
-      $this->includes = [];
+    /**
+     * Adds as include
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\IncludeXsd $include
+     */
+    public function addToInclude(\Digipost\Signature\API\XML\Thirdparty\XAdES\IncludeXsd $include)
+    {
+        $this->include[] = $include;
+        return $this;
     }
-    return $this->includes;
-  }
 
-  public function withIncludes(array $values) {
-    $content =& $this->getIncludes();
-
-    if ($values !== NULL) {
-      foreach ($values as $value) {
-        $content[] = $value;
-      }
+    /**
+     * isset include
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetInclude($index)
+    {
+        return isset($this->include[$index]);
     }
-    return $this;
-  }
 
-  public function getCanonicalizationMethod() {
-    return $this->canonicalizationMethod;
-  }
-
-  public function setCanonicalizationMethod(CanonicalizationMethod $value) {
-    $this->canonicalizationMethod = $value;
-  }
-
-  public function withCanonicalizationMethod(CanonicalizationMethod $value) {
-    $this->setCanonicalizationMethod($value);
-    return $this;
-  }
-
-  public function &getEncapsulatedTimeStampsAndXMLTimeStamps() {
-    if ($this->encapsulatedTimeStampsAndXMLTimeStamps === NULL) {
-      $this->encapsulatedTimeStampsAndXMLTimeStamps = [];
+    /**
+     * unset include
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetInclude($index)
+    {
+        unset($this->include[$index]);
     }
-    return $this->encapsulatedTimeStampsAndXMLTimeStamps;
-  }
 
-  public function withEncapsulatedTimeStampsAndXMLTimeStamps(array $values) {
-    $content =& $this->getEncapsulatedTimeStampsAndXMLTimeStamps();
-
-    if ($values !== NULL) {
-      foreach ($values as $value) {
-        $content[] = $value;
-      }
+    /**
+     * Gets as include
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\IncludeXsd[]
+     */
+    public function getInclude()
+    {
+        return $this->include;
     }
-    return $this;
-  }
 
-  public function getId() {
-    return $this->id;
-  }
+    /**
+     * Sets a new include
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\IncludeXsd[] $include
+     * @return self
+     */
+    public function setInclude(array $include)
+    {
+        $this->include = $include;
+        return $this;
+    }
 
-  public function setId(String $value) {
-    $this->id = $value;
-  }
+    /**
+     * Adds as referenceInfo
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\ReferenceInfo $referenceInfo
+     */
+    public function addToReferenceInfo(\Digipost\Signature\API\XML\Thirdparty\XAdES\ReferenceInfo $referenceInfo)
+    {
+        $this->referenceInfo[] = $referenceInfo;
+        return $this;
+    }
 
-  public function withId(String $value) {
-    $this->setId($value);
-    return $this;
-  }
+    /**
+     * isset referenceInfo
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetReferenceInfo($index)
+    {
+        return isset($this->referenceInfo[$index]);
+    }
+
+    /**
+     * unset referenceInfo
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetReferenceInfo($index)
+    {
+        unset($this->referenceInfo[$index]);
+    }
+
+    /**
+     * Gets as referenceInfo
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\ReferenceInfo[]
+     */
+    public function getReferenceInfo()
+    {
+        return $this->referenceInfo;
+    }
+
+    /**
+     * Sets a new referenceInfo
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\ReferenceInfo[] $referenceInfo
+     * @return self
+     */
+    public function setReferenceInfo(array $referenceInfo)
+    {
+        $this->referenceInfo = $referenceInfo;
+        return $this;
+    }
+
+    /**
+     * Gets as canonicalizationMethod
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XMLdSig\CanonicalizationMethod
+     */
+    public function getCanonicalizationMethod()
+    {
+        return $this->canonicalizationMethod;
+    }
+
+    /**
+     * Sets a new canonicalizationMethod
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XMLdSig\CanonicalizationMethod $canonicalizationMethod
+     * @return self
+     */
+    public function setCanonicalizationMethod(\Digipost\Signature\API\XML\Thirdparty\XMLdSig\CanonicalizationMethod $canonicalizationMethod)
+    {
+        $this->canonicalizationMethod = $canonicalizationMethod;
+        return $this;
+    }
+
+    /**
+     * Adds as encapsulatedTimeStamp
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType $encapsulatedTimeStamp
+     */
+    public function addToEncapsulatedTimeStamp(\Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType $encapsulatedTimeStamp)
+    {
+        $this->encapsulatedTimeStamp[] = $encapsulatedTimeStamp;
+        return $this;
+    }
+
+    /**
+     * isset encapsulatedTimeStamp
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetEncapsulatedTimeStamp($index)
+    {
+        return isset($this->encapsulatedTimeStamp[$index]);
+    }
+
+    /**
+     * unset encapsulatedTimeStamp
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetEncapsulatedTimeStamp($index)
+    {
+        unset($this->encapsulatedTimeStamp[$index]);
+    }
+
+    /**
+     * Gets as encapsulatedTimeStamp
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[]
+     */
+    public function getEncapsulatedTimeStamp()
+    {
+        return $this->encapsulatedTimeStamp;
+    }
+
+    /**
+     * Sets a new encapsulatedTimeStamp
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[] $encapsulatedTimeStamp
+     * @return self
+     */
+    public function setEncapsulatedTimeStamp(array $encapsulatedTimeStamp)
+    {
+        $this->encapsulatedTimeStamp = $encapsulatedTimeStamp;
+        return $this;
+    }
+
+    /**
+     * Adds as xMLTimeStamp
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType $xMLTimeStamp
+     */
+    public function addToXMLTimeStamp(\Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType $xMLTimeStamp)
+    {
+        $this->xMLTimeStamp[] = $xMLTimeStamp;
+        return $this;
+    }
+
+    /**
+     * isset xMLTimeStamp
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetXMLTimeStamp($index)
+    {
+        return isset($this->xMLTimeStamp[$index]);
+    }
+
+    /**
+     * unset xMLTimeStamp
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetXMLTimeStamp($index)
+    {
+        unset($this->xMLTimeStamp[$index]);
+    }
+
+    /**
+     * Gets as xMLTimeStamp
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[]
+     */
+    public function getXMLTimeStamp()
+    {
+        return $this->xMLTimeStamp;
+    }
+
+    /**
+     * Sets a new xMLTimeStamp
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[] $xMLTimeStamp
+     * @return self
+     */
+    public function setXMLTimeStamp(array $xMLTimeStamp)
+    {
+        $this->xMLTimeStamp = $xMLTimeStamp;
+        return $this;
+    }
+
+
 }
 

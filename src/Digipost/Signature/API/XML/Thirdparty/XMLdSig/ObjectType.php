@@ -2,98 +2,114 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XMLdSig;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class Object
+ * Class representing ObjectType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="ObjectType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence maxOccurs="unbounded" minOccurs="0">
- *         <any processContents='lax'/>
- *       </sequence>
- *       <attribute name="Id" type="{http://www.w3.org/2001/XMLSchema}ID" />
- *       <attribute name="MimeType" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       <attribute name="Encoding" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XMLdSig
- *          
- * @Serializer\XmlRoot(name="Object")
- * @Serializer\AccessorOrder("custom", custom={"content"})
+ * XSD Type: ObjectType
  */
-class ObjectType {
+class ObjectType
+{
 
-  /**
-   * @Serializer\XmlList(inline=true)
-   * @Serializer\Type("array<object>")
-   */
-  protected $content;
+    private $content = [];
 
-  /**
-   * @Serializer\Type("string")
-   * @Serializer\XmlAttribute()
-   */
-  protected $id;
+    /**
+     * @property string $id
+     */
+    private $id = null;
 
-  /**
-   * @Serializer\Type("string")
-   * @Serializer\XmlAttribute()
-   */
-  protected $mimeType;
+    /**
+     * @property string $mimeType
+     */
+    private $mimeType = null;
 
-  /**
-   * @Serializer\Type("string")
-   * @Serializer\XmlAttribute()
-   */
-  protected $encoding;
+    /**
+     * @property string $encoding
+     */
+    private $encoding = null;
 
-  public function __construct(array $content = NULL, String $id = NULL,
-                              String $mimeType = NULL,
-                              String $encoding = NULL) {
-    $this->content = $content;
-    $this->id = $id;
-    $this->mimeType = $mimeType;
-    $this->encoding = $encoding;
-    return $this;
-  }
-
-  public function getContent() {
-    if ($this->content === NULL) {
-      $this->content = [];
+    /**
+     * Gets as id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
     }
+
+    /**
+     * Sets a new id
+     *
+     * @param string $id
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Gets as mimeType
+     *
+     * @return string
+     */
+    public function getMimeType()
+    {
+        return $this->mimeType;
+    }
+
+    /**
+     * Sets a new mimeType
+     *
+     * @param string $mimeType
+     * @return self
+     */
+    public function setMimeType($mimeType)
+    {
+        $this->mimeType = $mimeType;
+        return $this;
+    }
+
+    /**
+     * Gets as encoding
+     *
+     * @return string
+     */
+    public function getEncoding()
+    {
+        return $this->encoding;
+    }
+
+    /**
+     * Sets a new encoding
+     *
+     * @param string $encoding
+     * @return self
+     */
+    public function setEncoding($encoding)
+    {
+        $this->encoding = $encoding;
+        return $this;
+    }
+
+  /**
+   * @return array
+   */
+  public function getContent(): array
+  {
     return $this->content;
   }
 
-  public function getId() {
-    return $this->id;
-  }
-
-  public function setId($value) {
-    $this->id = $value;
-  }
-
-  public function getMimeType() {
-    return $this->mimeType;
-  }
-
-  public function setMimeType($value) {
-    $this->mimeType = $value;
-  }
-
-  public function getEncoding() {
-    return $this->encoding;
-  }
-
-  public function setEncoding($value) {
-    $this->encoding = $value;
+  /**
+   * @param array $content
+   * @return ObjectType
+   */
+  public function setContent(array $content)
+  {
+    $this->content = $content;
+    return $this;
   }
 }
 

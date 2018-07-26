@@ -2,79 +2,69 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class OCSPRefType
+ * Class representing OCSPRefType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="OCSPRefType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element name="OCSPIdentifier" type="{http://uri.etsi.org/01903/v1.3.2#}OCSPIdentifierType"/>
- *         <element name="DigestAlgAndValue" type="{http://uri.etsi.org/01903/v1.3.2#}DigestAlgAndValueType" minOccurs="0"/>
- *       </sequence>
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
- *
- * @Serializer\AccessorOrder("custom", custom={
- *   "ocspIdentifier",
- *   "digestAlgAndValue"
- * })
+ * XSD Type: OCSPRefType
  */
-class OCSPRefType {
+class OCSPRefType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\OCSPIdentifierType")
-   */
-  protected $ocspIdentifier;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\OCSPIdentifierType $oCSPIdentifier
+     */
+    private $oCSPIdentifier = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType")
-   *
-   */
-  protected $digestAlgAndValue;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $digestAlgAndValue
+     */
+    private $digestAlgAndValue = null;
 
-  public function __construct(OCSPIdentifierType $ocspIdentifier = NULL,
-                              DigestAlgAndValueType $digestAlgAndValue = NULL) {
-    $this->ocspIdentifier = $ocspIdentifier;
-    $this->digestAlgAndValue = $digestAlgAndValue;
-    return $this;
-  }
+    /**
+     * Gets as oCSPIdentifier
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\OCSPIdentifierType
+     */
+    public function getOCSPIdentifier()
+    {
+        return $this->oCSPIdentifier;
+    }
 
-  public function getOCSPIdentifier() {
-    return $this->ocspIdentifier;
-  }
+    /**
+     * Sets a new oCSPIdentifier
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\OCSPIdentifierType $oCSPIdentifier
+     * @return self
+     */
+    public function setOCSPIdentifier(\Digipost\Signature\API\XML\Thirdparty\XAdES\OCSPIdentifierType $oCSPIdentifier)
+    {
+        $this->oCSPIdentifier = $oCSPIdentifier;
+        return $this;
+    }
 
-  public function setOCSPIdentifier(OCSPIdentifierType $value) {
-    $this->ocspIdentifier = $value;
-  }
+    /**
+     * Gets as digestAlgAndValue
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType
+     */
+    public function getDigestAlgAndValue()
+    {
+        return $this->digestAlgAndValue;
+    }
 
-  public function withOCSPIdentifier(OCSPIdentifierType $value) {
-    $this->setOCSPIdentifier($value);
-    return $this;
-  }
+    /**
+     * Sets a new digestAlgAndValue
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $digestAlgAndValue
+     * @return self
+     */
+    public function setDigestAlgAndValue(\Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $digestAlgAndValue)
+    {
+        $this->digestAlgAndValue = $digestAlgAndValue;
+        return $this;
+    }
 
-  public function getDigestAlgAndValue() {
-    return $this->digestAlgAndValue;
-  }
 
-  public function setDigestAlgAndValue(DigestAlgAndValueType $value) {
-    $this->digestAlgAndValue = $value;
-  }
-
-  public function withDigestAlgAndValue(DigestAlgAndValueType $value) {
-    $this->setDigestAlgAndValue($value);
-    return $this;
-  }
 }
 

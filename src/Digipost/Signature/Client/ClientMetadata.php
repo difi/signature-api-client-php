@@ -3,7 +3,6 @@
 namespace Digipost\Signature\Client;
 
 use Digipost\Signature\Client\Core\Exceptions\RuntimeIOException;
-use PharIo\Version\InvalidVersionException;
 
 class ClientMetadata {
 
@@ -30,17 +29,24 @@ ClientMetadata::__initStatic();
  *
  * @return bool|null|string
  */
-function findFileInParents(string $filename, $startDir = __DIR__,
-                           $maxIterations = 20) {
+function findFileInParents(
+  string $filename,
+  $startDir = __DIR__,
+  $maxIterations = 20
+) {
   $path = $startDir;
   do {
     $path = realpath($path . implode(DIRECTORY_SEPARATOR, ['', '..', '']));
     $filePath = $path . DIRECTORY_SEPARATOR . $filename;
-    $fileContents = file_exists($filePath) ? file_get_contents($filePath) : NULL;
+    $fileContents = file_exists($filePath) ? file_get_contents(
+      $filePath
+    ) : NULL;
   } while (--$maxIterations > 0 && !isset($fileContents) && $path !== DIRECTORY_SEPARATOR);
 
   if (!isset($fileContents)) {
-    throw new RuntimeIOException("Unable to resolve file '$filename' library version, starting from directory '$startDir'");
+    throw new RuntimeIOException(
+      "Unable to resolve file '$filename' library version, starting from directory '$startDir'"
+    );
   }
   return $fileContents;
 }

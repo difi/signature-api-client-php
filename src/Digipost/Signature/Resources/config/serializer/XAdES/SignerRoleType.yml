@@ -1,0 +1,28 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\SignerRoleType:
+    properties:
+        claimedRoles:
+            expose: true
+            access_type: public_method
+            serialized_name: ClaimedRoles
+            accessor:
+                getter: getClaimedRoles
+                setter: setClaimedRoles
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType>
+            xml_list:
+                inline: false
+                entry_name: ClaimedRole
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+        certifiedRoles:
+            expose: true
+            access_type: public_method
+            serialized_name: CertifiedRoles
+            accessor:
+                getter: getCertifiedRoles
+                setter: setCertifiedRoles
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType>
+            xml_list:
+                inline: false
+                entry_name: CertifiedRole
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'

@@ -1,0 +1,76 @@
+services:
+  _defaults:
+    autowire: true
+    public: true
+    autoconfigure: true
+
+  digipost_signature.keystore_file_loader:
+    class: Digipost\Signature\Loader\KeyStoreFileLoader
+    factory: ['Digipost\Signature\Loader\KeyStoreFileLoader', loader]
+    arguments: ['@service_container', '%digipost_signature.keystore.filename%']
+
+  digipost_signature.keystore_config:
+    class: Digipost\Signature\Client\Security\KeyStoreConfig
+    factory: ['Digipost\Signature\Client\Security\KeyStoreConfig', fromKeyStoreFileLoader]
+    arguments:
+      - '@digipost_signature.keystore_file_loader'
+      - '%digipost_signature.keystore.key.alias%'
+      - '%digipost_signature.keystore.password%'
+      - '%digipost_signature.keystore.key.password%'
+
+  digipost_signature.client_guzzle_config:
+    class: Digipost\Signature\Client\Core\Internal\Http\ClientConfig
+    factory: ['Digipost\Signature\Client\Core\Internal\Http\ClientConfig', factory]
+    autowire: false
+    arguments: ['@service_container']
+
+  Digipost\Signature\Client\ClientConfigurationBuilder:
+    class: Digipost\Signature\Client\ClientConfigurationBuilder
+    factory: 'Digipost\Signature\Client\ClientConfiguration::builder'
+    autowire: false
+    arguments:
+      - '@service_container'
+      - '@digipost_signature.keystore_config'
+
+  Digipost\Signature\Client\ClientConfiguration:
+    class: Digipost\Signature\Client\ClientConfiguration
+    factory_service: 'Digipost\Signature\Client\ClientConfigurationBuilder'
+    autowire: false
+    arguments:
+      - '@digipost_signature.keystore_config'
+      - '@digipost_signature.client_guzzle_config'
+
+
+  Digipost\Signature\Client\Core\Internal\XML\Marshalling:
+    class: Digipost\Signature\Client\Core\Internal\XML\Marshalling
+    factory: ['Digipost\Signature\Client\Core\Internal\XML\Marshalling', factory]
+    autowire: false
+    autoconfigure: false
+    arguments:
+      - '@service_container'
+
+
+  Digipost\Signature\Client\Core\Internal\XMLSignatureFactory:
+    class: Digipost\Signature\Client\Core\Internal\XMLSignatureFactory
+    factory: ['Digipost\Signature\Client\Core\Internal\XMLSignatureFactory', singleton]
+    autowire: false
+    autoconfigure: true
+    arguments: ['@service_container']
+
+
+  Digipost\Signature\Client\ASiCe\DumpDocumentBundleToDisk:
+    class: Digipost\Signature\Client\ASiCe\DumpDocumentBundleToDisk
+    factory: ['Digipost\Signature\Client\ASiCe\DumpDocumentBundleToDisk', factory]
+    autowire: false
+    arguments: ['@service_container']
+
+  digipost_signature.locate_resource:
+    factory_service: kernel
+    factory_method: locateResource
+    synthetic: true
+
+  Digipost\Signature\Client\Certificates:
+    class: Digipost\Signature\Client\Certificates
+    factory: ['Digipost\Signature\Client\Certificates', build]
+    autowire: false
+    arguments: ['@service_container', '%digipost_signature.keystore.ca_path%']

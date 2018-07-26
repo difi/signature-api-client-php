@@ -1,0 +1,58 @@
+Digipost\Signature\API\XML\DirectSignatureJobManifest:
+    xml_root_name: direct-signature-job-manifest
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        signer:
+            expose: true
+            access_type: public_method
+            serialized_name: signer
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSigner
+                setter: setSigner
+            xml_list:
+                inline: true
+                entry_name: signer
+                namespace: 'http://signering.posten.no/schema/v1'
+            type: array<Digipost\Signature\API\XML\XMLDirectSigner>
+        sender:
+            expose: true
+            access_type: public_method
+            serialized_name: sender
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSender
+                setter: setSender
+            type: Digipost\Signature\API\XML\XMLSender
+        document:
+            expose: true
+            access_type: public_method
+            serialized_name: document
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getDocument
+                setter: setDocument
+            type: Digipost\Signature\API\XML\XMLDirectDocument
+        requiredAuthentication:
+            expose: true
+            access_type: public_method
+            serialized_name: required-authentication
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getRequiredAuthentication
+                setter: setRequiredAuthentication
+            type: Digipost\Signature\API\XML\XMLAuthenticationLevel
+        identifierInSignedDocuments:
+            expose: true
+            access_type: public_method
+            serialized_name: identifier-in-signed-documents
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getIdentifierInSignedDocuments
+                setter: setIdentifierInSignedDocuments
+            type: Digipost\Signature\API\XML\XMLIdentifierInSignedDocuments

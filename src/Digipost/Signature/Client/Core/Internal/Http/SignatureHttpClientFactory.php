@@ -1,4 +1,5 @@
 <?php
+
 namespace Digipost\Signature\Client\Core\Internal\Http;
 
 use Digipost\Signature\Client\ClientConfiguration;
@@ -7,16 +8,11 @@ use GuzzleHttp\Psr7\Uri as URI;
 
 class SignatureHttpClientFactory {
 
-  public static function create(ClientConfiguration $config) // [HttpIntegrationConfiguration config]
+  public static function create(ClientConfiguration $config
+  ) // [HttpIntegrationConfiguration config]
   {
-    //    $jerseyClient = $JerseyClientBuilder->newBuilder()
-    //      ->withConfig($config->getJaxrsConfiguration())
-    //      ->sslContext($config->getSSLContext())
-    //      ->hostnameVerifier($NoopHostnameVerifier->INSTANCE)
-    //      ->build();
     $params = $config->getGuzzleConfiguration();
     $guzzleClient = new Client($params);
-    //$guzzleClient->getCommand
     return new DefaultClient($guzzleClient, $config->getServiceRoot());
   }
 }
@@ -25,22 +21,26 @@ class DefaultClient implements SignatureHttpClient {
 
   private $guzzleClient;
 
+  /**
+   * @var Client
+   */
   private $_signatureServiceRoot;
 
   function __construct(Client $guzzleClient, URI $root) {
 
     $this->guzzleClient = $guzzleClient;
-    //$config = $guzzleClient->getConfig();
-    //$config['base_uri'] = $root;
     $this->_signatureServiceRoot = $this->target($root);
-    //$guzzleClient->
   }
 
+  /**
+   * @param String $uri
+   *
+   * @return Client
+   */
   public function target(String $uri) {
     $config = $this->guzzleClient->getConfig();
     $config['base_uri'] = $uri;
     return new Client($config);
-    //return $uri;
   }
 
   /**

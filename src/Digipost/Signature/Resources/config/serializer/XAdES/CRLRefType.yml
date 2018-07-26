@@ -1,0 +1,22 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\CRLRefType:
+    properties:
+        digestAlgAndValue:
+            expose: true
+            access_type: public_method
+            serialized_name: DigestAlgAndValue
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getDigestAlgAndValue
+                setter: setDigestAlgAndValue
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType
+        cRLIdentifier:
+            expose: true
+            access_type: public_method
+            serialized_name: CRLIdentifier
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getCRLIdentifier
+                setter: setCRLIdentifier
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\CRLIdentifierType

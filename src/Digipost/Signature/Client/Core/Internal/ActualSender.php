@@ -7,8 +7,10 @@ use Digipost\Signature\Client\Core\Sender;
 
 class ActualSender {
 
-  public static function getActualSender(Sender $messageSpecificSender = NULL,
-                                         Sender $globalSender = NULL) {
+  public static function getActualSender(
+    Sender $messageSpecificSender = NULL,
+    Sender $globalSender = NULL
+  ) {
     if (isset($messageSpecificSender)) {
       return $messageSpecificSender;
     }

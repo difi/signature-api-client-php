@@ -44,11 +44,17 @@ class CreatePortalManifest extends ManifestCreator {
       $xmlPortalSigner = $this->generateSigner($signer);
 
       if ($signer->getNotifications() !== NULL) {
-        $xmlPortalSigner->setNotifications($this->generateNotifications($signer->getNotifications()));
+        $xmlPortalSigner->setNotifications(
+          $this->generateNotifications($signer->getNotifications())
+        );
       }
       else {
         if ($signer->getNotificationsUsingLookup() !== NULL) {
-          $xmlPortalSigner->setNotificationsUsingLookup($this->generateNotificationsUsingLookup($signer->getNotificationsUsingLookup()));
+          $xmlPortalSigner->setNotificationsUsingLookup(
+            $this->generateNotificationsUsingLookup(
+              $signer->getNotificationsUsingLookup()
+            )
+          );
         }
       }
       array_push($xmlSigners, $xmlPortalSigner);
@@ -65,23 +71,30 @@ class CreatePortalManifest extends ManifestCreator {
     $xmlAvailability = new XMLAvailability();
     return $xmlPortalSignerJobManifest
       ->withSigners($xmlSigners)
-      ->withRequiredAuthentication($job->getRequiredAuthentication()
-                                     ->getXmlEnumValue() || NULL)
-      ->withSender($sender->withOrganizationNumber($sender->getOrganizationNumber())
+      ->withRequiredAuthentication(
+        $job->getRequiredAuthentication()
+            ->getXmlEnumValue() || NULL
       )
-      ->withDocument($xmlPortalDocument
-                       ->withTitle($document->getTitle())
-                       ->withNonsensitiveTitle($document->getNonsensitiveTitle())
-                       ->withDescription($document->getMessage())
-                       ->withHref($document->getFileName())
-                       ->withMime($document->getMimeType())
+      ->withSender(
+        $sender->withOrganizationNumber($sender->getOrganizationNumber())
       )
-      ->withAvailability($xmlAvailability
-                           ->withActivationTime($activationTime)
-                           ->withAvailableSeconds($job->getAvailableSeconds())
+      ->withDocument(
+        $xmlPortalDocument
+          ->withTitle($document->getTitle())
+          ->withNonsensitiveTitle($document->getNonsensitiveTitle())
+          ->withDescription($document->getMessage())
+          ->withHref($document->getFileName())
+          ->withMime($document->getMimeType())
       )
-      ->withIdentifierInSignedDocuments($job->getIdentifierInSignedDocuments()
-                                          ->getXmlEnumValue() || NULL);
+      ->withAvailability(
+        $xmlAvailability
+          ->withActivationTime($activationTime)
+          ->withAvailableSeconds($job->getAvailableSeconds())
+      )
+      ->withIdentifierInSignedDocuments(
+        $job->getIdentifierInSignedDocuments()
+            ->getXmlEnumValue() || NULL
+      );
   }
 
   private function generateSigner(PortalSigner $signer) {
@@ -89,13 +102,17 @@ class CreatePortalManifest extends ManifestCreator {
     $xmlSigner = new XMLPortalSigner();
     $xmlSigner
       ->withOrder($signer->getOrder())
-      ->withSignatureType($signer->getSignatureType()
-                            ->getXmlEnumValue() || NULL)
+      ->withSignatureType(
+        $signer->getSignatureType()
+               ->getXmlEnumValue() || NULL
+      )
       ->withOnBehalfOf($signer->getOnBehalfOf()->getXmlEnumValue() || NULL);
 
     if ($signer->isIdentifiedByPersonalIdentificationNumber()) {
 
-      $xmlSigner->setPersonalIdentificationNumber($signer->getIdentifier() /* TODO .orElseThrow(SIGNER_NOT_SPECIFIED) */);
+      $xmlSigner->setPersonalIdentificationNumber(
+        $signer->getIdentifier() /* TODO .orElseThrow(SIGNER_NOT_SPECIFIED) */
+      );
     }
 
     else {
@@ -104,7 +121,9 @@ class CreatePortalManifest extends ManifestCreator {
     return $xmlSigner;
   }
 
-  private function generateNotificationsUsingLookup(NotificationsUsingLookup $notificationsUsingLookup) {
+  private function generateNotificationsUsingLookup(
+    NotificationsUsingLookup $notificationsUsingLookup
+  ) {
     $xmlNotificationsUsingLookup = new XMLNotificationsUsingLookup();
     if ($notificationsUsingLookup->shouldSendEmail) {
       $xmlNotificationsUsingLookup->setEmail(new XMLEnabled());
@@ -118,7 +137,9 @@ class CreatePortalManifest extends ManifestCreator {
   private function generateNotifications(Notifications $notifications) {
     $xmlNotifications = new XMLNotifications();
     if ($notifications->shouldSendEmail()) {
-      $xmlNotifications->setEmail(new XMLEmail($notifications->getEmailAddress()));
+      $xmlNotifications->setEmail(
+        new XMLEmail($notifications->getEmailAddress())
+      );
     }
     if ($notifications->shouldSendSms()) {
       $xmlNotifications->setSms(new XMLSms($notifications->getMobileNumber()));

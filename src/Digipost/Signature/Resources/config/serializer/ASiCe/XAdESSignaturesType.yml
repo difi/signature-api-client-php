@@ -1,0 +1,13 @@
+Digipost\Signature\API\XML\Thirdparty\ASiCe\XAdESSignaturesType:
+    properties:
+        signature:
+            expose: true
+            access_type: public_method
+            accessor:
+                getter: getSignature
+                setter: setSignature
+            xml_map:
+                inline: true
+                entry_name: Signature
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XMLdSig\Signature>

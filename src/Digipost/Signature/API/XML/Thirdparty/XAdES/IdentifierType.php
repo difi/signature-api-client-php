@@ -2,69 +2,81 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class IdentifierType
+ * Class representing IdentifierType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="IdentifierType">
- *   <simpleContent>
- *     <extension base="<http://www.w3.org/2001/XMLSchema>anyURI">
- *       <attribute name="Qualifier" type="{http://uri.etsi.org/01903/v1.3.2#}QualifierType" />
- *     </extension>
- *   </simpleContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
+ * XSD Type: IdentifierType
  */
-class IdentifierType {
+class IdentifierType
+{
 
-  /**
-   * @Serializer\XmlValue(cdata=false)
-   */
-  protected $value;
+    /**
+     * @property string $__value
+     */
+    private $__value = null;
 
-  /**
-   * @Serializer\XmlAttribute()
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\QualifierType")
-   */
-  protected $qualifier;
+    /**
+     * @property string $qualifier
+     */
+    private $qualifier = null;
 
-  public function __construct(String $value = NULL,
-                              QualifierType $qualifier = NULL) {
-    $this->value = $value;
-    $this->qualifier = $qualifier;
-    return $this;
-  }
+    /**
+     * Construct
+     *
+     * @param string $value
+     */
+    public function __construct($value)
+    {
+        $this->value($value);
+    }
 
-  public function getValue() {
-    return $this->value;
-  }
+    /**
+     * Gets or sets the inner value
+     *
+     * @param string $value
+     * @return string
+     */
+    public function value()
+    {
+        if ($args = func_get_args()) {
+            $this->__value = $args[0];
+        }
+        return $this->__value;
+    }
 
-  public function setValue(String $value) {
-    $this->value = $value;
-  }
+    /**
+     * Gets a string value
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return strval($this->__value);
+    }
 
-  public function withValue(String $value) {
-    $this->setValue($value);
-    return $this;
-  }
+    /**
+     * Gets as qualifier
+     *
+     * @return string
+     */
+    public function getQualifier()
+    {
+        return $this->qualifier;
+    }
 
-  public function getQualifier() {
-    return $this->qualifier;
-  }
+    /**
+     * Sets a new qualifier
+     *
+     * @param string $qualifier
+     * @return self
+     */
+    public function setQualifier($qualifier)
+    {
+        $this->qualifier = $qualifier;
+        return $this;
+    }
 
-  public function setQualifier(QualifierType $value) {
-    $this->qualifier = $value;
-  }
 
-  public function withQualifier(QualifierType $value) {
-    $this->setQualifier($value);
-    return $this;
-  }
 }
 

@@ -2,9 +2,6 @@
 
 namespace Digipost\Signature\Client\Core\Internal\Security;
 
-use CRLFetchException;
-use CRLWriteException;
-
 class CertificateRevocationList {
 
   /**
@@ -22,13 +19,16 @@ class CertificateRevocationList {
   private $localPath;
 
   /**
-   * Creates a new CRL. Fetches it from the URI if it does not exist as a cached copy or the copy is stale.
+   * Creates a new CRL. Fetches it from the URI if it does not exist as a
+   * cached copy or the copy is stale.
    *
    * @param string $URI The URI to the revocation list.
    */
   public function __construct($URI) {
     $this->URI = $URI;
-    $this->localPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . sha1(getenv('HOME') . $this->URI) . '.crl';
+    $this->localPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . sha1(
+        getenv('HOME') . $this->URI
+      ) . '.crl';
   }
 
   public function __get($name) {
@@ -135,8 +135,10 @@ End;
             continue 2;
         }
       }
-      else if (preg_match('/^([a-f0-9]{8})/', $line, $matches) == 1) {
-        $this->_hash = $matches[1];
+      else {
+        if (preg_match('/^([a-f0-9]{8})/', $line, $matches) == 1) {
+          $this->_hash = $matches[1];
+        }
       }
     }
     $this->fieldsPopulated = TRUE;
@@ -156,9 +158,11 @@ End;
       // If the local copy of the CRL does not exist or we are forced to fetch the file, do it.
       $this->fetch();
     }
-    else if ($now > $this->nextUpdate) {
-      // If the local copy of the CRL states that the next update has taken place, fetch the new CRL
-      $this->fetch();
+    else {
+      if ($now > $this->nextUpdate) {
+        // If the local copy of the CRL states that the next update has taken place, fetch the new CRL
+        $this->fetch();
+      }
     }
   }
 
@@ -171,7 +175,9 @@ End;
       throw new CRLFetchException("Unable to fetch the CRL at $this->URI");
     }
     if (file_put_contents($this->localPath, $remoteContents) === FALSE) {
-      throw new CRLWriteException("Could not write the contents of the remote CRL to the local copy.");
+      throw new CRLWriteException(
+        "Could not write the contents of the remote CRL to the local copy."
+      );
     }
   }
 
@@ -187,7 +193,9 @@ End;
     foreach ($crls as $crl) {
       $pemFileName .= sha1($crl->localPath);
     }
-    $pemFileName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . sha1($pemFileName) . '.pem';
+    $pemFileName = sys_get_temp_dir() . DIRECTORY_SEPARATOR . sha1(
+        $pemFileName
+      ) . '.pem';
     /* If there already is a PEM file for those specific CRLs, check if it is stale.
      * Remove it if it is, otherwise just return that. */
     if (file_exists($pemFileName)) {

@@ -1,0 +1,20 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\IncludeType:
+    properties:
+        uRI:
+            expose: true
+            access_type: public_method
+            serialized_name: URI
+            accessor:
+                getter: getURI
+                setter: setURI
+            xml_attribute: true
+            type: string
+        referencedData:
+            expose: true
+            access_type: public_method
+            serialized_name: referencedData
+            accessor:
+                getter: getReferencedData
+                setter: setReferencedData
+            xml_attribute: true
+            type: boolean

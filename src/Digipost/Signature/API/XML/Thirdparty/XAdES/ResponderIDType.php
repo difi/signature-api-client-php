@@ -2,72 +2,69 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class ResponderIDType
+ * Class representing ResponderIDType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="ResponderIDType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <choice>
- *         <element name="ByName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         <element name="ByKey" type="{http://www.w3.org/2001/XMLSchema}base64Binary"/>
- *       </choice>
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
- *
- * @Serializer\AccessorOrder("custom", custom={"byKey","byName"})
+ * XSD Type: ResponderIDType
  */
-class ResponderIDType {
+class ResponderIDType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   */
-  protected $byKey;
+    /**
+     * @property string $byName
+     */
+    private $byName = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   */
-  protected $byName;
+    /**
+     * @property \Digipost\Signature\API\XML\CustomBase64BinaryType $byKey
+     */
+    private $byKey = null;
 
-  public function __construct(String $byKey = NULL, String $byName = NULL) {
-    $this->byKey = $byKey;
-    $this->byName = $byName;
-    return $this;
-  }
+    /**
+     * Gets as byName
+     *
+     * @return string
+     */
+    public function getByName()
+    {
+        return $this->byName;
+    }
 
-  public function getByKey() {
-    return $this->byKey;
-  }
+    /**
+     * Sets a new byName
+     *
+     * @param string $byName
+     * @return self
+     */
+    public function setByName($byName)
+    {
+        $this->byName = $byName;
+        return $this;
+    }
 
-  public function setByKey(String $value) {
-    $this->byKey = $value;
-  }
+    /**
+     * Gets as byKey
+     *
+     * @return \Digipost\Signature\API\XML\CustomBase64BinaryType
+     */
+    public function getByKey()
+    {
+        return $this->byKey;
+    }
 
-  public function withByKey(String $value) {
-    $this->setByKey($value);
-    return $this;
-  }
+    /**
+     * Sets a new byKey
+     *
+     * @param \Digipost\Signature\API\XML\CustomBase64BinaryType $byKey
+     * @return self
+     */
+    public function setByKey(\Digipost\Signature\API\XML\CustomBase64BinaryType $byKey)
+    {
+        $this->byKey = $byKey;
+        return $this;
+    }
 
-  public function getByName() {
-    return $this->byName;
-  }
 
-  public function setByName(String $value) {
-    $this->byName = $value;
-  }
-
-  public function withByName(String $value) {
-    $this->setByName($value);
-    return $this;
-  }
 }
 

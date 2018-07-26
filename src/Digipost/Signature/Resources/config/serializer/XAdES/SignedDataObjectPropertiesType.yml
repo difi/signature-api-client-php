@@ -1,0 +1,59 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\SignedDataObjectPropertiesType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        dataObjectFormat:
+            expose: true
+            access_type: public_method
+            serialized_name: DataObjectFormat
+            accessor:
+                getter: getDataObjectFormat
+                setter: setDataObjectFormat
+            xml_list:
+                inline: true
+                entry_name: DataObjectFormat
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\DataObjectFormatType>
+        commitmentTypeIndication:
+            expose: true
+            access_type: public_method
+            serialized_name: CommitmentTypeIndication
+            accessor:
+                getter: getCommitmentTypeIndication
+                setter: setCommitmentTypeIndication
+            xml_list:
+                inline: true
+                entry_name: CommitmentTypeIndication
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CommitmentTypeIndicationType>
+        allDataObjectsTimeStamp:
+            expose: true
+            access_type: public_method
+            serialized_name: AllDataObjectsTimeStamp
+            accessor:
+                getter: getAllDataObjectsTimeStamp
+                setter: setAllDataObjectsTimeStamp
+            xml_list:
+                inline: true
+                entry_name: AllDataObjectsTimeStamp
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\XAdESTimeStampType>
+        individualDataObjectsTimeStamp:
+            expose: true
+            access_type: public_method
+            serialized_name: IndividualDataObjectsTimeStamp
+            accessor:
+                getter: getIndividualDataObjectsTimeStamp
+                setter: setIndividualDataObjectsTimeStamp
+            xml_list:
+                inline: true
+                entry_name: IndividualDataObjectsTimeStamp
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\XAdESTimeStampType>

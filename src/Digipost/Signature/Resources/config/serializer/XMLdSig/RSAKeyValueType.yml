@@ -1,0 +1,22 @@
+Digipost\Signature\API\XML\Thirdparty\XMLdSig\RSAKeyValueType:
+    properties:
+        modulus:
+            expose: true
+            access_type: public_method
+            serialized_name: Modulus
+            xml_element:
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+            accessor:
+                getter: getModulus
+                setter: setModulus
+            type: Digipost\Signature\API\XML\CustomBase64BinaryType
+        exponent:
+            expose: true
+            access_type: public_method
+            serialized_name: Exponent
+            xml_element:
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+            accessor:
+                getter: getExponent
+                setter: setExponent
+            type: Digipost\Signature\API\XML\CustomBase64BinaryType

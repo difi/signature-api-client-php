@@ -1,0 +1,42 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\SignatureProductionPlaceType:
+    properties:
+        city:
+            expose: true
+            access_type: public_method
+            serialized_name: City
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getCity
+                setter: setCity
+            type: string
+        stateOrProvince:
+            expose: true
+            access_type: public_method
+            serialized_name: StateOrProvince
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getStateOrProvince
+                setter: setStateOrProvince
+            type: string
+        postalCode:
+            expose: true
+            access_type: public_method
+            serialized_name: PostalCode
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getPostalCode
+                setter: setPostalCode
+            type: string
+        countryName:
+            expose: true
+            access_type: public_method
+            serialized_name: CountryName
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getCountryName
+                setter: setCountryName
+            type: string

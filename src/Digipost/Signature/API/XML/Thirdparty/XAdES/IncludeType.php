@@ -2,72 +2,69 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class IncludeType
+ * Class representing IncludeType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="IncludeType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <attribute name="URI" use="required" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
- *       <attribute name="referencedData" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
- *
- * @Serializer\XmlRoot(name="Include")
+ * XSD Type: IncludeType
  */
-class IncludeType {
+class IncludeType
+{
 
-  /**
-   * @Serializer\XmlAttribute()
-   * @Serializer\SerializedName("URI")
-   */
-  protected $uri;
+    /**
+     * @property string $uRI
+     */
+    private $uRI = null;
 
-  /**
-   * @Serializer\XmlAttribute()
-   * @Serializer\Type("boolean")
-   */
-  protected $referencedData;
+    /**
+     * @property boolean $referencedData
+     */
+    private $referencedData = null;
 
-  public function __construct(String $uri = NULL, bool $referencedData = NULL) {
-    $this->uri = $uri;
-    $this->referencedData = $referencedData;
-    return $this;
-  }
+    /**
+     * Gets as uRI
+     *
+     * @return string
+     */
+    public function getURI()
+    {
+        return $this->uRI;
+    }
 
-  public function getURI() {
-    return $this->uri;
-  }
+    /**
+     * Sets a new uRI
+     *
+     * @param string $uRI
+     * @return self
+     */
+    public function setURI($uRI)
+    {
+        $this->uRI = $uRI;
+        return $this;
+    }
 
-  public function setURI(String $value) {
-    $this->uri = $value;
-  }
+    /**
+     * Gets as referencedData
+     *
+     * @return boolean
+     */
+    public function getReferencedData()
+    {
+        return $this->referencedData;
+    }
 
-  public function withURI(String $value) {
-    $this->setURI($value);
-    return $this;
-  }
+    /**
+     * Sets a new referencedData
+     *
+     * @param boolean $referencedData
+     * @return self
+     */
+    public function setReferencedData($referencedData)
+    {
+        $this->referencedData = $referencedData;
+        return $this;
+    }
 
-  public function isReferencedData() {
-    return $this->referencedData;
-  }
 
-  public function setReferencedData(bool $value) {
-    $this->referencedData = $value;
-  }
-
-  public function withReferencedData(bool $value) {
-    $this->setReferencedData($value);
-    return $this;
-  }
 }
 

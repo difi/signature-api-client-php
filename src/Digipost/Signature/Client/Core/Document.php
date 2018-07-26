@@ -19,8 +19,13 @@ class Document implements ASiCEAttachable {
 
   //const FileType_PDF = DocumentFileType::PDF;
   //const FileType_TXT = DocumentFileType::TXT;
-  public function __construct(String $title, String $message, String $fileName,
-                              DocumentFileType $fileType, $document) {
+  public function __construct(
+    String $title,
+    String $message,
+    String $fileName,
+    DocumentFileType $fileType,
+    $document
+  ) {
     $this->title = $title;
     $this->message = $message;
     $this->fileName = $fileName;

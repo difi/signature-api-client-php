@@ -1,0 +1,69 @@
+Digipost\Signature\API\XML\PortalSignatureJobManifest:
+    xml_root_name: portal-signature-job-manifest
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        signers:
+            expose: true
+            access_type: public_method
+            serialized_name: signers
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSigners
+                setter: setSigners
+            type: array<Digipost\Signature\API\XML\XMLPortalSigner>
+            xml_list:
+                inline: false
+                entry_name: signer
+                skip_when_empty: false
+                namespace: 'http://signering.posten.no/schema/v1'
+        sender:
+            expose: true
+            access_type: public_method
+            serialized_name: sender
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSender
+                setter: setSender
+            type: Digipost\Signature\API\XML\XMLSender
+        document:
+            expose: true
+            access_type: public_method
+            serialized_name: document
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getDocument
+                setter: setDocument
+            type: Digipost\Signature\API\XML\XMLPortalDocument
+        requiredAuthentication:
+            expose: true
+            access_type: public_method
+            serialized_name: required-authentication
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getRequiredAuthentication
+                setter: setRequiredAuthentication
+            type: Digipost\Signature\API\XML\XMLAuthenticationLevel
+        availability:
+            expose: true
+            access_type: public_method
+            serialized_name: availability
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getAvailability
+                setter: setAvailability
+            type: Digipost\Signature\API\XML\XMLAvailability
+        identifierInSignedDocuments:
+            expose: true
+            access_type: public_method
+            serialized_name: identifier-in-signed-documents
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getIdentifierInSignedDocuments
+                setter: setIdentifierInSignedDocuments
+            type: Digipost\Signature\API\XML\XMLIdentifierInSignedDocuments

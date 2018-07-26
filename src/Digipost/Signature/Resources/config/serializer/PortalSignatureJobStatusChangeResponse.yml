@@ -1,0 +1,64 @@
+Digipost\Signature\API\XML\PortalSignatureJobStatusChangeResponse:
+    xml_root_name: portal-signature-job-status-change-response
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        signatureJobId:
+            expose: true
+            access_type: public_method
+            serialized_name: signature-job-id
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSignatureJobId
+                setter: setSignatureJobId
+            type: integer
+        status:
+            expose: true
+            access_type: public_method
+            serialized_name: status
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getStatus
+                setter: setStatus
+            type: Digipost\Signature\API\XML\XMLPortalSignatureJobStatus
+        confirmationUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: confirmation-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getConfirmationUrl
+                setter: setConfirmationUrl
+            type: string
+        cancellationUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: cancellation-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getCancellationUrl
+                setter: setCancellationUrl
+            type: string
+        deleteDocumentsUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: delete-documents-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getDeleteDocumentsUrl
+                setter: setDeleteDocumentsUrl
+            type: string
+        signatures:
+            expose: true
+            access_type: public_method
+            serialized_name: signatures
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSignatures
+                setter: setSignatures
+            type: Digipost\Signature\API\XML\XMLSignatures

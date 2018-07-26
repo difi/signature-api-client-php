@@ -1,0 +1,64 @@
+xsd2php:
+  namespaces:
+    'http://signering.posten.no/schema/v1': 'Digipost\Signature\API\XML'
+    'http://www.w3.org/2000/09/xmldsig#': 'Digipost\Signature\API\XML\Thirdparty\XMLdSig'
+    'http://uri.etsi.org/2918/v1.2.1#': 'Digipost\Signature\API\XML\Thirdparty\ASiCe'
+    'http://uri.etsi.org/01903/v1.3.2#': 'Digipost\Signature\API\XML\Thirdparty\XAdES'
+  destinations_php:
+    'Digipost\Signature\API\XML\Thirdparty\XMLdSig': '%kernel.project_dir%/src/Digipost/Signature/API/XML/Thirdparty/XMLdSig'
+    'Digipost\Signature\API\XML\Thirdparty\ASiCe': '%kernel.project_dir%/src/Digipost/Signature/API/XML/Thirdparty/ASiCe'
+    'Digipost\Signature\API\XML\Thirdparty\XAdES': '%kernel.project_dir%/src/Digipost/Signature/API/XML/Thirdparty/XAdES'
+    'Digipost\Signature\API\XML': '%kernel.project_dir%/src/Digipost/Signature/API/XML'
+  destinations_jms:
+    'Digipost\Signature\API\XML\Thirdparty\XMLdSig': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer/XMLdSig'
+    'Digipost\Signature\API\XML\Thirdparty\ASiCe': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer/ASiCe'
+    'Digipost\Signature\API\XML\Thirdparty\XAdES': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer/XAdES'
+    'Digipost\Signature\API\XML': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer'
+  aliases:
+    'http://signering.posten.no/schema/v1':
+      'authentication-level': 'Digipost\Signature\API\XML\XMLAuthenticationLevel'
+      'availability': 'Digipost\Signature\API\XML\XMLAvailability'
+      'direct-document': 'Digipost\Signature\API\XML\XMLDirectDocument'
+      'direct-signature-job-manifest': 'Digipost\Signature\API\XML\XMLDirectSignatureJobManifest'
+      'direct-signature-job-request': 'Digipost\Signature\API\XML\XMLDirectSignatureJobRequest'
+      'direct-signature-job-response': 'Digipost\Signature\API\XML\XMLDirectSignatureJobResponse'
+      'direct-signature-job-status': 'Digipost\Signature\API\XML\XMLDirectSignatureJobStatus'
+      'direct-signature-job-status-response': 'Digipost\Signature\API\XML\XMLDirectSignatureJobStatusResponse'
+      'direct-signer': 'Digipost\Signature\API\XML\XMLDirectSigner'
+      'email': 'Digipost\Signature\API\XML\XMLEmail'
+      'enabled': 'Digipost\Signature\API\XML\XMLEnabled'
+      'error': 'Digipost\Signature\API\XML\XMLError'
+      'exit-urls': 'Digipost\Signature\API\XML\XMLExitUrls'
+      'identifier-in-signed-documents': 'Digipost\Signature\API\XML\XMLIdentifierInSignedDocuments'
+      'notifications': 'Digipost\Signature\API\XML\XMLNotifications'
+      'notifications-using-lookup': 'Digipost\Signature\API\XML\XMLNotificationsUsingLookup'
+      'portal-document': 'Digipost\Signature\API\XML\XMLPortalDocument'
+      'portal-signature-job-manifest': 'Digipost\Signature\API\XML\XMLPortalSignatureJobManifest'
+      'portal-signature-job-request': 'Digipost\Signature\API\XML\XMLPortalSignatureJobRequest'
+      'portal-signature-job-response': 'Digipost\Signature\API\XML\XMLPortalSignatureJobResponse'
+      'portal-signature-job-status': 'Digipost\Signature\API\XML\XMLPortalSignatureJobStatus'
+      'portal-signature-job-status-response': 'Digipost\Signature\API\XML\XMLPortalSignatureJobStatusResponse'
+      'portal-signer': 'Digipost\Signature\API\XML\XMLPortalSigner'
+      'sender': 'Digipost\Signature\API\XML\XMLSender'
+      'signature': 'Digipost\Signature\API\XML\XMLSignature'
+      'signatures': 'Digipost\Signature\API\XML\XMLSignatures'
+      'signature-status': 'Digipost\Signature\API\XML\XMLSignatureStatus'
+      'signature-type': 'Digipost\Signature\API\XML\XMLSignatureType'
+      'signer-specific-url': 'Digipost\Signature\API\XML\XMLSignerSpecificUrl'
+      'signer-status': 'Digipost\Signature\API\XML\XMLSignerStatus'
+      'signing-on-behalf-of': 'Digipost\Signature\API\XML\XMLSigningOnBehalfOf'
+      'sms': 'Digipost\Signature\API\XML\XMLSms'
+      'status-retrieval-method': 'Digipost\Signature\API\XML\XMLStatusRetrievalMethod'
+#    'http://www.w3.org/2000/09/xmldsig#':
+#      DigestValue: 'Digipost\Signature\API\XML\CustomBase64BinaryType'
+    'http://www.w3.org/2001/XMLSchema':
+      anyType: 'Digipost\Signature\API\XML\AnyType'
+      anySimpleType: 'Digipost\Signature\API\XML\AnySimpleType'
+      base64Binary: 'Digipost\Signature\API\XML\CustomBase64BinaryType'
+#    'http://uri.etsi.org/01903/v1.3.2#':
+#      AnyType: 'Digipost\Signature\JMS\Handler\CustomAnyTypeHandler'
+#    'http://uri.etsi.org/2918/v1.2.1#':
+#      AnyType: 'Digipost\Signature\JMS\Handler\CustomAnyTypeHandler'
+    '##any':
+      any: 'Digipost\Signature\API\XML\AnyAnyType'
+  naming_strategy: short

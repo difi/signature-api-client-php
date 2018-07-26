@@ -1,0 +1,40 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\ReferenceInfoType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        uRI:
+            expose: true
+            access_type: public_method
+            serialized_name: URI
+            accessor:
+                getter: getURI
+                setter: setURI
+            xml_attribute: true
+            type: string
+        digestMethod:
+            expose: true
+            access_type: public_method
+            serialized_name: DigestMethod
+            xml_element:
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+            accessor:
+                getter: getDigestMethod
+                setter: setDigestMethod
+            type: Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod
+        digestValue:
+            expose: true
+            access_type: public_method
+            serialized_name: DigestValue
+            xml_element:
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+            accessor:
+                getter: getDigestValue
+                setter: setDigestValue
+            type: Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestValue

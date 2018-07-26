@@ -2,18 +2,26 @@
 
 namespace Digipost\Signature\XSD;
 
-define('DIGIPOST_ROOT_PATH', realpath(__DIR__ . '/../../../../vendor/digipost/signature-api-specification/schema/xsd'));
+// TODO: Move this to config/resource loading
+
+define(
+  'DIGIPOST_ROOT_PATH', realpath(
+  __DIR__ . '/../../../../vendor/digipost/signature-api-specification/schema/xsd'
+)
+);
 
 /**
  * Class SignatureApiSchemas
  *
  * If depending on
  * [signature-api-specification](http://search.maven.org/#search%7Cga%7C1%7Cg%3Ano.digipost.signature%20a%3Asignature-api-specification),
- * these {@code String} constants can be used to resolve the schemas from classpath.
+ * these {@code String} constants can be used to resolve the schemas from
+ * classpath.
  * <p>
- * The {@code String} constants contains the resource names for the individual schema files, but the sets
- * {@link #DIRECT_AND_PORTAL_API}, {@link #DIRECT_API}, and {@link #PORTAL_API} compiles all relevant schemas
- * for the possible API integration cases.
+ * The {@code String} constants contains the resource names for the individual
+ * schema files, but the sets
+ * {@link #DIRECT_AND_PORTAL_API}, {@link #DIRECT_API}, and {@link #PORTAL_API}
+ * compiles all relevant schemas for the possible API integration cases.
  *
  * @package Digipost\Signature\XSD
  */

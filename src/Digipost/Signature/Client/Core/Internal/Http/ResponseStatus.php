@@ -5,6 +5,7 @@ namespace Digipost\Signature\Client\Core\Internal\Http;
 use MyCLabs\Enum\Enum;
 
 interface StatusType {
+
 }
 
 class Status {
@@ -30,13 +31,12 @@ class Unknown implements StatusType {
 
 class ResponseStatus {
 
-  public static function resolve($code) // [int code]
-  {
+  public static function resolve(int $code) {
     $status = Status::fromStatusCode($code);
-    if (($status === NULL)) {
+    if ($status === NULL) {
       $status = Custom::fromStatusCode($code);
     }
-    if (($status === NULL)) {
+    if ($status === NULL) {
       $status = ResponseStatus::unknown($code);
     }
     return $status;

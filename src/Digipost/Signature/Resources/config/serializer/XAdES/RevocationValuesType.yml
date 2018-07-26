@@ -1,0 +1,56 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\RevocationValuesType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        cRLValues:
+            expose: true
+            access_type: public_method
+            serialized_name: CRLValues
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getCRLValues
+                setter: setCRLValues
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType>
+            xml_list:
+                inline: false
+                entry_name: EncapsulatedCRLValue
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+        oCSPValues:
+            expose: true
+            access_type: public_method
+            serialized_name: OCSPValues
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getOCSPValues
+                setter: setOCSPValues
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType>
+            xml_list:
+                inline: false
+                entry_name: EncapsulatedOCSPValue
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+        otherValues:
+            expose: true
+            access_type: public_method
+            serialized_name: OtherValues
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getOtherValues
+                setter: setOtherValues
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType>
+            xml_list:
+                inline: false
+                entry_name: OtherValue
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'

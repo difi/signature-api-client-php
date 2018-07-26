@@ -1,0 +1,69 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\GenericTimeStampType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        include:
+            expose: true
+            access_type: public_method
+            serialized_name: Include
+            accessor:
+                getter: getInclude
+                setter: setInclude
+            xml_list:
+                inline: true
+                entry_name: Include
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\IncludeXsd>
+        referenceInfo:
+            expose: true
+            access_type: public_method
+            serialized_name: ReferenceInfo
+            accessor:
+                getter: getReferenceInfo
+                setter: setReferenceInfo
+            xml_list:
+                inline: true
+                entry_name: ReferenceInfo
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\ReferenceInfo>
+        canonicalizationMethod:
+            expose: true
+            access_type: public_method
+            serialized_name: CanonicalizationMethod
+            xml_element:
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+            accessor:
+                getter: getCanonicalizationMethod
+                setter: setCanonicalizationMethod
+            type: Digipost\Signature\API\XML\Thirdparty\XMLdSig\CanonicalizationMethod
+        encapsulatedTimeStamp:
+            expose: true
+            access_type: public_method
+            serialized_name: EncapsulatedTimeStamp
+            accessor:
+                getter: getEncapsulatedTimeStamp
+                setter: setEncapsulatedTimeStamp
+            xml_list:
+                inline: true
+                entry_name: EncapsulatedTimeStamp
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType>
+        xMLTimeStamp:
+            expose: true
+            access_type: public_method
+            serialized_name: XMLTimeStamp
+            accessor:
+                getter: getXMLTimeStamp
+                setter: setXMLTimeStamp
+            xml_list:
+                inline: true
+                entry_name: XMLTimeStamp
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType>

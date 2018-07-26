@@ -2,34 +2,63 @@
 
 namespace Digipost\Signature\Client\Core\Internal;
 
+use Digipost\Signature\API\XML\CustomBase64BinaryType;
+use Digipost\Signature\API\XML\Thirdparty\XAdES\QualifyingProperties;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\CanonicalizationMethod;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\KeyInfo;
-use Digipost\Signature\API\XML\Thirdparty\XMLdSig\ObjectType;
+use Digipost\Signature\API\XML\Thirdparty\XMLdSig\ObjectXsd;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\Reference;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\Signature;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\SignatureMethod;
+use Digipost\Signature\API\XML\Thirdparty\XMLdSig\SignatureValue;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\SignedInfo;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transform;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transforms;
+use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
 use MyCLabs\Enum\Enum;
-use XmlDsig\XmlDigitalSignature;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class XMLSignatureFactory {
 
+  use ContainerAwareTrait;
+
+  /***
+   * @var String
+   */
+  private $mechanismType;
+
   static $PROVIDERS = [
-    "XMLdSig" => XmlDigitalSignature::class,
+    "XMLdSig" => XMLDigitalSignatureContext::class,
   ];
 
-  /** @var XmlDigitalSignature */
+  /** @var self */
+  static $INSTANCE;
+
+  /** @var XMLDigitalSignatureContext */
   protected $provider;
 
-  //function __construct() {
-  //$dsig = new XmlDigitalSignature();
-  //}
+  public static function singleton(ContainerInterface $container = NULL) {
+    if (!isset(static::$INSTANCE)) {
+      static::$INSTANCE = new self();
+      static::$INSTANCE->setContainer($container);
+    }
 
-  public static function getInstance(String $mechanismType,
-                                     String $provider = NULL) {
+    return static::$INSTANCE;
+  }
+
+  /**
+   * @param String      $mechanismType
+   * @param String|NULL $provider
+   *
+   * @return \Digipost\Signature\Client\Core\Internal\XMLSignatureFactory
+   * @throws \Digipost\Signature\Client\Core\Internal\NoSuchProviderException
+   */
+  public static function getInstance(
+    String $mechanismType,
+    String $provider = NULL
+  ) {
     if (!isset($provider)) {
       $provider = 'XMLdSig';
     }
@@ -39,7 +68,8 @@ class XMLSignatureFactory {
       }
     }
 
-    $factory = new XMLSignatureFactory();
+    $factory = XMLSignatureFactory::singleton();
+    $factory->mechanismType = $mechanismType;
     $factory->provider = new self::$PROVIDERS[$provider]();
 
     return $factory;
@@ -47,38 +77,45 @@ class XMLSignatureFactory {
 
 
   public function getKeyInfoFactory() {
-
+    //return KeyInfoFactory::getInstance_String_Provider($this->mechanismType, $this->getProvider());
+    //return DOMKeyInfoFactory::getInstance();
+    //return new DOMKeyInfoFactory();
   }
 
   /**
    * @param String $algorithm
-   * @param null   $params
    *
    * @return DigestMethod
    */
-  public function newDigestMethod(String $algorithm, $params = NULL) {
+  public function newDigestMethod(String $algorithm) {
     $this->provider->setDigestMethod($algorithm);
-    $digestMethod = new DigestMethod(NULL, $algorithm);
+    $digestMethod = new DigestMethod();
+    $digestMethod->setAlgorithm($algorithm);
+
     //return SignatureDigestMethod::fromString($algorithm);
     return $digestMethod;
   }
 
   /**
    * @param String $algorithm
-   * @param null   $params
    *
    * @return CanonicalizationMethod
    */
-  public function newCanonicalizationMethod(String $algorithm, $params = NULL) {
+  public function newCanonicalizationMethod(String $algorithm) {
     $this->provider->setCanonicalMethod($algorithm);
 
     //return SignatureCanonicalizationMethod::fromString($algorithm);
-    $canonicalizationMethod = new CanonicalizationMethod(NULL, $algorithm);
+    $canonicalizationMethod = new CanonicalizationMethod();
+    $canonicalizationMethod->setAlgorithm($algorithm);
+
     return $canonicalizationMethod;
   }
 
   public function newSignatureMethod(String $method, $params = NULL) {
-    $signatureMethod = new SignatureMethod($params, $method);
+    $signatureMethod = new SignatureMethod();
+    $signatureMethod
+      ->setAlgorithm($method)
+      ->setHMACOutputLength($params);
     // TODO: implement
     //$this->provider->setSignatureMethod($method, $params);
     return $signatureMethod;
@@ -86,34 +123,70 @@ class XMLSignatureFactory {
 
 
   public function newTransform(String $algorithm, $params = NULL) {
-    $transform = new Transform([], $algorithm);
+    $transform = new Transform();
+    $transform
+      ->setAlgorithm($algorithm);
+    if (isset($params)) {
+      $transform->setXPath($params);
+    }
+
     return $transform;
   }
 
   /**
    * @param String                 $uri
    * @param DigestMethod           $digestMethod
-   * @param Transforms | Transform $transforms
+   * @param Transforms|Transform[] $transform
    * @param String                 $type
    * @param String                 $id
    * @param String                 $digestValue
    *
    * @return Reference
    */
-  public function newReference(String $uri = NULL,
-                               DigestMethod $digestMethod = NULL,
-                               $transforms = NULL,
-                               String $type = NULL,
-                               String $id = NULL,
-                               $digestValue = NULL
+  public function newReference(
+    String $uri = NULL,
+    DigestMethod $digestMethod = NULL,
+    $transform = NULL,
+    String $type = NULL,
+    String $id = NULL,
+    $digestValue = NULL
   ) {
+    if (isset($digestValue) && !($digestValue instanceof CustomBase64BinaryType)) {
+      $digestValue = new CustomBase64BinaryType($digestValue);
+    }
+
+    if (!isset($digestMethod)) {
+      throw new \InvalidArgumentException("No digest method was provided");
+    }
     //$node = new \DOMDocument();
     //$this->provider->addReference($node, $uri);
-    if (isset($transforms) && $transforms instanceof Transform) {
-      $transforms = new Transforms([$transforms]);
+    if (isset($transform) && $transform instanceof Transform) {
+      //$transforms = new Transforms();
+      //$transforms->addToTransform($transform);
     }
-    $reference = new Reference($transforms, $digestMethod, $digestValue, $id,
-                               $uri, $type);
+    else {
+      //$transforms = $transform;
+    }
+
+    $reference = new Reference();
+    $reference
+      ->setURI($uri)
+      ->setDigestMethod($digestMethod)
+      ->setId($id)
+      ->setType($type);
+    if (isset($transform) && $transform instanceof Transform) {
+      $reference->addToTransforms($transform);
+    }
+    else {
+      if (is_array($transform)) {
+        $reference->setTransforms($transform);
+      }
+    }
+    if (isset($digestValue)) {
+      $reference->setDigestValue($digestValue);
+    }
+
+    //$this->provider->addReference($reference, $uri);
     return $reference;
   }
 
@@ -125,40 +198,161 @@ class XMLSignatureFactory {
    *
    * @return SignedInfo
    */
-  public function newSignedInfo(CanonicalizationMethod $cm,
-                                SignatureMethod $sm,
-                                array $references,
-                                String $id = NULL) {
+  public function newSignedInfo(
+    CanonicalizationMethod $cm,
+    SignatureMethod $sm,
+    array $references,
+    String $id = NULL
+  ) {
 
-    $signedInfo = new SignedInfo($cm, $sm, $references, $id);
+    $signedInfo = new SignedInfo();
+    $signedInfo
+      ->setCanonicalizationMethod($cm)
+      ->setSignatureMethod($sm)
+      ->setReference($references)
+      ->setId($id);
 
     return $signedInfo;
   }
 
   /**
-   * @param array  $content
-   * @param String $id
-   * @param String $mimeType
-   * @param String $encoding
+   * @param \DOMElement $content
+   * @param String      $id
+   * @param String      $mimeType
+   * @param String      $encoding
    *
-   * @return Object
+   * @return ObjectXsd
    */
-  public function newXMLObject(array $content = NULL, String $id = NULL,
-                               String $mimeType = NULL,
-                               String $encoding = NULL) {
+  public function newXMLObject(
+    $content = NULL,
+    String $id = NULL,
+    String $mimeType = NULL,
+    String $encoding = NULL
+  ) {
 
-    $xmlObject = new ObjectType($content, $id, $mimeType, $encoding);
+    $second = $content->ownerDocument->documentElement;
+
+    //    print $doc->saveXML();
+    //    print "\n---------\n\n";
+    $first = new \DOMDocument();
+    $object = $first->createElementNS(
+      'http://uri.etsi.org/01903/v1.3.2#', 'QualifyingProperties'
+    );
+    $first->appendChild($object);
+
+    foreach ($second->childNodes as $node) {
+      $importNode = $first->importNode($node, TRUE);
+      $first->documentElement->appendChild($importNode);
+    }
+    $first->saveXML();
+
+    $xml = new \DOMDocument("1.0", 'UTF-8');
+    $xml->formatOutput = TRUE;
+    $xml->appendChild($xml->importNode($first->documentElement, TRUE));
+
+    $docXML = $xml->saveXML();
+    $qualifyingProperties = Marshalling::unmarshal(
+      $docXML, QualifyingProperties::class
+    );
+
+    //print $xml->saveXML($xml); exit;
+    //print $docXML; exit;
+
+    //    $object = $doc->createElementNS('http://uri.etsi.org/01903/v1.3.2#', 'ds:Object');
+    //    $objectImported = $doc->importNode($object, TRUE);
+    //    $doc->appendChild()
+
+    //    $object = $doc->createDocumentFragment();
+    //    $object->appendChild($doc->createElementNS('http://uri.etsi.org/01903/v1.3.2#', 'ds:Object'));
+
+    //$object = new \DOMElement('Object', '')
+
+    //$doc->firstChild->appendChild($object);
+
+
+    //exit;
+    //$marshalling = Marshalling::
+    //DOMStructure
+    //$doc = new \DOMDocumentFragment();
+    //$doc->appendChild($content);
+    //$doc = $content;
+    //$doc->xmlStandalone = FALSE;
+    //$doc->loadXML($content, LIBXML_NOCDATA | LIBXML_NOXMLDECL | LIBXML_NSCLEAN);
+    //Marshalling::unmarshal()
+    //    $xPath = new \DOMXPath($doc);
+    //    $signedProperties = $xPath->evaluate("//*[local-name()='SignedProperties']")->item(0);
+    //$xmlData = $doc->saveXML($query);
+    //    $newDoc = new \DOMDocument();
+    //    $newDoc->loadXML('<Object></Object>');
+
+    //    $node = $newDoc->importNode($doc->firstChild, true);
+    //    $newDoc->firstChild->appendChild($node);
+
+    //    $newDoc->formatOutput = TRUE;
+
+
+    //$objectXML = $doc->saveXML($object->ownerDocument->firstChild);
+    //$qualifyingProperties = Marshalling::unmarshal($objectXML, QualifyingProperties::class);
+
+
+    //print_r($qualifyingProperties);
+    //print_r($qualifyingProperties);
+    //foreach ($content as $content) {
+    //}
+    //$test = new ObjectIdentifier();
+    //$test->set
+    //print $objectXML;
+
+    //$objectXsd = new ObjectXsd($qualifyingProperties);
+    $xmlObject = new ObjectXsd();
+    $xmlObject
+      //->setQualifyingProperties($qualifyingProperties)
+      ->value($qualifyingProperties)
+      ->setMimeType($mimeType)
+      ->setId($id)
+      ->setEncoding($encoding);
+    //    $xmlObject = new ObjectXsd($qualifyingProperties);
+    //    $xmlObject
+    //      ->setId($id)
+    //      ->setEncoding($encoding)
+    //      ->setMimeType($mimeType);
+    //    $xmlObject
+    //      ->setMimeType($mimeType)
+    //      ->setEncoding($encoding)
+    //      ->setId($id);
+    //    return $xmlObject;
+    //$qualifyingProperties = new QualifyingProperties();
+    //$qualifyingProperties->setId($id);
     return $xmlObject;
   }
 
-  public function newXMLSignature(SignedInfo $si, KeyInfo $ki, array $objects,
-                                  String $id, String $signatureValueId = NULL) {
-
-    $xmlSignature = new Signature($si, $signatureValueId, $ki, $objects, $id);
+  public function newXMLSignature(
+    SignedInfo $si,
+    KeyInfo $ki,
+    array $objects,
+    String $id = NULL,
+    SignatureValue $signatureValue = NULL
+  ) {
+    $xmlSignature = new Signature();
+    $xmlSignature
+      ->setSignedInfo($si)
+      ->setKeyInfo($ki)
+      ->setObject($objects)
+      ->setId($id);
+    if (isset($signatureValue)) {
+      $xmlSignature->setSignatureValue($signatureValue);
+    }
     //return new \Digipost\Signature\API\XML\XMLSignature($status, $notifications, $pn, $xadesurl);
     //$this->provider->
-    $this->provider->sign();
+    //$this->provider->sign();
     return $xmlSignature;
+  }
+
+  /**
+   * @return XMLDigitalSignatureContext
+   */
+  public function getProvider(): XMLDigitalSignatureContext {
+    return $this->provider;
   }
 
 }
@@ -175,13 +369,29 @@ class XMLSignatureFactory {
  */
 class SignatureDigestMethod extends Enum {
 
-  const SHA1 = XmlDigitalSignature::DIGEST_SHA1;
+  const SHA1 = ['sha1', 'http://www.w3.org/2000/09/xmldsig#sha1'];
 
-  const SHA256 = XmlDigitalSignature::DIGEST_SHA256;
+  const SHA256 = ['sha256', 'http://www.w3.org/2001/04/xmlenc#sha256'];
 
-  const SHA512 = XmlDigitalSignature::DIGEST_SHA512;
+  const SHA512 = ['sha512', 'http://www.w3.org/2001/04/xmlenc#sha512'];
 
-  const RIPEMD160 = XmlDigitalSignature::DIGEST_RIPEMD160;
+  const RIPEMD160 = ['ripmed160', 'http://www.w3.org/2001/04/xmlenc#ripemd160'];
+
+  function __construct($value) {
+    parent::__construct($value);
+  }
+
+  public function getValue() {
+    return $this->value[0];
+  }
+
+  public function getUri() {
+    return $this->value[1];
+  }
+
+  public function __toString() {
+    return (string) $this->value[0];
+  }
 
   public static function fromString($value) {
     return new SignatureDigestMethod($value);
@@ -200,13 +410,13 @@ class SignatureDigestMethod extends Enum {
  */
 class SignatureCanonicalizationMethod extends Enum {
 
-  const C14N = XmlDigitalSignature::C14N;
+  const C14N = XMLDigitalSignatureContext::C14N;
 
-  const C14N_COMMENTS = XmlDigitalSignature::C14N_COMMENTS;
+  const C14N_COMMENTS = XMLDigitalSignatureContext::C14N_COMMENTS;
 
-  const C14N_EXCLUSIVE = XmlDigitalSignature::C14N_EXCLUSIVE;
+  const C14N_EXCLUSIVE = XMLDigitalSignatureContext::C14N_EXCLUSIVE;
 
-  const C14N_EXCLUSIVE_COMMENTS = XmlDigitalSignature::C14N_EXCLUSIVE_COMMENTS;
+  const C14N_EXCLUSIVE_COMMENTS = XMLDigitalSignatureContext::C14N_EXCLUSIVE_COMMENTS;
 
   public static function fromString($value) {
     return new SignatureCanonicalizationMethod($value);
@@ -216,7 +426,6 @@ class SignatureCanonicalizationMethod extends Enum {
 class NoSuchProviderException extends \Exception {
 
 }
-
 
 class XMLSignature {
 

@@ -1,0 +1,11 @@
+Digipost\Signature\API\XML\Thirdparty\ASiCe\ExtensionType:
+    properties:
+        critical:
+            expose: true
+            access_type: public_method
+            serialized_name: Critical
+            accessor:
+                getter: getCritical
+                setter: setCritical
+            xml_attribute: true
+            type: boolean

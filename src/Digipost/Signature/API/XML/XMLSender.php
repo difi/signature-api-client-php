@@ -32,7 +32,8 @@ use JMS\Serializer\Annotation as Serializer;
 class XMLSender {
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\Type("string")
+   * @Serializer\XmlElement()
    */
   protected $organizationNumber;
 

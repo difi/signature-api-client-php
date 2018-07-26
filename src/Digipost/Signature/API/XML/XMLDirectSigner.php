@@ -45,6 +45,7 @@ class XMLDirectSigner implements XMLSigner {
    * ID recognized by the sender, and must uniquely identify the signer within
    * a job.
    *
+   * @Serializer\Type("string")
    * @Serializer\XmlElement()
    */
   protected $signerIdentifier;
@@ -53,6 +54,7 @@ class XMLDirectSigner implements XMLSigner {
    * Refer to a signer by a personal identification number.
    * <p>[See also](https://www.skatteetaten.no/en/International-pages/Felles-innhold-benyttes-i-flere-malgrupper/Articles/Norwegian-national-ID-numbers/)
    *
+   * @Serializer\Type("string")
    * @Serializer\XmlElement()
    */
   protected $personalIdentificationNumber;

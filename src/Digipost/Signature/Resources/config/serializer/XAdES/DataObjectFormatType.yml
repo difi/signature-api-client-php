@@ -1,0 +1,51 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\DataObjectFormatType:
+    properties:
+        objectReference:
+            expose: true
+            access_type: public_method
+            serialized_name: ObjectReference
+            accessor:
+                getter: getObjectReference
+                setter: setObjectReference
+            xml_attribute: true
+            type: string
+        description:
+            expose: true
+            access_type: public_method
+            serialized_name: Description
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getDescription
+                setter: setDescription
+            type: string
+        objectIdentifier:
+            expose: true
+            access_type: public_method
+            serialized_name: ObjectIdentifier
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getObjectIdentifier
+                setter: setObjectIdentifier
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\ObjectIdentifierType
+        mimeType:
+            expose: true
+            access_type: public_method
+            serialized_name: MimeType
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getMimeType
+                setter: setMimeType
+            type: string
+        encoding:
+            expose: true
+            access_type: public_method
+            serialized_name: Encoding
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getEncoding
+                setter: setEncoding
+            type: string

@@ -1,0 +1,24 @@
+Digipost\Signature\API\XML\PortalSignatureJobResponse:
+    xml_root_name: portal-signature-job-response
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        signatureJobId:
+            expose: true
+            access_type: public_method
+            serialized_name: signature-job-id
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSignatureJobId
+                setter: setSignatureJobId
+            type: integer
+        cancellationUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: cancellation-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getCancellationUrl
+                setter: setCancellationUrl
+            type: string

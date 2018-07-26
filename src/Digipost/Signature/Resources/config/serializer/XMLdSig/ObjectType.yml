@@ -1,0 +1,40 @@
+Digipost\Signature\API\XML\Thirdparty\XMLdSig\ObjectType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        mimeType:
+            expose: true
+            access_type: public_method
+            serialized_name: MimeType
+            accessor:
+                getter: getMimeType
+                setter: setMimeType
+            xml_attribute: true
+            type: string
+        encoding:
+            expose: true
+            access_type: public_method
+            serialized_name: Encoding
+            accessor:
+                getter: getEncoding
+                setter: setEncoding
+            xml_attribute: true
+            type: string
+        content:
+            expose: true
+            access_type: public_method
+            accessor:
+                getter: getContent
+                setter: setContent
+            xml_map:
+                inline: true
+                entry_name: QualifyingProperties
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\QualifyingProperties>

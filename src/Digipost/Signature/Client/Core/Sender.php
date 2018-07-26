@@ -14,8 +14,10 @@ class Sender {
    */
   protected $pollingQueue;
 
-  public function __construct(String $organizationNumber,
-                              PollingQueue $pollingQueue = NULL) {
+  public function __construct(
+    String $organizationNumber,
+    PollingQueue $pollingQueue = NULL
+  ) {
     if (isset($pollingQueue)) {
       $this->pollingQueue = $pollingQueue;
     }

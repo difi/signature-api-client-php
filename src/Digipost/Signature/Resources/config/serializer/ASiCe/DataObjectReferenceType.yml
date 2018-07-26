@@ -1,0 +1,62 @@
+Digipost\Signature\API\XML\Thirdparty\ASiCe\DataObjectReferenceType:
+    properties:
+        uRI:
+            expose: true
+            access_type: public_method
+            serialized_name: URI
+            accessor:
+                getter: getURI
+                setter: setURI
+            xml_attribute: true
+            type: string
+        mimeType:
+            expose: true
+            access_type: public_method
+            serialized_name: MimeType
+            accessor:
+                getter: getMimeType
+                setter: setMimeType
+            xml_attribute: true
+            type: string
+        rootfile:
+            expose: true
+            access_type: public_method
+            serialized_name: Rootfile
+            accessor:
+                getter: getRootfile
+                setter: setRootfile
+            xml_attribute: true
+            type: boolean
+        digestMethod:
+            expose: true
+            access_type: public_method
+            serialized_name: DigestMethod
+            xml_element:
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+            accessor:
+                getter: getDigestMethod
+                setter: setDigestMethod
+            type: Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod
+        digestValue:
+            expose: true
+            access_type: public_method
+            serialized_name: DigestValue
+            xml_element:
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+            accessor:
+                getter: getDigestValue
+                setter: setDigestValue
+            type: Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestValue
+        dataObjectReferenceExtensions:
+            expose: true
+            access_type: public_method
+            serialized_name: DataObjectReferenceExtensions
+            accessor:
+                getter: getDataObjectReferenceExtensions
+                setter: setDataObjectReferenceExtensions
+            type: array<Digipost\Signature\API\XML\Thirdparty\ASiCe\Extension>
+            xml_list:
+                inline: false
+                entry_name: Extension
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/2918/v1.2.1#'

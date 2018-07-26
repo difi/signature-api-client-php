@@ -3,16 +3,20 @@
 namespace Digipost\Signature\Client;
 
 use MyCLabs\Enum\Enum;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class Certificates
  *
  * @package Digipost\Signature\Client
  *
+ * @method static Certificates INIT
  * @method static Certificates TEST
  * @method static Certificates PRODUCTION
  */
 class Certificates extends Enum {
+
+  const INIT = [];
 
   const TEST = [
     "test/Buypass_Class_3_Test4_CA_3.cer",
@@ -30,25 +34,36 @@ class Certificates extends Enum {
   ];
 
   public function certificatePaths() {
-    return $this->value;
+    $className = get_called_class();
+    $basePath = '';
+    if (isset(static::$cache[$className]) && isset(static::$cache[$className]['basePath'])) {
+      $basePath = static::$cache[$className]['basePath'];
+    }
+    return array_map(
+      function ($value) use ($basePath) {
+        return $basePath . '/' . $value;
+      },
+      $this->value
+    );
+  }
+
+  public function setRootDir(String $basePath) {
+    $cache = &static::$cache;
+    $cache[get_called_class()]['basePath'] = $basePath;
+    return $cache;
+  }
+
+  public static function build(ContainerInterface $container, String $path) {
+    //$test = $container->get('kernel')->locateResource('@Buypass_difitest_1646201040405302454751306-2017-09-05.p12');
+    //$appName = $container->get('kernel')->getName();
+    //$test2 = $container->get('kernel')->locateResource("@$appName/Resources/config/Buypass_difitest_1646201040405302454751306-2017-09-05.p12");
+
+    $resolvedPath = $path;
+    if ($path[0] === '@') {
+      $resolvedPath = $container->get('kernel')->locateResource($path);
+    }
+    $self = Certificates::INIT();
+    $self->setRootDir($resolvedPath);
+    return $self;
   }
 }
-
-class FullCertificateClassPathUri {
-
-  protected static $instance;  // FullCertificateClassPathUri
-
-  protected static $root;  // String
-
-  public static function __staticinit() { // static class members
-    self::$instance = new FullCertificateClassPathUri();
-    self::$root = "/" . Certificates::class . "/certificates/";
-  }
-
-  public function apply($resourceName) // [String resourceName]
-  {
-    return (("classpath:" . self::$root) . $resourceName);
-  }
-}
-
-FullCertificateClassPathUri::__staticinit(); // initialize static vars for this class on load

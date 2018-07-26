@@ -1,0 +1,13 @@
+Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestValue:
+    xml_root_name: DigestValue
+    properties:
+        __value:
+            expose: true
+            xml_element:
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+            xml_value: true
+            access_type: public_method
+            accessor:
+                getter: value
+                setter: value
+            type: string

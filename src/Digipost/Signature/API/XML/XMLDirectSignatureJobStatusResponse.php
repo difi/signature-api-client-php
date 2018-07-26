@@ -42,20 +42,30 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class XMLDirectSignatureJobStatusResponse {
 
+  /**
+   * @Serializer\Type("string")
+   */
   protected $signatureJobId;
 
   /**
-   * @Serializer\Type("Digipost\Signature\API\XML\XMLDirectSignatureJobStatus")
+   * @Serializer\Type("string")
    */
   protected $signatureJobStatus;
 
   /**
+   * @Serializer\XmlList(entry="status", inline=true)
    * @Serializer\Type("array<Digipost\Signature\API\XML\XMLSignerStatus>")
    */
   protected $statuses;
 
+  /**
+   * @Serializer\Type("string")
+   */
   protected $confirmationUrl;
 
+  /**
+   * @Serializer\Type("string")
+   */
   protected $deleteDocumentsUrl;
 
   /**
@@ -63,6 +73,9 @@ class XMLDirectSignatureJobStatusResponse {
    */
   protected $xadesUrls;
 
+  /**
+   * @Serializer\Type("string")
+   */
   protected $padesUrl;
 
   function __construct(int $signatureJobId = NULL,

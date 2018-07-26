@@ -2,122 +2,225 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class RevocationValuesType
+ * Class representing RevocationValuesType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="RevocationValuesType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element name="CRLValues" type="{http://uri.etsi.org/01903/v1.3.2#}CRLValuesType" minOccurs="0"/>
- *         <element name="OCSPValues" type="{http://uri.etsi.org/01903/v1.3.2#}OCSPValuesType" minOccurs="0"/>
- *         <element name="OtherValues" type="{http://uri.etsi.org/01903/v1.3.2#}OtherCertStatusValuesType" minOccurs="0"/>
- *       </sequence>
- *       <attribute name="Id" type="{http://www.w3.org/2001/XMLSchema}ID" />
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
- *
- * @Serializer\AccessorOrder("custom", custom={
- *   "crlValues",
- *   "ocspValues",
- *   "otherValues"
- * })
+ * XSD Type: RevocationValuesType
  */
-class RevocationValuesType {
+class RevocationValuesType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\CRLValuesType")
-   */
-  protected $crlValues;
+    /**
+     * @property string $id
+     */
+    private $id = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\OCSPValuesType")
-   */
-  protected $ocspValues;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[] $cRLValues
+     */
+    private $cRLValues = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\OtherCertStatusValuesType")
-   */
-  protected $otherValues;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[] $oCSPValues
+     */
+    private $oCSPValues = null;
 
-  /**
-   * @Serializer\XmlAttribute()
-   */
-  protected $id;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[] $otherValues
+     */
+    private $otherValues = null;
 
-  public function __construct(CRLValuesType $crlValues = NULL,
-                              OCSPValuesType $ocspValues = NULL,
-                              OtherCertStatusValuesType $otherValues = NULL,
-                              String $id = NULL) {
-    $this->crlValues = $crlValues;
-    $this->ocspValues = $ocspValues;
-    $this->otherValues = $otherValues;
-    $this->id = $id;
-    return $this;
-  }
+    /**
+     * Gets as id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-  public function getCRLValues() {
-    return $this->crlValues;
-  }
+    /**
+     * Sets a new id
+     *
+     * @param string $id
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
-  public function setCRLValues(CRLValuesType $value) {
-    $this->crlValues = $value;
-  }
+    /**
+     * Adds as encapsulatedCRLValue
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType $encapsulatedCRLValue
+     */
+    public function addToCRLValues(\Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType $encapsulatedCRLValue)
+    {
+        $this->cRLValues[] = $encapsulatedCRLValue;
+        return $this;
+    }
 
-  public function withCRLValues(CRLValuesType $value) {
-    $this->setCRLValues($value);
-    return $this;
-  }
+    /**
+     * isset cRLValues
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetCRLValues($index)
+    {
+        return isset($this->cRLValues[$index]);
+    }
 
-  public function getOCSPValues() {
-    return $this->ocspValues;
-  }
+    /**
+     * unset cRLValues
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetCRLValues($index)
+    {
+        unset($this->cRLValues[$index]);
+    }
 
-  public function setOCSPValues(OCSPValuesType $value) {
-    $this->ocspValues = $value;
-  }
+    /**
+     * Gets as cRLValues
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[]
+     */
+    public function getCRLValues()
+    {
+        return $this->cRLValues;
+    }
 
-  public function withOCSPValues(OCSPValuesType $value) {
-    $this->setOCSPValues($value);
-    return $this;
-  }
+    /**
+     * Sets a new cRLValues
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[] $cRLValues
+     * @return self
+     */
+    public function setCRLValues(array $cRLValues)
+    {
+        $this->cRLValues = $cRLValues;
+        return $this;
+    }
 
-  public function getOtherValues() {
-    return $this->otherValues;
-  }
+    /**
+     * Adds as encapsulatedOCSPValue
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType $encapsulatedOCSPValue
+     */
+    public function addToOCSPValues(\Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType $encapsulatedOCSPValue)
+    {
+        $this->oCSPValues[] = $encapsulatedOCSPValue;
+        return $this;
+    }
 
-  public function setOtherValues(OtherCertStatusValuesType $value) {
-    $this->otherValues = $value;
-  }
+    /**
+     * isset oCSPValues
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetOCSPValues($index)
+    {
+        return isset($this->oCSPValues[$index]);
+    }
 
-  public function withOtherValues(OtherCertStatusValuesType $value) {
-    $this->setOtherValues($value);
-    return $this;
-  }
+    /**
+     * unset oCSPValues
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetOCSPValues($index)
+    {
+        unset($this->oCSPValues[$index]);
+    }
 
-  public function getId() {
-    return $this->id;
-  }
+    /**
+     * Gets as oCSPValues
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[]
+     */
+    public function getOCSPValues()
+    {
+        return $this->oCSPValues;
+    }
 
-  public function setId(String $value) {
-    $this->id = $value;
-  }
+    /**
+     * Sets a new oCSPValues
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[] $oCSPValues
+     * @return self
+     */
+    public function setOCSPValues(array $oCSPValues)
+    {
+        $this->oCSPValues = $oCSPValues;
+        return $this;
+    }
 
-  public function withId(String $value) {
-    $this->setId($value);
-    return $this;
-  }
+    /**
+     * Adds as otherValue
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType $otherValue
+     */
+    public function addToOtherValues(\Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType $otherValue)
+    {
+        $this->otherValues[] = $otherValue;
+        return $this;
+    }
+
+    /**
+     * isset otherValues
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetOtherValues($index)
+    {
+        return isset($this->otherValues[$index]);
+    }
+
+    /**
+     * unset otherValues
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetOtherValues($index)
+    {
+        unset($this->otherValues[$index]);
+    }
+
+    /**
+     * Gets as otherValues
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[]
+     */
+    public function getOtherValues()
+    {
+        return $this->otherValues;
+    }
+
+    /**
+     * Sets a new otherValues
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[] $otherValues
+     * @return self
+     */
+    public function setOtherValues(array $otherValues)
+    {
+        $this->otherValues = $otherValues;
+        return $this;
+    }
+
+
 }
 

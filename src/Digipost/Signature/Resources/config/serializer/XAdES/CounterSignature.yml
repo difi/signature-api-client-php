@@ -1,0 +1,3 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\CounterSignature:
+    xml_root_name: CounterSignature
+

@@ -7,6 +7,7 @@ use Digipost\Signature\Client\ASiCe\Manifest\ManifestCreator;
 use Digipost\Signature\Client\ASiCe\Signature\CreateSignature;
 use Digipost\Signature\Client\Core\Exceptions\SenderNotSpecifiedException;
 use Digipost\Signature\Client\Core\SignatureJob;
+use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * Class CreateASiCE
@@ -27,13 +28,18 @@ class CreateASiCE {
 
   private $documentBundleProcessors;
 
-  public function __construct(ManifestCreator $manifestCreator,
-                              ASiCEConfiguration $clientConfiguration) {
+  public function __construct(
+    ManifestCreator $manifestCreator,
+    ASiCEConfiguration $clientConfiguration
+  ) {
     $this->manifestCreator = $manifestCreator;
     $this->globalSender = $clientConfiguration->getGlobalSender();
     $this->keyStoreConfig = $clientConfiguration->getKeyStoreConfig();
-    $this->documentBundleProcessors = $clientConfiguration->getDocumentBundleProcessors();
-    $this->createSignature = new CreateSignature($clientConfiguration->getClock());
+    $this->documentBundleProcessors = $clientConfiguration->getDocumentBundleProcessors(
+    );
+    $this->createSignature = new CreateSignature(
+      $clientConfiguration->getClock()
+    );
     $this->createZip = new CreateZip();
   }
 
@@ -57,17 +63,21 @@ class CreateASiCE {
     array_push($files, $job->getDocument());
     array_push($files, $manifest);
 
-    $signature = $this->createSignature->createSignature($files,
-                                                         $this->keyStoreConfig);
+    $signature = $this->createSignature->createSignature(
+      $files,
+      $this->keyStoreConfig
+    );
     array_push($files, $signature);
     $zipped = $this->createZip->zipIt($files);
-    //        for ($processor : documentBundleProcessors) {
-    //            try (ByteArrayInputStream zipStream = new ByteArrayInputStream(zipped)) {
-    //                processor.process(job, zipStream);
-    //            } catch (IOException e) {
-    //                throw new RuntimeIOException(e);
-    //            }
-    //        }
+    foreach ($this->documentBundleProcessors as $processor) {
+      /** @var DocumentBundleProcessor $processor */
+      try {
+        $zipStream = stream_for($zipped);
+        $processor->process($job, $zipStream);
+      } catch (\RuntimeException $e) {
+        throw new \RuntimeException($e);
+      }
+    }
 
     return new DocumentBundle($zipped);
   }

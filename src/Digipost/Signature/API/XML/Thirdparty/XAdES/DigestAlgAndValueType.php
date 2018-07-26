@@ -2,78 +2,69 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod;
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class DigestAlgAndValueType
- *
- * <p>The following schema fragment specifies the expected content contained within this class.
- *
- * <pre>
- * <complexType name="DigestAlgAndValueType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element ref="{http://www.w3.org/2000/09/xmldsig#}DigestMethod"/>
- *         <element ref="{http://www.w3.org/2000/09/xmldsig#}DigestValue"/>
- *       </sequence>
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
+ * Class representing DigestAlgAndValueType
  *
  *
- * @Serializer\AccessorOrder("custom", custom={"digestMethod","digestValue"})
+ * XSD Type: DigestAlgAndValueType
  */
-class DigestAlgAndValueType {
+class DigestAlgAndValueType
+{
 
-  /**
-   * @Serializer\XmlKeyValuePairs()
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod")
-   */
-  protected $digestMethod;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod $digestMethod
+     */
+    private $digestMethod = null;
 
-  /**
-   * @Serializer\XmlValue()
-   */
-  protected $digestValue;
+    /**
+     * @property \Digipost\Signature\API\XML\CustomBase64BinaryType $digestValue
+     */
+    private $digestValue = null;
 
-  public function __construct(DigestMethod $digestMethod = NULL,
-                              string $digestValue = NULL) {
-    $this->digestMethod = $digestMethod;
-    $this->digestValue = $digestValue;
-    return $this;
-  }
+    /**
+     * Gets as digestMethod
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod
+     */
+    public function getDigestMethod()
+    {
+        return $this->digestMethod;
+    }
 
-  public function getDigestMethod() {
-    return $this->digestMethod;
-  }
+    /**
+     * Sets a new digestMethod
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod $digestMethod
+     * @return self
+     */
+    public function setDigestMethod(\Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod $digestMethod)
+    {
+        $this->digestMethod = $digestMethod;
+        return $this;
+    }
 
-  public function setDigestMethod($value) {
-    $this->digestMethod = $value;
-  }
+    /**
+     * Gets as digestValue
+     *
+     * @return \Digipost\Signature\API\XML\CustomBase64BinaryType
+     */
+    public function getDigestValue()
+    {
+        return $this->digestValue;
+    }
 
-  public function getDigestValue() {
-    return $this->digestValue;
-  }
+    /**
+     * Sets a new digestValue
+     *
+     * @param \Digipost\Signature\API\XML\CustomBase64BinaryType $digestValue
+     * @return self
+     */
+    public function setDigestValue($digestValue)
+    {
+        $this->digestValue = $digestValue;
+        return $this;
+    }
 
-  public function setDigestValue($value) // [byte[] value]
-  {
-    $this->digestValue = $value;
-  }
 
-  public function withDigestMethod($value) {
-    $this->setDigestMethod($value);
-    return $this;
-  }
-
-  public function withDigestValue($value) // [byte[] value]
-  {
-    $this->setDigestValue($value);
-    return $this;
-  }
 }
 

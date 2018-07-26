@@ -1,0 +1,48 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\SignaturePolicyIdType:
+    properties:
+        sigPolicyId:
+            expose: true
+            access_type: public_method
+            serialized_name: SigPolicyId
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getSigPolicyId
+                setter: setSigPolicyId
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\ObjectIdentifierType
+        transforms:
+            expose: true
+            access_type: public_method
+            serialized_name: Transforms
+            accessor:
+                getter: getTransforms
+                setter: setTransforms
+            type: array<Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transform>
+            xml_list:
+                inline: false
+                entry_name: Transform
+                skip_when_empty: true
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+        sigPolicyHash:
+            expose: true
+            access_type: public_method
+            serialized_name: SigPolicyHash
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getSigPolicyHash
+                setter: setSigPolicyHash
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType
+        sigPolicyQualifiers:
+            expose: true
+            access_type: public_method
+            serialized_name: SigPolicyQualifiers
+            accessor:
+                getter: getSigPolicyQualifiers
+                setter: setSigPolicyQualifiers
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType>
+            xml_list:
+                inline: false
+                entry_name: SigPolicyQualifier
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'

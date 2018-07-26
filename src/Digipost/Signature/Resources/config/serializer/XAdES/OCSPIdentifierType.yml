@@ -1,0 +1,31 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\OCSPIdentifierType:
+    properties:
+        uRI:
+            expose: true
+            access_type: public_method
+            serialized_name: URI
+            accessor:
+                getter: getURI
+                setter: setURI
+            xml_attribute: true
+            type: string
+        responderID:
+            expose: true
+            access_type: public_method
+            serialized_name: ResponderID
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getResponderID
+                setter: setResponderID
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\ResponderIDType
+        producedAt:
+            expose: true
+            access_type: public_method
+            serialized_name: ProducedAt
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getProducedAt
+                setter: setProducedAt
+            type: GoetasWebservices\Xsd\XsdToPhp\XMLSchema\DateTime

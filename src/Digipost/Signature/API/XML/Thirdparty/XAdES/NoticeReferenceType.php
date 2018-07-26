@@ -2,72 +2,103 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class NoticeReferenceType
+ * Class representing NoticeReferenceType
  *
- * <pre>
- * <complexType name="NoticeReferenceType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element name="Organization" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         <element name="NoticeNumbers" type="{http://uri.etsi.org/01903/v1.3.2#}IntegerListType"/>
- *       </sequence>
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
  *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
- *
- * @Serializer\AccessorOrder("custom", custom={"organization","noticeNumbers"})
+ * XSD Type: NoticeReferenceType
  */
-class NoticeReferenceType {
+class NoticeReferenceType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   */
-  protected $organization;
+    /**
+     * @property string $organization
+     */
+    private $organization = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\IntegerListType")
-   */
-  protected $noticeNumbers;
+    /**
+     * @property integer[] $noticeNumbers
+     */
+    private $noticeNumbers = null;
 
-  public function __construct(String $organization = NULL,
-                              IntegerListType $noticeNumbers = NULL) {
-    $this->organization = $organization;
-    $this->noticeNumbers = $noticeNumbers;
-    return $this;
-  }
+    /**
+     * Gets as organization
+     *
+     * @return string
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
 
-  public function getOrganization() {
-    return $this->organization;
-  }
+    /**
+     * Sets a new organization
+     *
+     * @param string $organization
+     * @return self
+     */
+    public function setOrganization($organization)
+    {
+        $this->organization = $organization;
+        return $this;
+    }
 
-  public function setOrganization(String $value) {
-    $this->organization = $value;
-  }
+    /**
+     * Adds as int
+     *
+     * @return self
+     * @param integer $int
+     */
+    public function addToNoticeNumbers($int)
+    {
+        $this->noticeNumbers[] = $int;
+        return $this;
+    }
 
-  public function withOrganization(String $value) {
-    $this->setOrganization($value);
-    return $this;
-  }
+    /**
+     * isset noticeNumbers
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetNoticeNumbers($index)
+    {
+        return isset($this->noticeNumbers[$index]);
+    }
 
-  public function getNoticeNumbers() {
-    return $this->noticeNumbers;
-  }
+    /**
+     * unset noticeNumbers
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetNoticeNumbers($index)
+    {
+        unset($this->noticeNumbers[$index]);
+    }
 
-  public function setNoticeNumbers(IntegerListType $value) {
-    $this->noticeNumbers = $value;
-  }
+    /**
+     * Gets as noticeNumbers
+     *
+     * @return integer[]
+     */
+    public function getNoticeNumbers()
+    {
+        return $this->noticeNumbers;
+    }
 
-  public function withNoticeNumbers(IntegerListType $value) {
-    $this->setNoticeNumbers($value);
-    return $this;
-  }
+    /**
+     * Sets a new noticeNumbers
+     *
+     * @param integer[] $noticeNumbers
+     * @return self
+     */
+    public function setNoticeNumbers(array $noticeNumbers)
+    {
+        $this->noticeNumbers = $noticeNumbers;
+        return $this;
+    }
+
+
 }
 

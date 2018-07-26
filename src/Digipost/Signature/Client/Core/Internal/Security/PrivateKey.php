@@ -16,12 +16,7 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
  * @package Digipost\Signature\Client\Core\Internal\Security
  */
 class PrivateKeyType extends Enum {
-
   const OPENSSL_KEYTYPE_RSA = 0;
-
-  public function __construct(mixed $value) {
-    parent::__construct($value);
-  }
 }
 
 /**
@@ -33,7 +28,7 @@ class PrivateKey implements PrivateKeyInterface {
 
   private $keyResource = NULL;
 
-  private $passphrase = '';
+  private $passphrase;
 
   /**
    * Holds a private key so you can sign or decrypt stuff with it, must be cleartext,
@@ -154,17 +149,29 @@ class PrivateKey implements PrivateKeyInterface {
     // TODO: Implement unserialize() method.
   }
 
-  function getAlgorithm() {
+  function getAlgorithm(): String {
     // TODO: Implement getAlgorithm() method.
-    $details = openssl_pkey_get_details($this->keyResource);
   }
 
-  function getFormat() {
-    // TODO: Implement getFormat() method.
+  function getFormat(): String {
   }
 
-  function getEncoded() {
-    // TODO: Implement getEncoded() method.
-    //openssl_private_encrypt()
+  function getEncoded(): String {
+    openssl_pkey_export($this->keyResource, $out);
+    return $out;
+  }
+
+  function getDetails() {
+    return $this->serialize();
+    //return $this->getKeyInfo();
+    //$details = openssl_pkey_get_details($this->keyResource);
+    //return $details;
+  }
+  public function getPublicKey() {
+    return openssl_pkey_get_public($this->keyResource);
+  }
+
+  public function getRaw() {
+    return $this->keyResource;
   }
 }

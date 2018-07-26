@@ -2,66 +2,69 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XMLdSig;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class X509IssuerSerialType
+ * Class representing X509IssuerSerialType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="X509IssuerSerialType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element name="X509IssuerName" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         <element name="X509SerialNumber" type="{http://www.w3.org/2001/XMLSchema}integer"/>
- *       </sequence>
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XMLdSig
- *          
- * @Serializer\AccessorOrder("custom", custom={
- *   "x509IssuerName",
- *   "x509SerialNumber"
- * })
+ * XSD Type: X509IssuerSerialType
  */
-class X509IssuerSerialType {
+class X509IssuerSerialType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   */
-  protected $x509IssuerName;
+    /**
+     * @property string $x509IssuerName
+     */
+    private $x509IssuerName = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   */
-  protected $x509SerialNumber;
+    /**
+     * @property integer $x509SerialNumber
+     */
+    private $x509SerialNumber = null;
 
-  public function __construct(String $x509IssuerName = NULL,
-                              int $x509SerialNumber = NULL) {
-    $this->x509IssuerName = $x509IssuerName;
-    $this->x509SerialNumber = $x509SerialNumber;
-    return $this;
-  }
+    /**
+     * Gets as x509IssuerName
+     *
+     * @return string
+     */
+    public function getX509IssuerName()
+    {
+        return $this->x509IssuerName;
+    }
 
-  public function getX509IssuerName() {
-    return $this->x509IssuerName;
-  }
+    /**
+     * Sets a new x509IssuerName
+     *
+     * @param string $x509IssuerName
+     * @return self
+     */
+    public function setX509IssuerName($x509IssuerName)
+    {
+        $this->x509IssuerName = $x509IssuerName;
+        return $this;
+    }
 
-  public function setX509IssuerName($value) {
-    $this->x509IssuerName = $value;
-  }
+    /**
+     * Gets as x509SerialNumber
+     *
+     * @return integer
+     */
+    public function getX509SerialNumber()
+    {
+        return $this->x509SerialNumber;
+    }
 
-  public function getX509SerialNumber() {
-    return $this->x509SerialNumber;
-  }
+    /**
+     * Sets a new x509SerialNumber
+     *
+     * @param integer $x509SerialNumber
+     * @return self
+     */
+    public function setX509SerialNumber($x509SerialNumber)
+    {
+        $this->x509SerialNumber = $x509SerialNumber;
+        return $this;
+    }
 
-  public function setX509SerialNumber($value) {
-    $this->x509SerialNumber = $value;
-  }
+
 }
 

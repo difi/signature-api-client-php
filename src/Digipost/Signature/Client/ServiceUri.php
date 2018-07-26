@@ -2,8 +2,8 @@
 
 namespace Digipost\Signature\Client;
 
-use MyCLabs\Enum\Enum;
 use GuzzleHttp\Psr7\Uri;
+use MyCLabs\Enum\Enum;
 
 /**
  * Class ServiceUri
@@ -21,6 +21,8 @@ class ServiceUri extends Enum {
   const DIFI_QA = "https://api.difiqa.signering.posten.no/api/";
 
   const DIFI_TEST = "https://api.difitest.signering.posten.no/api/";
+
+  //const DIFI_TEST = "https://de22e73a.ngrok.io/api/";
 
   protected $uri;
 

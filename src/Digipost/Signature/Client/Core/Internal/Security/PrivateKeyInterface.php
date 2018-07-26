@@ -1,10 +1,10 @@
 <?php
 namespace Digipost\Signature\Client\Core\Internal\Security;
 
-interface PrivateKeyInterface extends \Serializable {
-  function getAlgorithm();
+interface PrivateKeyInterface extends \Serializable, Key  {
+  function getAlgorithm(): String;
 
-  function getFormat();
+  function getFormat(): String;
 
-  function getEncoded();
+  function getEncoded(): String;
 }

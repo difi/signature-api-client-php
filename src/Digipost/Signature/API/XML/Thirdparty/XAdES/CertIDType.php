@@ -2,101 +2,96 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType;
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class CertIDType
- *
- * <p>The following schema fragment specifies the expected content contained within this class.
- *
- * <pre>
- * <complexType name="CertIDType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element name="CertDigest" type="{http://uri.etsi.org/01903/v1.3.2#}DigestAlgAndValueType"/>
- *         <element name="IssuerSerial" type="{http://www.w3.org/2000/09/xmldsig#}X509IssuerSerialType"/>
- *       </sequence>
- *       <attribute name="URI" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
+ * Class representing CertIDType
  *
  *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
+ * XSD Type: CertIDType
  */
-class CertIDType {
+class CertIDType
+{
 
-  /**
-   * @Serializer\XmlElement()
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType")
-   */
-  protected $certDigest;
+    /**
+     * @property string $uRI
+     */
+    private $uRI = null;
 
-  /**
-   * @Serializer\XmlElement()
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType")
-   */
-  protected $issuerSerial;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $certDigest
+     */
+    private $certDigest = null;
 
-  /**
-   * @Serializer\XmlAttribute()
-   * @Serializer\Type("string")
-   * @Serializer\SerializedName("URI")
-   */
-  protected $uri;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType $issuerSerial
+     */
+    private $issuerSerial = null;
 
-  public function __construct(DigestAlgAndValueType $certDigest = NULL,
-                              X509IssuerSerialType $issuerSerial = NULL,
-                              String $uri = NULL) {
+    /**
+     * Gets as uRI
+     *
+     * @return string
+     */
+    public function getURI()
+    {
+        return $this->uRI;
+    }
 
-    $this->certDigest = $certDigest;
-    $this->issuerSerial = $issuerSerial;
-    $this->uri = $uri;
-    return $this;
-  }
+    /**
+     * Sets a new uRI
+     *
+     * @param string $uRI
+     * @return self
+     */
+    public function setURI($uRI)
+    {
+        $this->uRI = $uRI;
+        return $this;
+    }
 
-  public function getCertDigest() {
-    return $this->certDigest;
-  }
+    /**
+     * Gets as certDigest
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType
+     */
+    public function getCertDigest()
+    {
+        return $this->certDigest;
+    }
 
-  public function setCertDigest(DigestAlgAndValueType $value) {
-    $this->certDigest = $value;
-  }
+    /**
+     * Sets a new certDigest
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $certDigest
+     * @return self
+     */
+    public function setCertDigest(\Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $certDigest)
+    {
+        $this->certDigest = $certDigest;
+        return $this;
+    }
+
+    /**
+     * Gets as issuerSerial
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType
+     */
+    public function getIssuerSerial()
+    {
+        return $this->issuerSerial;
+    }
+
+    /**
+     * Sets a new issuerSerial
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType $issuerSerial
+     * @return self
+     */
+    public function setIssuerSerial(\Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType $issuerSerial)
+    {
+        $this->issuerSerial = $issuerSerial;
+        return $this;
+    }
 
 
-  public function withCertDigest(DigestAlgAndValueType $value) {
-    $this->setCertDigest($value);
-    return $this;
-  }
-
-  public function getIssuerSerial() {
-    return $this->issuerSerial;
-  }
-
-  public function setIssuerSerial(X509IssuerSerialType $value) {
-    $this->issuerSerial = $value;
-  }
-
-
-  public function withIssuerSerial(X509IssuerSerialType $value) {
-    $this->setIssuerSerial($value);
-    return $this;
-  }
-
-  public function getURI() {
-    return $this->uri;
-  }
-
-  public function setURI($value) {
-    $this->uri = $value;
-  }
-
-  public function withURI(String $value) {
-    $this->setURI($value);
-    return $this;
-  }
 }
 

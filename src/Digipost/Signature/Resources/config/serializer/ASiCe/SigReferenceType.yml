@@ -1,0 +1,20 @@
+Digipost\Signature\API\XML\Thirdparty\ASiCe\SigReferenceType:
+    properties:
+        uRI:
+            expose: true
+            access_type: public_method
+            serialized_name: URI
+            accessor:
+                getter: getURI
+                setter: setURI
+            xml_attribute: true
+            type: string
+        mimeType:
+            expose: true
+            access_type: public_method
+            serialized_name: MimeType
+            accessor:
+                getter: getMimeType
+                setter: setMimeType
+            xml_attribute: true
+            type: string

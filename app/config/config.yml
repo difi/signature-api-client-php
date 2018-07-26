@@ -1,0 +1,35 @@
+# This is the main configuration file of your application. It stores all the
+# common options for every execution environment ('prod', 'dev', 'test').
+
+# To avoid creating configuration files that are too long, we first import some
+# files that define the values for important parts of the Symfony application,
+# such as the security component and the dependency injection services
+imports:
+- { resource: parameters.yml }
+- { resource: services.yml }
+- { resource: xsd2php.yml }
+
+# Basic configuration for the Symfony framework features
+framework:
+  secret:          '%env(SYMFONY_SECRET)%'
+  validation:      { enable_annotations: true }
+  trusted_hosts:   ~
+  session:
+    handler_id:  session.handler.native_file
+    save_path:   '%kernel.project_dir%/var/sessions/%kernel.environment%'
+  fragments:       ~
+  php_errors:
+    log: true
+  cache:
+    prefix_seed: symfony-demo
+
+digipost_signature:
+  keystore:
+    filename: '%digipost_signature.keystore.filename%'
+    password: '%digipost_signature.keystore.password%'
+    key:
+      alias: '%digipost_signature.keystore.key.alias%'
+      password: '%digipost_signature.keystore.key.password%'
+    client_cert: '%digipost_signature.keystore.client_cert%'
+  client:
+    organisation_number: '%digipost_signature.client.organisation_number%'

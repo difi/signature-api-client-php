@@ -2,80 +2,69 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class CRLRefType
+ * Class representing CRLRefType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="CRLRefType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element name="DigestAlgAndValue" type="{http://uri.etsi.org/01903/v1.3.2#}DigestAlgAndValueType"/>
- *         <element name="CRLIdentifier" type="{http://uri.etsi.org/01903/v1.3.2#}CRLIdentifierType" minOccurs="0"/>
- *       </sequence>
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
- *
- * @Serializer\AccessorOrder("custom", custom={
- *   "digestAlgAndValue",
- *   "crlIdentifier"
- * })
+ * XSD Type: CRLRefType
  */
-class CRLRefType {
+class CRLRefType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType")
-   * @Serializer\SerializedName("DigestAlgAndValue")
-   */
-  protected $digestAlgAndValue;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $digestAlgAndValue
+     */
+    private $digestAlgAndValue = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\CRLIdentifierType")
-   * @Serializer\SerializedName("CRLIdentifier")
-   */
-  protected $crlIdentifier;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\CRLIdentifierType $cRLIdentifier
+     */
+    private $cRLIdentifier = null;
 
-  public function __construct(DigestAlgAndValueType $digestAlgAndValue = NULL,
-                              CRLIdentifierType $crlIdentifier = NULL) {
-    $this->digestAlgAndValue = $digestAlgAndValue;
-    $this->crlIdentifier = $crlIdentifier;
-    return $this;
-  }
+    /**
+     * Gets as digestAlgAndValue
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType
+     */
+    public function getDigestAlgAndValue()
+    {
+        return $this->digestAlgAndValue;
+    }
 
-  public function getDigestAlgAndValue() {
-    return $this->digestAlgAndValue;
-  }
+    /**
+     * Sets a new digestAlgAndValue
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $digestAlgAndValue
+     * @return self
+     */
+    public function setDigestAlgAndValue(\Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $digestAlgAndValue)
+    {
+        $this->digestAlgAndValue = $digestAlgAndValue;
+        return $this;
+    }
 
-  public function setDigestAlgAndValue(DigestAlgAndValueType $value) {
-    $this->digestAlgAndValue = $value;
-  }
+    /**
+     * Gets as cRLIdentifier
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\CRLIdentifierType
+     */
+    public function getCRLIdentifier()
+    {
+        return $this->cRLIdentifier;
+    }
 
-  public function withDigestAlgAndValue(DigestAlgAndValueType $value) {
-    $this->setDigestAlgAndValue($value);
-    return $this;
-  }
+    /**
+     * Sets a new cRLIdentifier
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\CRLIdentifierType $cRLIdentifier
+     * @return self
+     */
+    public function setCRLIdentifier(\Digipost\Signature\API\XML\Thirdparty\XAdES\CRLIdentifierType $cRLIdentifier)
+    {
+        $this->cRLIdentifier = $cRLIdentifier;
+        return $this;
+    }
 
-  public function getCRLIdentifier() {
-    return $this->crlIdentifier;
-  }
 
-  public function setCRLIdentifier(CRLIdentifierType $value) {
-    $this->crlIdentifier = $value;
-  }
-
-  public function withCRLIdentifier(CRLIdentifierType $value) {
-    $this->setCRLIdentifier($value);
-    return $this;
-  }
 }
 

@@ -1,0 +1,12 @@
+Digipost\Signature\API\XML\CustomBase64BinaryType:
+  properties:
+    value:
+      expose: true
+      access_type: public_method
+      accessor:
+        getter: value
+        setter: value
+      xml_value:
+        inline: true
+        namespace: 'http://www.w3.org/2000/09/xmldsig#'
+      type: string

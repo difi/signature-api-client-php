@@ -1,0 +1,35 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\CertificateValuesType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        encapsulatedX509Certificate:
+            expose: true
+            access_type: public_method
+            serialized_name: EncapsulatedX509Certificate
+            accessor:
+                getter: getEncapsulatedX509Certificate
+                setter: setEncapsulatedX509Certificate
+            xml_list:
+                inline: true
+                entry_name: EncapsulatedX509Certificate
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType>
+        otherCertificate:
+            expose: true
+            access_type: public_method
+            serialized_name: OtherCertificate
+            accessor:
+                getter: getOtherCertificate
+                setter: setOtherCertificate
+            xml_list:
+                inline: true
+                entry_name: OtherCertificate
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType>

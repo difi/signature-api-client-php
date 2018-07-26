@@ -1,0 +1,40 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\QualifyingPropertiesType:
+    properties:
+        target:
+            expose: true
+            access_type: public_method
+            serialized_name: Target
+            accessor:
+                getter: getTarget
+                setter: setTarget
+            xml_attribute: true
+            type: string
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        signedProperties:
+            expose: true
+            access_type: public_method
+            serialized_name: SignedProperties
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getSignedProperties
+                setter: setSignedProperties
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\SignedPropertiesType
+        unsignedProperties:
+            expose: true
+            access_type: public_method
+            serialized_name: UnsignedProperties
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getUnsignedProperties
+                setter: setUnsignedProperties
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\UnsignedPropertiesType

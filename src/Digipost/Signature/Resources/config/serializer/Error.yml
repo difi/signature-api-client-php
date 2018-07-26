@@ -1,0 +1,34 @@
+Digipost\Signature\API\XML\Error:
+    xml_root_name: error
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        errorCode:
+            expose: true
+            access_type: public_method
+            serialized_name: error-code
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getErrorCode
+                setter: setErrorCode
+            type: string
+        errorMessage:
+            expose: true
+            access_type: public_method
+            serialized_name: error-message
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getErrorMessage
+                setter: setErrorMessage
+            type: string
+        errorType:
+            expose: true
+            access_type: public_method
+            serialized_name: error-type
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getErrorType
+                setter: setErrorType
+            type: string

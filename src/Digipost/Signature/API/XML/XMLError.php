@@ -30,22 +30,32 @@ use JMS\Serializer\Annotation as Serializer;
  *   "errorMessage",
  *   "errorType"
  * })
- * @Serializer\XmlRoot(name="error")
+ * @Serializer\XmlRoot(name="ns4:error")
+ * @Serializer\XmlNamespace(uri="http://uri.etsi.org/01903/v1.3.2#")
+ * @Serializer\XmlNamespace(uri="http://signering.posten.no/schema/v1", prefix="ns4")
+ * @Serializer\XmlNamespace(uri="http://uri.etsi.org/2918/v1.2.1#", prefix="ns3")
+ * @Serializer\XmlNamespace(uri="http://www.w3.org/2000/09/xmldsig#", prefix="ns2")
  */
 class XMLError {
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement(namespace="http://signering.posten.no/schema/v1")
+   * @Serializer\Type("string")
+   * @Serializer\SerializedName("error-code")
    */
   protected $errorCode;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement(namespace="http://signering.posten.no/schema/v1")
+   * @Serializer\Type("string")
+   * @Serializer\SerializedName("error-message")
    */
   protected $errorMessage;
 
   /**
-   * @Serializer\XmlElement(cdata=false)
+   * @Serializer\XmlElement(namespace="http://signering.posten.no/schema/v1")
+   * @Serializer\Type("string")
+   * @Serializer\SerializedName("error-type")
    */
   protected $errorType;
 

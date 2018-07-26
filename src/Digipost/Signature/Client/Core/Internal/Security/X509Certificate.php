@@ -6,13 +6,17 @@ use CRLCheckException;
 use Digipost\Signature\Client\Core\Exceptions\CertificateParsingFailedException;
 use Digipost\Signature\Client\Core\Exceptions\InvalidCertificateAuthorityException;
 use Digipost\Signature\Client\Core\Exceptions\OpenSSLExtensionNotLoadedException;
+use JMS\Serializer\Annotation as Serializer;
 use phpseclib\File\X509;
 
 /**
- * @property \CertificateRevocationList|CertificateRevocationList|null fingerprint
- * @property \CertificateRevocationList|CertificateRevocationList|null crl
+ * @property \CertificateRevocationList|CertificateRevocationList|null fingerprintCA
+ * @property string crlURI
+ * @property bool isCA
+ * @property string name
+ * @Serializer\ExclusionPolicy("ALL")
  */
-class X509Certificate extends Certificate {
+class X509Certificate extends Certificate implements \Serializable {
 
   /**
    * @var X509
@@ -146,8 +150,8 @@ class X509Certificate extends Certificate {
         return $this->validFrom < $now && $now < $this->validTo;
       case 'crlURI':
         if (isset($this->info['extensions']['crlDistributionPoints']) && preg_match('/URI:([^\\n]+)\\n/',
-                       $this->info['extensions']['crlDistributionPoints'],
-                       $matches)) {
+                                                                                    $this->info['extensions']['crlDistributionPoints'],
+                                                                                    $matches)) {
           return $matches[1];
         }
         return NULL;
@@ -184,7 +188,7 @@ End;
    *
    * @return string
    */
-  private static function stripDelimitersAndLineWraps($certificate) {
+  public static function stripDelimitersAndLineWraps($certificate) {
     $certificate = str_replace('-----BEGIN CERTIFICATE-----', '', $certificate);
     $certificate = str_replace('-----END CERTIFICATE-----', '', $certificate);
     $certificate = str_replace("\r", '', $certificate);
@@ -224,8 +228,8 @@ End;
    * @param array $certs
    */
   public static function buildChain(array $certs) {
-    foreach ($certs as $certificate) {
-      foreach ($certs as $ca) {
+    foreach ($certs as &$certificate) {
+      foreach ($certs as &$ca) {
         if ($certificate->fingerprintCA == $ca->fingerprint) {
           $certificate->setIssuer($ca);
           continue 2;
@@ -374,7 +378,7 @@ End;
       $certificate = $this;
       while ($certificate->issuer !== $certificate) {
         if ($certificate->issuer == NULL) {
-          throw new CRLCheckException("Could not find the root of the certificate '$this->name'.");
+          throw new CRLCheckException("Could not find the root of the certificate '" . $this->name . "'.");
         }
         $certificate = $certificate->issuer;
         $crls[] = $certificate->crl;
@@ -485,7 +489,6 @@ End;
     return $this->issuer;
   }
 
-
   /**
    * @return \DateTime
    */
@@ -532,5 +535,48 @@ End;
    */
   public function getSerialNumber(): String {
     return $this->info['subject']['serialNumber'];
+  }
+
+  /**
+   * @param String $part
+   *
+   * @return mixed
+   * @throws \Exception
+   */
+  public function getSubjectPart(String $part) {
+    $part = strtoupper($part);
+    if (!isset($this->info['subject'][$part])) {
+      throw new \Exception('The part "' . $part . '" does not exist in the certificate subject.');
+    }
+    return $this->info['subject'][$part];
+  }
+
+  /**
+   * String representation of object
+   *
+   * @link  http://php.net/manual/en/serializable.serialize.php
+   * @return string the string representation of the object or null
+   * @since 5.1.0
+   */
+  public function serialize() {
+    return $this->getClearText();
+  }
+
+  /**
+   * Constructs the object
+   *
+   * @link  http://php.net/manual/en/serializable.unserialize.php
+   *
+   * @param string $serialized <p>
+   *                           The string representation of the object.
+   *                           </p>
+   *
+   * @return X509Certificate
+   * @throws CertificateParsingFailedException
+   * @throws OpenSSLExtensionNotLoadedException
+   * @since 5.1.0
+   */
+  public function unserialize($serialized) {
+    return new X509Certificate($serialized);
   }
 }

@@ -8,7 +8,6 @@ use Digipost\Signature\API\XML\XMLDirectSigner;
 use Digipost\Signature\API\XML\XMLSender;
 use Digipost\Signature\Client\Core\Sender;
 use Digipost\Signature\Client\Direct\DirectJob;
-use Ds\Map;
 
 /**
  * Class CreateDirectManifest
@@ -38,7 +37,9 @@ class CreateDirectManifest extends ManifestCreator {
         $xmlSigner->withOnBehalfOf($onBehalfOf->getXmlEnumValue());
       }
       if ($signer->isIdentifiedByPersonalIdentificationNumber()) {
-        $xmlSigner->setPersonalIdentificationNumber($signer->getPersonalIdentificationNumber());
+        $xmlSigner->setPersonalIdentificationNumber(
+          $signer->getPersonalIdentificationNumber()
+        );
       }
       else {
         $xmlSigner->setSignerIdentifier($signer->getCustomIdentifier());
@@ -52,21 +53,28 @@ class CreateDirectManifest extends ManifestCreator {
 
     $requiredAuthentication = $job->getRequiredAuthentication();
     if ($requiredAuthentication) {
-      $xmlSignatureJobManifest->withRequiredAuthentication($requiredAuthentication->getXmlEnumValue());
+      $xmlSignatureJobManifest->withRequiredAuthentication(
+        $requiredAuthentication->getXmlEnumValue()
+      );
     }
     $identifierInSignedDocuments = $job->getIdentifierInSignedDocuments();
     if ($identifierInSignedDocuments) {
-      $xmlSignatureJobManifest->withIdentifierInSignedDocuments($identifierInSignedDocuments->getXmlEnumValue());
+      $xmlSignatureJobManifest->withIdentifierInSignedDocuments(
+        $identifierInSignedDocuments->getXmlEnumValue()
+      );
     }
 
     return $xmlSignatureJobManifest
       ->withSigners($signers)
-      ->withSender($xmlSender->withOrganizationNumber($sender->getOrganizationNumber()))
-      ->withDocument($xmlDirectDocument
-                       ->withTitle($document->getTitle())
-                       ->withDescription($document->getMessage())
-                       ->withHref($document->getFileName())
-                       ->withMime($document->getMimeType())
+      ->withSender(
+        $xmlSender->withOrganizationNumber($sender->getOrganizationNumber())
+      )
+      ->withDocument(
+        $xmlDirectDocument
+          ->withTitle($document->getTitle())
+          ->withDescription($document->getMessage())
+          ->withHref($document->getFileName())
+          ->withMime($document->getMimeType())
       );
   }
 }

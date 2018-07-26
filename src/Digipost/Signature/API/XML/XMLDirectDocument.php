@@ -62,23 +62,26 @@ use JMS\Serializer\Annotation as Serializer;
 class XMLDirectDocument implements XMLDocument {
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlElement()
    */
   protected $title;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlElement()
    */
   protected $description;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute
    */
   protected $href;
 
   /**
+   * @Serializer\Type("string")
    * @Serializer\XmlAttribute
-   *
    */
   protected $mime;
 

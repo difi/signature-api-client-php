@@ -1,0 +1,50 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\CompleteRevocationRefsType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        cRLRefs:
+            expose: true
+            access_type: public_method
+            serialized_name: CRLRefs
+            accessor:
+                getter: getCRLRefs
+                setter: setCRLRefs
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CRLRefType>
+            xml_list:
+                inline: false
+                entry_name: CRLRef
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+        oCSPRefs:
+            expose: true
+            access_type: public_method
+            serialized_name: OCSPRefs
+            accessor:
+                getter: getOCSPRefs
+                setter: setOCSPRefs
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\OCSPRefType>
+            xml_list:
+                inline: false
+                entry_name: OCSPRef
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+        otherRefs:
+            expose: true
+            access_type: public_method
+            serialized_name: OtherRefs
+            accessor:
+                getter: getOtherRefs
+                setter: setOtherRefs
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType>
+            xml_list:
+                inline: false
+                entry_name: OtherRef
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'

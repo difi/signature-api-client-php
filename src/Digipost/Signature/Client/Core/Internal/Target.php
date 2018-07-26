@@ -1,4 +1,5 @@
 <?php
+
 namespace Digipost\Signature\Client\Core\Internal;
 
 use Digipost\Signature\Client\Core\Sender;
@@ -13,10 +14,12 @@ use MyCLabs\Enum\Enum;
  * @method static Target DIRECT
  */
 class Target extends Enum {
-	const PORTAL = "/%s/portal/signature-jobs";
-	const DIRECT = "/%s/direct/signature-jobs";
 
-	protected $path;
+  const PORTAL = "/%s/portal/signature-jobs";
+
+  const DIRECT = "/%s/direct/signature-jobs";
+
+  protected $path;
 
   function Target($value) {
     $this->path = $value;

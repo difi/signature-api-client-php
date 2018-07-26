@@ -1,0 +1,44 @@
+Digipost\Signature\API\XML\DirectSignatureJobRequest:
+    xml_root_name: direct-signature-job-request
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        reference:
+            expose: true
+            access_type: public_method
+            serialized_name: reference
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getReference
+                setter: setReference
+            type: string
+        exitUrls:
+            expose: true
+            access_type: public_method
+            serialized_name: exit-urls
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getExitUrls
+                setter: setExitUrls
+            type: Digipost\Signature\API\XML\XMLExitUrls
+        statusRetrievalMethod:
+            expose: true
+            access_type: public_method
+            serialized_name: status-retrieval-method
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getStatusRetrievalMethod
+                setter: setStatusRetrievalMethod
+            type: Digipost\Signature\API\XML\XMLStatusRetrievalMethod
+        pollingQueue:
+            expose: true
+            access_type: public_method
+            serialized_name: polling-queue
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getPollingQueue
+                setter: setPollingQueue
+            type: string

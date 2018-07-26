@@ -2,125 +2,191 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transforms;
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class SignaturePolicyIdType
+ * Class representing SignaturePolicyIdType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="SignaturePolicyIdType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element name="SigPolicyId" type="{http://uri.etsi.org/01903/v1.3.2#}ObjectIdentifierType"/>
- *         <element ref="{http://www.w3.org/2000/09/xmldsig#}Transforms" minOccurs="0"/>
- *         <element name="SigPolicyHash" type="{http://uri.etsi.org/01903/v1.3.2#}DigestAlgAndValueType"/>
- *         <element name="SigPolicyQualifiers" type="{http://uri.etsi.org/01903/v1.3.2#}SigPolicyQualifiersListType" minOccurs="0"/>
- *       </sequence>
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
- *
- * @Serializer\AccessorOrder("custom", custom={
- *   "sigPolicyId",
- *   "transforms",
- *   "sigPolicyHash",
- *   "sigPolicyQualifiers"
- * })
+ * XSD Type: SignaturePolicyIdType
  */
-class SignaturePolicyIdType {
+class SignaturePolicyIdType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\ObjectIdentifier")
-   */
-  protected $sigPolicyId;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\ObjectIdentifierType $sigPolicyId
+     */
+    private $sigPolicyId = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false, namespace="http://www.w3.org/2000/09/xmldsig#")
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transforms")
-   */
-  protected $transforms;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transform[] $transforms
+     */
+    private $transforms = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType")
-   */
-  protected $sigPolicyHash;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $sigPolicyHash
+     */
+    private $sigPolicyHash = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   * @Serializer\Type("Digipost\Signature\API\XML\Thirdparty\XAdES\SigPolicyQualifiersListType")
-   */
-  protected $sigPolicyQualifiers;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[] $sigPolicyQualifiers
+     */
+    private $sigPolicyQualifiers = null;
 
-  public function __construct(ObjectIdentifier $sigPolicyId = NULL,
-                              Transforms $transforms = NULL,
-                              DigestAlgAndValueType $sigPolicyHash = NULL,
-                              SigPolicyQualifiersListType $sigPolicyQualifiers = NULL) {
-    $this->sigPolicyId = $sigPolicyId;
-    $this->transforms = $transforms;
-    $this->sigPolicyHash = $sigPolicyHash;
-    $this->sigPolicyQualifiers = $sigPolicyQualifiers;
-    return $this;
-  }
+    /**
+     * Gets as sigPolicyId
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\ObjectIdentifierType
+     */
+    public function getSigPolicyId()
+    {
+        return $this->sigPolicyId;
+    }
 
-  public function getSigPolicyId() {
-    return $this->sigPolicyId;
-  }
+    /**
+     * Sets a new sigPolicyId
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\ObjectIdentifierType $sigPolicyId
+     * @return self
+     */
+    public function setSigPolicyId(\Digipost\Signature\API\XML\Thirdparty\XAdES\ObjectIdentifierType $sigPolicyId)
+    {
+        $this->sigPolicyId = $sigPolicyId;
+        return $this;
+    }
 
-  public function setSigPolicyId(ObjectIdentifier $value) {
-    $this->sigPolicyId = $value;
-  }
+    /**
+     * Adds as transform
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transform $transform
+     */
+    public function addToTransforms(\Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transform $transform)
+    {
+        $this->transforms[] = $transform;
+        return $this;
+    }
 
-  public function withSigPolicyId(ObjectIdentifier $value) {
-    $this->setSigPolicyId($value);
-    return $this;
-  }
+    /**
+     * isset transforms
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetTransforms($index)
+    {
+        return isset($this->transforms[$index]);
+    }
 
-  public function getTransforms() {
-    return $this->transforms;
-  }
+    /**
+     * unset transforms
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetTransforms($index)
+    {
+        unset($this->transforms[$index]);
+    }
 
-  public function setTransforms(Transforms $value) {
-    $this->transforms = $value;
-  }
+    /**
+     * Gets as transforms
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transform[]
+     */
+    public function getTransforms()
+    {
+        return $this->transforms;
+    }
 
-  public function withTransforms(Transforms $value) {
-    $this->setTransforms($value);
-    return $this;
-  }
+    /**
+     * Sets a new transforms
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transform[] $transforms
+     * @return self
+     */
+    public function setTransforms(array $transforms)
+    {
+        $this->transforms = $transforms;
+        return $this;
+    }
 
-  public function getSigPolicyHash() {
-    return $this->sigPolicyHash;
-  }
+    /**
+     * Gets as sigPolicyHash
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType
+     */
+    public function getSigPolicyHash()
+    {
+        return $this->sigPolicyHash;
+    }
 
-  public function setSigPolicyHash(DigestAlgAndValueType $value) {
-    $this->sigPolicyHash = $value;
-  }
+    /**
+     * Sets a new sigPolicyHash
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $sigPolicyHash
+     * @return self
+     */
+    public function setSigPolicyHash(\Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType $sigPolicyHash)
+    {
+        $this->sigPolicyHash = $sigPolicyHash;
+        return $this;
+    }
 
-  public function withSigPolicyHash(DigestAlgAndValueType $value) {
-    $this->setSigPolicyHash($value);
-    return $this;
-  }
+    /**
+     * Adds as sigPolicyQualifier
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType $sigPolicyQualifier
+     */
+    public function addToSigPolicyQualifiers(\Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType $sigPolicyQualifier)
+    {
+        $this->sigPolicyQualifiers[] = $sigPolicyQualifier;
+        return $this;
+    }
 
-  public function getSigPolicyQualifiers() {
-    return $this->sigPolicyQualifiers;
-  }
+    /**
+     * isset sigPolicyQualifiers
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetSigPolicyQualifiers($index)
+    {
+        return isset($this->sigPolicyQualifiers[$index]);
+    }
 
-  public function setSigPolicyQualifiers(SigPolicyQualifiersListType $value) {
-    $this->sigPolicyQualifiers = $value;
-  }
+    /**
+     * unset sigPolicyQualifiers
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetSigPolicyQualifiers($index)
+    {
+        unset($this->sigPolicyQualifiers[$index]);
+    }
 
-  public function withSigPolicyQualifiers(SigPolicyQualifiersListType $value) {
-    $this->setSigPolicyQualifiers($value);
-    return $this;
-  }
+    /**
+     * Gets as sigPolicyQualifiers
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[]
+     */
+    public function getSigPolicyQualifiers()
+    {
+        return $this->sigPolicyQualifiers;
+    }
+
+    /**
+     * Sets a new sigPolicyQualifiers
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[] $sigPolicyQualifiers
+     * @return self
+     */
+    public function setSigPolicyQualifiers(array $sigPolicyQualifiers)
+    {
+        $this->sigPolicyQualifiers = $sigPolicyQualifiers;
+        return $this;
+    }
+
+
 }
 

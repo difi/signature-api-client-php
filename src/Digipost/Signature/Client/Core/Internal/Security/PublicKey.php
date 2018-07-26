@@ -6,7 +6,7 @@ use Digipost\Signature\Client\Core\Exceptions\DecryptionFailedException;
 use Digipost\Signature\Client\Core\Exceptions\InvalidMessageDigestAlgorithmException;
 use Digipost\Signature\Client\Core\Exceptions\OpenSSLExtensionNotLoadedException;
 
-class PublicKey {
+class PublicKey implements PublicKeyInterface {
 
   public $keyResource = NULL;
 
@@ -22,6 +22,23 @@ class PublicKey {
       throw new OpenSSLExtensionNotLoadedException('The openssl module is not loaded.');
     }
     $this->keyResource = openssl_pkey_get_public($certificate);
+  }
+
+  private function getDetails(): array {
+    $keyData = openssl_pkey_get_details($this->keyResource);
+    return $keyData;
+  }
+
+  public function getEncodedAsXML(): String {
+    $keyData = $this->getDetails();
+    return sprintf("<RSAKeyValue><Modulus>%s</Modulus><Exponent>%s</Exponent></RSAKeyValue>",
+                   base64_encode($keyData['rsa']['n']),
+                   base64_encode($keyData['rsa']['e']));
+  }
+
+  public function getAlgorithm(): String {
+    $key = openssl_get_publickey($this->keyResource);
+    return '';
   }
 
   /**
@@ -63,5 +80,28 @@ class PublicKey {
     if ($this->keyResource) {
       openssl_free_key($this->keyResource);
     }
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function serialize() {
+    return $this->getEncoded();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function unserialize($serialized) {
+    // TODO: Implement unserialize() method.
+  }
+
+  function getFormat(): String {
+    // TODO: Implement getFormat() method.
+  }
+
+  function getEncoded(): String {
+    $details = $this->getDetails();
+    return $details['key'];
   }
 }

@@ -2,119 +2,123 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class CRLIdentifierType
+ * Class representing CRLIdentifierType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="CRLIdentifierType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <sequence>
- *         <element name="Issuer" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         <element name="IssueTime" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *         <element name="Number" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
- *       </sequence>
- *       <attribute name="URI" type="{http://www.w3.org/2001/XMLSchema}anyURI" />
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
- *
- * @Serializer\AccessorOrder("custom", custom={
- *   "issuer",
- *   "issueTime",
- *   "number"
- * })
+ * XSD Type: CRLIdentifierType
  */
-class CRLIdentifierType {
+class CRLIdentifierType
+{
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   */
-  protected $issuer;
+    /**
+     * @property string $uRI
+     */
+    private $uRI = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   */
-  protected $issueTime;
+    /**
+     * @property string $issuer
+     */
+    private $issuer = null;
 
-  /**
-   * @Serializer\XmlElement(cdata=false)
-   */
-  protected $number;
+    /**
+     * @property \DateTime $issueTime
+     */
+    private $issueTime = null;
 
-  /**
-   * @Serializer\XmlAttribute()
-   * @Serializer\SerializedName("URI")
-   */
-  protected $uri;
+    /**
+     * @property integer $number
+     */
+    private $number = null;
 
-  public function __construct(String $issuer = NULL,
-                              \DateTime $issueTime = NULL,
-                              int $number = NULL,
-                              String $uri = NULL) {
-    $this->issuer = $issuer;
-    $this->issueTime = $issueTime;
-    $this->number = $number;
-    $this->uri = $uri;
-  }
+    /**
+     * Gets as uRI
+     *
+     * @return string
+     */
+    public function getURI()
+    {
+        return $this->uRI;
+    }
 
-  public function getIssuer() {
-    return $this->issuer;
-  }
+    /**
+     * Sets a new uRI
+     *
+     * @param string $uRI
+     * @return self
+     */
+    public function setURI($uRI)
+    {
+        $this->uRI = $uRI;
+        return $this;
+    }
 
-  public function setIssuer(String $value) {
-    $this->issuer = $value;
-  }
+    /**
+     * Gets as issuer
+     *
+     * @return string
+     */
+    public function getIssuer()
+    {
+        return $this->issuer;
+    }
 
-  public function withIssuer(String $value) {
-    $this->setIssuer($value);
-    return $this;
-  }
+    /**
+     * Sets a new issuer
+     *
+     * @param string $issuer
+     * @return self
+     */
+    public function setIssuer($issuer)
+    {
+        $this->issuer = $issuer;
+        return $this;
+    }
 
-  public function getIssueTime() {
-    return $this->issueTime;
-  }
+    /**
+     * Gets as issueTime
+     *
+     * @return \DateTime
+     */
+    public function getIssueTime()
+    {
+        return $this->issueTime;
+    }
 
-  public function setIssueTime(\DateTime $value) {
-    $this->issueTime = $value;
-  }
+    /**
+     * Sets a new issueTime
+     *
+     * @param \DateTime $issueTime
+     * @return self
+     */
+    public function setIssueTime(\DateTime $issueTime)
+    {
+        $this->issueTime = $issueTime;
+        return $this;
+    }
 
-  public function withIssueTime(\DateTime $value) {
-    $this->setIssueTime($value);
-    return $this;
-  }
+    /**
+     * Gets as number
+     *
+     * @return integer
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
 
-  public function getNumber() {
-    return $this->number;
-  }
+    /**
+     * Sets a new number
+     *
+     * @param integer $number
+     * @return self
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+        return $this;
+    }
 
-  public function setNumber(int $value) {
-    $this->number = $value;
-  }
 
-  public function withNumber(int $value) {
-    $this->setNumber($value);
-    return $this;
-  }
-
-  public function getURI() {
-    return $this->uri;
-  }
-
-  public function setURI(String $value) {
-    $this->uri = $value;
-  }
-
-  public function withURI(String $value) {
-    $this->setURI($value);
-    return $this;
-  }
 }
 

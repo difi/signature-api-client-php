@@ -1,0 +1,22 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\SignaturePolicyIdentifierType:
+    properties:
+        signaturePolicyId:
+            expose: true
+            access_type: public_method
+            serialized_name: SignaturePolicyId
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getSignaturePolicyId
+                setter: setSignaturePolicyId
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\SignaturePolicyIdType
+        signaturePolicyImplied:
+            expose: true
+            access_type: public_method
+            serialized_name: SignaturePolicyImplied
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getSignaturePolicyImplied
+                setter: setSignaturePolicyImplied
+            type: Digipost\Signature\API\XML\AnyType

@@ -1,0 +1,82 @@
+Digipost\Signature\API\XML\DirectSignatureJobStatusResponse:
+    xml_root_name: direct-signature-job-status-response
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        signatureJobId:
+            expose: true
+            access_type: public_method
+            serialized_name: signature-job-id
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSignatureJobId
+                setter: setSignatureJobId
+            type: integer
+        signatureJobStatus:
+            expose: true
+            access_type: public_method
+            serialized_name: signature-job-status
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSignatureJobStatus
+                setter: setSignatureJobStatus
+            type: Digipost\Signature\API\XML\XMLDirectSignatureJobStatus
+        status:
+            expose: true
+            access_type: public_method
+            serialized_name: status
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getStatus
+                setter: setStatus
+            xml_list:
+                inline: true
+                entry_name: status
+                namespace: 'http://signering.posten.no/schema/v1'
+            type: array<Digipost\Signature\API\XML\XMLSignerStatus>
+        confirmationUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: confirmation-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getConfirmationUrl
+                setter: setConfirmationUrl
+            type: string
+        deleteDocumentsUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: delete-documents-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getDeleteDocumentsUrl
+                setter: setDeleteDocumentsUrl
+            type: string
+        xadesUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: xades-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getXadesUrl
+                setter: setXadesUrl
+            xml_list:
+                inline: true
+                entry_name: xades-url
+                namespace: 'http://signering.posten.no/schema/v1'
+            type: array<Digipost\Signature\API\XML\XMLSignerSpecificUrl>
+        padesUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: pades-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getPadesUrl
+                setter: setPadesUrl
+            type: string

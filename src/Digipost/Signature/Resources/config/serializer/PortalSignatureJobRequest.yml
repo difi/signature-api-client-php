@@ -1,0 +1,24 @@
+Digipost\Signature\API\XML\PortalSignatureJobRequest:
+    xml_root_name: portal-signature-job-request
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        reference:
+            expose: true
+            access_type: public_method
+            serialized_name: reference
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getReference
+                setter: setReference
+            type: string
+        pollingQueue:
+            expose: true
+            access_type: public_method
+            serialized_name: polling-queue
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getPollingQueue
+                setter: setPollingQueue
+            type: string

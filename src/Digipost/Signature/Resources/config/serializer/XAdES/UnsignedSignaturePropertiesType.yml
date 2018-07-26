@@ -1,0 +1,167 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\UnsignedSignaturePropertiesType:
+    properties:
+        id:
+            expose: true
+            access_type: public_method
+            serialized_name: Id
+            accessor:
+                getter: getId
+                setter: setId
+            xml_attribute: true
+            type: string
+        counterSignature:
+            expose: true
+            access_type: public_method
+            serialized_name: CounterSignature
+            accessor:
+                getter: getCounterSignature
+                setter: setCounterSignature
+            xml_list:
+                inline: true
+                entry_name: CounterSignature
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CounterSignatureType>
+        signatureTimeStamp:
+            expose: true
+            access_type: public_method
+            serialized_name: SignatureTimeStamp
+            accessor:
+                getter: getSignatureTimeStamp
+                setter: setSignatureTimeStamp
+            xml_list:
+                inline: true
+                entry_name: SignatureTimeStamp
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\XAdESTimeStampType>
+        completeCertificateRefs:
+            expose: true
+            access_type: public_method
+            serialized_name: CompleteCertificateRefs
+            accessor:
+                getter: getCompleteCertificateRefs
+                setter: setCompleteCertificateRefs
+            xml_list:
+                inline: true
+                entry_name: CompleteCertificateRefs
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CompleteCertificateRefsType>
+        completeRevocationRefs:
+            expose: true
+            access_type: public_method
+            serialized_name: CompleteRevocationRefs
+            accessor:
+                getter: getCompleteRevocationRefs
+                setter: setCompleteRevocationRefs
+            xml_list:
+                inline: true
+                entry_name: CompleteRevocationRefs
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CompleteRevocationRefsType>
+        attributeCertificateRefs:
+            expose: true
+            access_type: public_method
+            serialized_name: AttributeCertificateRefs
+            accessor:
+                getter: getAttributeCertificateRefs
+                setter: setAttributeCertificateRefs
+            xml_list:
+                inline: true
+                entry_name: AttributeCertificateRefs
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CompleteCertificateRefsType>
+        attributeRevocationRefs:
+            expose: true
+            access_type: public_method
+            serialized_name: AttributeRevocationRefs
+            accessor:
+                getter: getAttributeRevocationRefs
+                setter: setAttributeRevocationRefs
+            xml_list:
+                inline: true
+                entry_name: AttributeRevocationRefs
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CompleteRevocationRefsType>
+        sigAndRefsTimeStamp:
+            expose: true
+            access_type: public_method
+            serialized_name: SigAndRefsTimeStamp
+            accessor:
+                getter: getSigAndRefsTimeStamp
+                setter: setSigAndRefsTimeStamp
+            xml_list:
+                inline: true
+                entry_name: SigAndRefsTimeStamp
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\XAdESTimeStampType>
+        refsOnlyTimeStamp:
+            expose: true
+            access_type: public_method
+            serialized_name: RefsOnlyTimeStamp
+            accessor:
+                getter: getRefsOnlyTimeStamp
+                setter: setRefsOnlyTimeStamp
+            xml_list:
+                inline: true
+                entry_name: RefsOnlyTimeStamp
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\XAdESTimeStampType>
+        certificateValues:
+            expose: true
+            access_type: public_method
+            serialized_name: CertificateValues
+            accessor:
+                getter: getCertificateValues
+                setter: setCertificateValues
+            xml_list:
+                inline: true
+                entry_name: CertificateValues
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CertificateValuesType>
+        revocationValues:
+            expose: true
+            access_type: public_method
+            serialized_name: RevocationValues
+            accessor:
+                getter: getRevocationValues
+                setter: setRevocationValues
+            xml_list:
+                inline: true
+                entry_name: RevocationValues
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\RevocationValuesType>
+        attrAuthoritiesCertValues:
+            expose: true
+            access_type: public_method
+            serialized_name: AttrAuthoritiesCertValues
+            accessor:
+                getter: getAttrAuthoritiesCertValues
+                setter: setAttrAuthoritiesCertValues
+            xml_list:
+                inline: true
+                entry_name: AttrAuthoritiesCertValues
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\CertificateValuesType>
+        attributeRevocationValues:
+            expose: true
+            access_type: public_method
+            serialized_name: AttributeRevocationValues
+            accessor:
+                getter: getAttributeRevocationValues
+                setter: setAttributeRevocationValues
+            xml_list:
+                inline: true
+                entry_name: AttributeRevocationValues
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\RevocationValuesType>
+        archiveTimeStamp:
+            expose: true
+            access_type: public_method
+            serialized_name: ArchiveTimeStamp
+            accessor:
+                getter: getArchiveTimeStamp
+                setter: setArchiveTimeStamp
+            xml_list:
+                inline: true
+                entry_name: ArchiveTimeStamp
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\XAdESTimeStampType>

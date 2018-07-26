@@ -1,0 +1,7 @@
+imports:
+- { resource: config.yml }
+
+#framework:
+#    cache:
+#        system: cache.adapter.apcu
+

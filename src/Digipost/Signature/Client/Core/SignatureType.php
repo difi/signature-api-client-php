@@ -1,4 +1,5 @@
 <?php
+
 namespace Digipost\Signature\Client\Core;
 
 use Digipost\Signature\API\XML\XMLSignatureType;
@@ -14,8 +15,10 @@ use MyCLabs\Enum\Enum;
  * @method static SignatureType ADVANCED_SIGNATURE
  */
 class SignatureType extends Enum implements MarshallableEnum {
-	const AUTHENTICATED_SIGNATURE = XMLSignatureType::AUTHENTICATED_ELECTRONIC_SIGNATURE;
-	const ADVANCED_SIGNATURE = XMLSignatureType::ADVANCED_ELECTRONIC_SIGNATURE;
+
+  const AUTHENTICATED_SIGNATURE = XMLSignatureType::AUTHENTICATED_ELECTRONIC_SIGNATURE;
+
+  const ADVANCED_SIGNATURE = XMLSignatureType::ADVANCED_ELECTRONIC_SIGNATURE;
 
   function getXmlEnumValue() {
     return new XMLSignatureType($this->value);

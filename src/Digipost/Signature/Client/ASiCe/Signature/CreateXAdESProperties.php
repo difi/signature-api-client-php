@@ -2,6 +2,7 @@
 
 namespace Digipost\Signature\Client\ASiCe\Signature;
 
+use Digipost\Signature\API\XML\CustomBase64BinaryType;
 use Digipost\Signature\API\XML\Thirdparty\XAdES\CertIDType;
 use Digipost\Signature\API\XML\Thirdparty\XAdES\DataObjectFormat;
 use Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType;
@@ -10,12 +11,14 @@ use Digipost\Signature\API\XML\Thirdparty\XAdES\SignedDataObjectProperties;
 use Digipost\Signature\API\XML\Thirdparty\XAdES\SignedProperties;
 use Digipost\Signature\API\XML\Thirdparty\XAdES\SignedSignatureProperties;
 use Digipost\Signature\API\XML\Thirdparty\XAdES\SigningCertificate;
+use Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType;
 use Digipost\Signature\Client\Core\Exceptions\CertificateException;
 use Digipost\Signature\Client\Core\Exceptions\XmlConfigurationException;
 use Digipost\Signature\Client\Core\Internal\Security\X509Certificate;
-use \DOMDocument as Document;
 use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
+use DOMDocument as Document;
+use RobRichards\XMLSecLibs\XMLSecurityDSig;
 
 /**
  * Class CreateXAdESProperties
@@ -24,16 +27,11 @@ use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
  */
 class CreateXAdESProperties {
 
-  private $sha1DigestMethod; //  = new DigestMethod(emptyList(), SHA1)
+  private $sha1DigestMethod;
 
   private $clock;
 
   private static $marshaller;
-
-  //    static {
-//          marshaller = new Jaxb2Marshaller();
-  //        marshaller.setClassesToBeBound(QualifyingProperties.class);
-  //    }
 
   function __staticInit() {
     self::$marshaller = new Marshalling();
@@ -45,18 +43,9 @@ class CreateXAdESProperties {
    * @param \DateTime $clock
    */
   function __construct(\DateTime $clock) {
+    $this->sha1DigestMethod = new DigestMethod();
+    $this->sha1DigestMethod->setAlgorithm(XMLSecurityDSig::SHA1);
     $this->clock = $clock;
-  }
-
-  /**
-   * @param $value
-   *
-   * @return array
-   */
-  private function singletonList($value) {
-    $list = [];
-    $list[] = $value;
-    return $list;
   }
 
   /**
@@ -70,47 +59,79 @@ class CreateXAdESProperties {
     try {
       $certificateEncoded = $certificate->getClearText();
       $certificateDigestValue = sha1($certificateEncoded);
-    } catch (CertificateEncodingException $e) {
-      throw new CertificateException("Unable to get encoded from of certificate",
-                                     $e);
+    } catch (CertificateException $e) {
+      throw new CertificateException(
+        "Unable to get encoded from of certificate",
+        $e
+      );
     }
 
-    $certificateDigest = new DigestAlgAndValueType($this->sha1DigestMethod,
-                                                   $certificateDigestValue);
-
-
-    $certificateIssuer = new X509IssuerSerialType($certificate->getIssuer()->getCommonName(),
-                                                  $certificate->getSerialNumber());
-    $signingCertificate = new SigningCertificate($this->singletonList(new CertIDType($certificateDigest,
-                                                                              $certificateIssuer,
-                                                                              NULL)));
+    $certificateDigest = new DigestAlgAndValueType();
+    $certificateDigest
+      ->setDigestValue(new CustomBase64BinaryType($certificateDigestValue))
+      ->setDigestMethod($this->sha1DigestMethod);
+    try {
+      $issuerNameString = sprintf(
+        "CN=%s, O=%s, C=%s",
+        $certificate->getIssuer()
+                    ->getSubjectPart('CN'),
+        $certificate->getIssuer()
+                    ->getSubjectPart('O'),
+        $certificate->getIssuer()->getSubjectPart('C')
+      );
+    } catch (\Exception $e) {
+      throw new CertificateException("Unable to get certificate issuer", $e);
+    }
+    $certificateIssuer = new X509IssuerSerialType();
+    $certificateIssuer
+      ->setX509IssuerName($issuerNameString)
+      ->setX509SerialNumber($certificate->getSerialNumber());
+    $certIDType = new CertIDType();
+    $signingCertificate = new SigningCertificate();
+    $signingCertificate
+      ->addToCert(
+        $certIDType
+          ->setCertDigest($certificateDigest)
+          ->setIssuerSerial($certificateIssuer)
+      );
 
     $now = $this->clock;
     //$now = ZonedDateTime.now(clock);
-    $signedSignatureProperties = new SignedSignatureProperties($now,
-                                                               $signingCertificate,
-                                                               NULL, NULL, NULL,
-                                                               NULL);
-    $signedDataObjectProperties = new SignedDataObjectProperties($this->dataObjectFormats($files),
-                                                                 NULL, NULL,
-                                                                 NULL, NULL);
-    $signedProperties = new SignedProperties($signedSignatureProperties,
-                                             $signedDataObjectProperties,
-                                             "SignedProperties");
-    $qualifyingProperties = new QualifyingProperties($signedProperties, NULL,
-                                                     "#Signature", NULL);
+    $signedSignatureProperties = new SignedSignatureProperties();
+    $signedSignatureProperties
+      ->setSigningTime($now)
+      ->setSigningCertificate($signingCertificate->getCert());;
+    $signedDataObjectProperties = new SignedDataObjectProperties();
+    $signedDataObjectProperties->setDataObjectFormat(
+      $this->dataObjectFormats($files)
+    );
+
+    $signedProperties = new SignedProperties();
+    $signedProperties
+      ->setSignedSignatureProperties($signedSignatureProperties)
+      ->setSignedDataObjectProperties($signedDataObjectProperties)
+      ->setId("SignedProperties");
+    $qualifyingProperties = new QualifyingProperties();
+    $qualifyingProperties
+      ->setSignedProperties($signedProperties)
+      ->setTarget('#Signature');
 
     //$domResult = new \DOMDocument();
     //$this->marshaller->marshal($qualifyingProperties, $domResult);
-    $domResult = NULL;
-    Marshalling::marshal($qualifyingProperties, $domResult);
-    $document = clone $domResult;
     /** @var \DOMDocument $domResult */
-    //$document = new Document();
+    Marshalling::marshal($qualifyingProperties, $domResult);
+    //$document = $domResult->firstChild;
+    //$domResult->parentNode;
+    //    $xPath = new \DOMXPath($domResult);
+    //    $query2 = $xPath->evaluate("//*[local-name()='QualifyingProperties']")->item(0);
+    $document = new Document();
+    $domResultXML = $domResult->saveXML();
+    //print "\$domResultXML:\n---------------\n" . $domResultXML . "\n\n";
+    $document->loadXML($domResultXML, LIBXML_NSCLEAN | LIBXML_NOCDATA);
     //$document->appendChild($domResult->firstChild);
 
-    // Explicitly mark the SignedProperties Id as an Document ID attribute, so that it will be eligble as a reference for signature.
-    // If not, it will not be treated as something to sign.
+    // Explicitly mark the SignedProperties Id as an Document ID attribute, so that
+    // it will be eligble as a reference for signature. If not, it will not be treated as something to sign.
     $this->markAsIdProperty($document, "SignedProperties", "Id");
 
     return $document;
@@ -125,9 +146,13 @@ class CreateXAdESProperties {
     $result = [];
     for ($i = 0; $i < sizeof($files); $i++) {
       $signatureElementIdReference = sprintf("#ID_%s", $i);
-      array_push($result,
-                 new DataObjectFormat(NULL, NULL, $files[$i]->getMimeType(),
-                                      NULL, $signatureElementIdReference));
+      $objectFormat = new DataObjectFormat();
+      $objectFormat
+        ->setMimeType($files[$i]->getMimeType())
+        //->setObjectIdentifier()
+        ->setObjectReference($signatureElementIdReference);
+
+      array_push($result, $objectFormat);
     }
     return $result;
   }
@@ -137,14 +162,19 @@ class CreateXAdESProperties {
    * @param String   $elementName
    * @param String   $property
    */
-  private function markAsIdProperty(Document $document, String $elementName,
-                                    String $property) {
+  private function markAsIdProperty(
+    Document $document,
+    String $elementName,
+    String $property
+  ) {
     //$xPath = XPathFactory::newInstance()->newXPath();
     $xPath = new \DOMXPath($document);
     try {
       //
       /** @var \DOMNodeList $idElement */
-      $idElements = $xPath->evaluate("//*[local-name()='" . $elementName . "']");
+      $idElements = $xPath->evaluate(
+        "//*[local-name()='" . $elementName . "']"
+      );
       foreach ($idElements as $element) {
         /** @var \DOMElement $element */
         $element->setIdAttribute($property, TRUE);

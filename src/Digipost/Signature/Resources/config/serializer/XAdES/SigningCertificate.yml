@@ -1,0 +1,3 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\SigningCertificate:
+    xml_root_name: SigningCertificate
+

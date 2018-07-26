@@ -1,0 +1,19 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\IdentifierType:
+    properties:
+        __value:
+            expose: true
+            xml_value: true
+            access_type: public_method
+            accessor:
+                getter: value
+                setter: value
+            type: string
+        qualifier:
+            expose: true
+            access_type: public_method
+            serialized_name: Qualifier
+            accessor:
+                getter: getQualifier
+                setter: setQualifier
+            xml_attribute: true
+            type: string

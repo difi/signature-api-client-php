@@ -30,6 +30,9 @@ use JMS\Serializer\Annotation as Serializer;
  * @package Digipost\Signature\API\XML
  *
  * @Serializer\XmlRoot(name="direct-signature-job-request", namespace="http://signering.posten.no/schema/v1")
+ * @Serializer\XmlNamespace(prefix="ns2", uri="http://uri.etsi.org/01903/v1.3.2#")
+ * @Serializer\XmlNamespace(prefix="ns3", uri="http://www.w3.org/2000/09/xmldsig#")
+ * @Serializer\XmlNamespace(prefix="ns4", uri="http://uri.etsi.org/2918/v1.2.1#")
  * @Serializer\AccessorOrder("custom", custom={
  *   "reference",
  *   "exitUrls",

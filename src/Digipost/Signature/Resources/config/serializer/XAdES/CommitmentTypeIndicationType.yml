@@ -1,0 +1,47 @@
+Digipost\Signature\API\XML\Thirdparty\XAdES\CommitmentTypeIndicationType:
+    properties:
+        commitmentTypeId:
+            expose: true
+            access_type: public_method
+            serialized_name: CommitmentTypeId
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getCommitmentTypeId
+                setter: setCommitmentTypeId
+            type: Digipost\Signature\API\XML\Thirdparty\XAdES\ObjectIdentifierType
+        objectReference:
+            expose: true
+            access_type: public_method
+            serialized_name: ObjectReference
+            accessor:
+                getter: getObjectReference
+                setter: setObjectReference
+            xml_list:
+                inline: true
+                entry_name: ObjectReference
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            type: array<string>
+        allSignedDataObjects:
+            expose: true
+            access_type: public_method
+            serialized_name: AllSignedDataObjects
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
+            accessor:
+                getter: getAllSignedDataObjects
+                setter: setAllSignedDataObjects
+            type: Digipost\Signature\API\XML\AnyType
+        commitmentTypeQualifiers:
+            expose: true
+            access_type: public_method
+            serialized_name: CommitmentTypeQualifiers
+            accessor:
+                getter: getCommitmentTypeQualifiers
+                setter: setCommitmentTypeQualifiers
+            type: array<Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType>
+            xml_list:
+                inline: false
+                entry_name: CommitmentTypeQualifier
+                skip_when_empty: true
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'

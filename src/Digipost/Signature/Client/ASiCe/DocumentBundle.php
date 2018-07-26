@@ -1,6 +1,8 @@
 <?php
 namespace Digipost\Signature\Client\ASiCe;
 
+use function GuzzleHttp\Psr7\stream_for;
+
 class DocumentBundle {
 
   /**
@@ -13,7 +15,7 @@ class DocumentBundle {
   }
 
   public function getInputStream() {
+    //return stream_for($this->bytes);
     return $this->bytes;
-    //return \GuzzleHttp\Psr7\stream_for($this->bytes);
   }
 }

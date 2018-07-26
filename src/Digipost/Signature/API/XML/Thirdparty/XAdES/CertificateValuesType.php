@@ -2,81 +2,168 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XAdES;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
- * Class CertificateValuesType
+ * Class representing CertificateValuesType
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
  *
- * <pre>
- * <complexType name="CertificateValuesType">
- *   <complexContent>
- *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       <choice maxOccurs="unbounded" minOccurs="0">
- *         <element name="EncapsulatedX509Certificate" type="{http://uri.etsi.org/01903/v1.3.2#}EncapsulatedPKIDataType"/>
- *         <element name="OtherCertificate" type="{http://uri.etsi.org/01903/v1.3.2#}AnyType"/>
- *       </choice>
- *       <attribute name="Id" type="{http://www.w3.org/2001/XMLSchema}ID" />
- *     </restriction>
- *   </complexContent>
- * </complexType>
- * </pre>
- *
- * @package Digipost\Signature\API\XML\Thirdparty\XAdES
+ * XSD Type: CertificateValuesType
  */
-class CertificateValuesType {
+class CertificateValuesType
+{
 
-  /**
-   * @Serializer\XmlList(entry="EncapsulatedX509Certificate", inline=true)
-   * @Serializer\Type("array<Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIData>")
-   *
-   */
-  protected $encapsulatedX509CertificatesAndOtherCertificates;
+    /**
+     * @property string $id
+     */
+    private $id = null;
 
-  /**
-   * @Serializer\XmlAttribute()
-   * @Serializer\SerializedName("ID")
-   */
-  protected $id;
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[] $encapsulatedX509Certificate
+     */
+    private $encapsulatedX509Certificate = array(
+        
+    );
 
-  public function __construct(array $encapsulatedX509CertificatesAndOtherCertificates = NULL,
-                              String $id = NULL) {
+    /**
+     * @property \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[] $otherCertificate
+     */
+    private $otherCertificate = array(
+        
+    );
 
-    $this->encapsulatedX509CertificatesAndOtherCertificates = $encapsulatedX509CertificatesAndOtherCertificates;
-    $this->id = $id;
-    return $this;
-  }
-
-  public function &getEncapsulatedX509CertificatesAndOtherCertificates() {
-    if (($this->encapsulatedX509CertificatesAndOtherCertificates === NULL)) {
-      $this->encapsulatedX509CertificatesAndOtherCertificates = [];
+    /**
+     * Gets as id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
     }
-    return $this->encapsulatedX509CertificatesAndOtherCertificates;
-  }
 
-
-  public function withEncapsulatedX509CertificatesAndOtherCertificates(array $values) {
-    $content =& $this->getEncapsulatedX509CertificatesAndOtherCertificates();
-    if ($values !== NULL) {
-      foreach ($values as $value) {
-        $content[] = $value;
-      }
+    /**
+     * Sets a new id
+     *
+     * @param string $id
+     * @return self
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
     }
-    return $this;
-  }
 
-  public function getId() {
-    return $this->id;
-  }
+    /**
+     * Adds as encapsulatedX509Certificate
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType $encapsulatedX509Certificate
+     */
+    public function addToEncapsulatedX509Certificate(\Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType $encapsulatedX509Certificate)
+    {
+        $this->encapsulatedX509Certificate[] = $encapsulatedX509Certificate;
+        return $this;
+    }
 
-  public function setId(String $value) {
-    $this->id = $value;
-  }
+    /**
+     * isset encapsulatedX509Certificate
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetEncapsulatedX509Certificate($index)
+    {
+        return isset($this->encapsulatedX509Certificate[$index]);
+    }
 
-  public function withId(String $value) {
-    $this->setId($value);
-    return $this;
-  }
+    /**
+     * unset encapsulatedX509Certificate
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetEncapsulatedX509Certificate($index)
+    {
+        unset($this->encapsulatedX509Certificate[$index]);
+    }
+
+    /**
+     * Gets as encapsulatedX509Certificate
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[]
+     */
+    public function getEncapsulatedX509Certificate()
+    {
+        return $this->encapsulatedX509Certificate;
+    }
+
+    /**
+     * Sets a new encapsulatedX509Certificate
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\EncapsulatedPKIDataType[] $encapsulatedX509Certificate
+     * @return self
+     */
+    public function setEncapsulatedX509Certificate(array $encapsulatedX509Certificate)
+    {
+        $this->encapsulatedX509Certificate = $encapsulatedX509Certificate;
+        return $this;
+    }
+
+    /**
+     * Adds as otherCertificate
+     *
+     * @return self
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType $otherCertificate
+     */
+    public function addToOtherCertificate(\Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType $otherCertificate)
+    {
+        $this->otherCertificate[] = $otherCertificate;
+        return $this;
+    }
+
+    /**
+     * isset otherCertificate
+     *
+     * @param scalar $index
+     * @return boolean
+     */
+    public function issetOtherCertificate($index)
+    {
+        return isset($this->otherCertificate[$index]);
+    }
+
+    /**
+     * unset otherCertificate
+     *
+     * @param scalar $index
+     * @return void
+     */
+    public function unsetOtherCertificate($index)
+    {
+        unset($this->otherCertificate[$index]);
+    }
+
+    /**
+     * Gets as otherCertificate
+     *
+     * @return \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[]
+     */
+    public function getOtherCertificate()
+    {
+        return $this->otherCertificate;
+    }
+
+    /**
+     * Sets a new otherCertificate
+     *
+     * @param \Digipost\Signature\API\XML\Thirdparty\XAdES\AnyType[] $otherCertificate
+     * @return self
+     */
+    public function setOtherCertificate(array $otherCertificate)
+    {
+        $this->otherCertificate = $otherCertificate;
+        return $this;
+    }
+
+
 }
 

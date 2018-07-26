@@ -1,14 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bendik
- * Date: 18.06.18
- * Time: 16:56
- */
 
 namespace Digipost\Signature\JAXB;
 
-class JAXBElement {
+/**
+ * Class JAXBElement
+ *
+ * @package Digipost\Signature\JAXB
+ */
+class JAXBElement implements \Serializable {
 
   protected $name;
 
@@ -26,11 +25,41 @@ class JAXBElement {
    * @param String $scope
    * @param mixed  $value
    */
-  public function __construct(QName $QName, String $declaredType,
-                              String $scope = NULL, $value = NULL) {
+  public function __construct(
+    QName $QName = NULL,
+    String $declaredType = NULL,
+    String $scope = NULL,
+    $value = NULL
+  ) {
     $this->name = $QName;
     $this->declaredType = $declaredType;
     $this->scope = $scope;
     $this->value = $value;
+  }
+
+  /**
+   * @return JAXBElement
+   */
+  public static function fromString(
+    $name = "",
+    $declaredType = NULL,
+    $scope = NULL,
+    $value = NULL
+  ) {
+    return new self($name, $declaredType, $scope, $value);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function serialize() {
+    // TODO: Implement serialize() method.
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public function unserialize($serialized) {
+    // TODO: Implement unserialize() method.
   }
 }

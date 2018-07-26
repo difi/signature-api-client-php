@@ -1,0 +1,38 @@
+Digipost\Signature\API\XML\DirectSignatureJobResponse:
+    xml_root_name: direct-signature-job-response
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        signatureJobId:
+            expose: true
+            access_type: public_method
+            serialized_name: signature-job-id
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getSignatureJobId
+                setter: setSignatureJobId
+            type: integer
+        redirectUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: redirect-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getRedirectUrl
+                setter: setRedirectUrl
+            xml_list:
+                inline: true
+                entry_name: redirect-url
+                namespace: 'http://signering.posten.no/schema/v1'
+            type: array<Digipost\Signature\API\XML\XMLSignerSpecificUrl>
+        statusUrl:
+            expose: true
+            access_type: public_method
+            serialized_name: status-url
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getStatusUrl
+                setter: setStatusUrl
+            type: string

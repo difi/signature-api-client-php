@@ -2,6 +2,7 @@
 
 namespace Digipost\Signature\Client\Core\Internal\Security;
 
+use Digipost\Signature\Client\Core\Exceptions\CertificateParsingFailedException;
 use Digipost\Signature\Client\Core\Exceptions\KeyStoreDecryptionFailedException;
 use Digipost\Signature\Client\Core\Exceptions\OpenSSLExtensionNotLoadedException;
 use Digipost\Signature\Client\Core\Exceptions\PrivateKeyDecryptionFailedException;
@@ -42,20 +43,21 @@ class KeyStore {
   }
 
   /**
-   * @param $contents
-   * @param $passphrase
-   * @param $privatekeyPassword
+   * @param String $contents
+   * @param String $passphrase
+   * @param String $privatekeyPassword
    *
    * @throws KeyStoreDecryptionFailedException
    * @throws OpenSSLExtensionNotLoadedException
    * @throws PrivateKeyDecryptionFailedException
-   * @throws \Digipost\Signature\Client\Core\Exceptions\CertificateParsingFailedException
+     * @throws CertificateParsingFailedException
    */
-  public function load($contents, $passphrase, $privatekeyPassword) {
+  public function load(String $contents, String $passphrase, String $privatekeyPassword) {
     if (!openssl_pkcs12_read($contents, $this->keystore, $passphrase)) {
+      $err = openssl_error_string();
       throw new KeyStoreDecryptionFailedException(
-        'Could not decrypt the certificate, the passphrase is incorrect, ' .
-        'its contents are mangled or it is not a valid PKCS #12 keystore.');
+        "Could not decrypt the certificate, the passphrase is incorrect, " .
+        "its contents are mangled or it is not a valid PKCS #12 keystore:\n'$err'");
     }
     $this->X509Certificate = new X509Certificate($this->keystore['cert']);
     $this->privateKey = new PrivateKey($this->keystore['pkey'], $privatekeyPassword);
@@ -69,6 +71,7 @@ class KeyStore {
     X509Certificate::buildChain($this->chain);
     //X509Certificate::buildChain($this->keystore['extracerts']);
   }
+
   /**
    * Initialize the PKCS12 keystore from a file.
    *
@@ -79,18 +82,19 @@ class KeyStore {
    * @throws KeyStoreDecryptionFailedException
    * @throws OpenSSLExtensionNotLoadedException
    * @throws PrivateKeyDecryptionFailedException
-   * @throws \Digipost\Signature\Client\Core\Exceptions\CertificateParsingFailedException
+   * @throws CertificateParsingFailedException
+   * @throws \FileTransferException
    */
   public static function initFromFile($keystoreLocation, $passphrase) {
     if (!file_exists($keystoreLocation)) {
-      throw new FileNotFoundException("The keystore file '$keystoreLocation' does not exist.");
+      throw new \RuntimeException("The keystore file '$keystoreLocation' does not exist.");
     }
     if (!is_readable($keystoreLocation)) {
-      throw new FileNotReadableException("The keystore file '$keystoreLocation' is not readable.");
+      throw new FileTransferException("The keystore file '$keystoreLocation' is not readable.");
     }
-    $me = new self();
-    $me->load(file_get_contents($keystoreLocation), $passphrase);
-    return $me;
+    $self = new self();
+    $self->load(file_get_contents($keystoreLocation), $passphrase, $passphrase);
+    return $self;
   }
 
   public function __get($name) {
@@ -138,15 +142,18 @@ class KeyStore {
     //return $this->X509Certificate->;
   }
 
+  // TODO: Fix lookup by alias
   public function getCertificate($alias) {
     return $this->X509Certificate;
   }
 
-  public function getKey(): PrivateKey {
+  public function getKey(String $alias, String $passphrase): PrivateKey {
     return $this->privateKey;
   }
 
+  // TODO: Fix lookup by alias
   public function getCertificateAlias(Certificate $certificate) {
-
+    /** @var X509Certificate $certificate */
+    return $certificate->getCrlUri();
   }
 }

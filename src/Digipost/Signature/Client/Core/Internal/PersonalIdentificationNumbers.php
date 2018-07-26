@@ -1,10 +1,11 @@
 <?php
+
 namespace Digipost\Signature\Client\Core\Internal;
 
 class PersonalIdentificationNumbers {
 
-  public static function mask($personalIdentificationNumber) // [String personalIdentificationNumber]
-  {
+  public static function mask($personalIdentificationNumber
+  ) {
     if (!isset($personalIdentificationNumber)) {
       return NULL;
     }

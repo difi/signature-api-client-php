@@ -72,13 +72,13 @@ class DirectJob implements JOB, WithExitUrls {
     return $this->reference;
   }
 
-  public function getDocument() {
-    return $this->document;
+  public function getSender() {
+    return $this->sender;
   }
 
 
-  public function getSender() {
-    return $this->sender;
+  public function getDocument() {
+    return $this->document;
   }
 
 
@@ -124,8 +124,9 @@ class DirectJob implements JOB, WithExitUrls {
    */
   public static function builder(DirectDocument $document,
                                  WithExitUrls $hasExitUrls,
-                                 $signers) {
+                                 DirectSigner... $signers) {
     //return $this->builder($document, $hasExitUrls, Arrays . asList(signers));
+    $signers = is_array($signers) ? $signers : [$signers];
     return new DirectJobBuilder(
       $signers,
       $document,
