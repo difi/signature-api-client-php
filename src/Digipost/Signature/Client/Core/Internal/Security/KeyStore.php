@@ -6,6 +6,7 @@ use Digipost\Signature\Client\Core\Exceptions\CertificateParsingFailedException;
 use Digipost\Signature\Client\Core\Exceptions\KeyStoreDecryptionFailedException;
 use Digipost\Signature\Client\Core\Exceptions\OpenSSLExtensionNotLoadedException;
 use Digipost\Signature\Client\Core\Exceptions\PrivateKeyDecryptionFailedException;
+use Digipost\Signature\Loader\KeyStoreFileLoader;
 
 class KeyStore {
 
@@ -86,6 +87,11 @@ class KeyStore {
    * @throws \FileTransferException
    */
   public static function initFromFile($keystoreLocation, $passphrase) {
+    if ($keystoreLocation instanceof KeyStoreFileLoader) {
+      $self = new self();
+      $self->load($keystoreLocation->load(), $passphrase, $passphrase);
+      return $self;
+    }
     if (!file_exists($keystoreLocation)) {
       throw new \RuntimeException("The keystore file '$keystoreLocation' does not exist.");
     }
@@ -136,7 +142,11 @@ class KeyStore {
 
   }
 
-  public function getCertificateChain($alias) {
+  public function getClientCertificate() {
+
+  }
+
+  public function getCertificateChain($alias = '') {
     //print_r($this->keystore);
     return $this->chain;
     //return $this->X509Certificate->;

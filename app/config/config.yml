@@ -31,5 +31,6 @@ digipost_signature:
       alias: '%digipost_signature.keystore.key.alias%'
       password: '%digipost_signature.keystore.key.password%'
     client_cert: '%digipost_signature.keystore.client_cert%'
+    client_key: '%digipost_signature.keystore.client_key%'
   client:
     organisation_number: '%digipost_signature.client.organisation_number%'

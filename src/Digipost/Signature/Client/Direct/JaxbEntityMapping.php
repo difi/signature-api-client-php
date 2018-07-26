@@ -41,6 +41,9 @@ class JaxbEntityMapping {
   }
 
   static function fromJaxb($xmlObject) {
+    if (empty($xmlObject)) {
+      throw new \InvalidArgumentException("The response object is empty");
+    }
     switch (get_class($xmlObject)) {
       case XMLDirectSignatureJobResponse::class:
         return self::fromJaxb_XMLDirectSignatureJobResponse($xmlObject);

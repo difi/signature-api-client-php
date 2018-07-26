@@ -17,4 +17,7 @@ parameters:
     digipost_signature.keystore.key.password: ~
     digipost_signature.keystore.ca_path: ~
     digipost_signature.keystore.client_cert: ~
+    digipost_signature.keystore.client_key: ~
     digipost_signature.client.organisation_number: ~
+    digipost_signature.ca_files.path: ~
+    digipost_signature.ca_bundle.path: ~

@@ -18,6 +18,11 @@ services:
       - '%digipost_signature.keystore.password%'
       - '%digipost_signature.keystore.key.password%'
 
+  digipost_signature.keystore:
+    class: Digipost\Signature\Client\Core\Internal\Security\KeyStore
+    calls:
+      - [initFromFile, ['@digipost_signature.keystore_file_loader', '%digipost_signature.keystore.password%', '%digipost_signature.keystore.key.password%']]
+
   digipost_signature.client_guzzle_config:
     class: Digipost\Signature\Client\Core\Internal\Http\ClientConfig
     factory: ['Digipost\Signature\Client\Core\Internal\Http\ClientConfig', factory]
@@ -49,14 +54,14 @@ services:
     arguments:
       - '@service_container'
 
-
   Digipost\Signature\Client\Core\Internal\XMLSignatureFactory:
-    class: Digipost\Signature\Client\Core\Internal\XMLSignatureFactory
-    factory: ['Digipost\Signature\Client\Core\Internal\XMLSignatureFactory', singleton]
-    autowire: false
-    autoconfigure: true
-    arguments: ['@service_container']
+    arguments:
+      ['@service_container']
 
+  digipost_signature.xml_signature_context:
+    class: Digipost\Signature\Client\Core\Internal\XMLDigitalSignatureContext
+    factory: ['Digipost\Signature\Client\Core\Internal\XMLDigitalSignatureContext', factory]
+    arguments: ['@service_container', '@sabre_io.xml.service']
 
   Digipost\Signature\Client\ASiCe\DumpDocumentBundleToDisk:
     class: Digipost\Signature\Client\ASiCe\DumpDocumentBundleToDisk
@@ -74,3 +79,6 @@ services:
     factory: ['Digipost\Signature\Client\Certificates', build]
     autowire: false
     arguments: ['@service_container', '%digipost_signature.keystore.ca_path%']
+
+  sabre_io.xml.service:
+    class: Sabre\Xml\Service

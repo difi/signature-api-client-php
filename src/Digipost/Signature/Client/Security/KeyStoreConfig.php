@@ -80,9 +80,8 @@ class KeyStoreConfig {
       $key = $this->keyStore->getKey($this->alias, $this->privateKeyPassword);
       if (!($key instanceof PrivateKeyInterface)) {
         throw new KeyException(
-          "Failed to retrieve private key from key store. Expected a PriveteKey, got " . get_class(
-            $key
-          )
+          "Failed to retrieve private key from key store. Expected a PrivateKey, got " .
+          get_class($key)
         );
       }
       return $key;
@@ -181,6 +180,9 @@ class KeyStoreConfig {
   }
 
   public function getClientCertificate() {
+    $this->keyStore->getCertificateChain();
+
+
     return '';
   }
 

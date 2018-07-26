@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class XMLSignatureFactory {
 
-  use ContainerAwareTrait;
+  private $container;
 
   /***
    * @var String
@@ -39,42 +39,25 @@ class XMLSignatureFactory {
   /** @var XMLDigitalSignatureContext */
   protected $provider;
 
-  public static function singleton(ContainerInterface $container = NULL) {
-    if (!isset(static::$INSTANCE)) {
-      static::$INSTANCE = new self();
-      static::$INSTANCE->setContainer($container);
-    }
-
-    return static::$INSTANCE;
-  }
-
   /**
-   * @param String      $mechanismType
-   * @param String|NULL $provider
+   * XMLSignatureFactory constructor.
    *
-   * @return \Digipost\Signature\Client\Core\Internal\XMLSignatureFactory
-   * @throws \Digipost\Signature\Client\Core\Internal\NoSuchProviderException
+   * @param ContainerInterface $container
    */
-  public static function getInstance(
-    String $mechanismType,
-    String $provider = NULL
-  ) {
-    if (!isset($provider)) {
-      $provider = 'XMLdSig';
+  function __construct(ContainerInterface $container = NULL) {
+    if ($container) {
+      $this->container = $container;
     }
-    else {
-      if (!isset(self::$PROVIDERS[$provider])) {
-        throw new NoSuchProviderException("No such provider: " . $provider);
-      }
-    }
-
-    $factory = XMLSignatureFactory::singleton();
-    $factory->mechanismType = $mechanismType;
-    $factory->provider = new self::$PROVIDERS[$provider]();
-
-    return $factory;
   }
 
+  public static function factory(String $mechanismType,
+                                 String $provider = NULL) {
+
+    $self = new XMLSignatureFactory();
+    $self->mechanismType = $mechanismType;
+    $self->provider = new self::$PROVIDERS[$provider]();
+    return $self;
+  }
 
   public function getKeyInfoFactory() {
     //return KeyInfoFactory::getInstance_String_Provider($this->mechanismType, $this->getProvider());
@@ -91,7 +74,6 @@ class XMLSignatureFactory {
     $this->provider->setDigestMethod($algorithm);
     $digestMethod = new DigestMethod();
     $digestMethod->setAlgorithm($algorithm);
-
     //return SignatureDigestMethod::fromString($algorithm);
     return $digestMethod;
   }
@@ -120,7 +102,6 @@ class XMLSignatureFactory {
     //$this->provider->setSignatureMethod($method, $params);
     return $signatureMethod;
   }
-
 
   public function newTransform(String $algorithm, $params = NULL) {
     $transform = new Transform();
@@ -307,7 +288,7 @@ class XMLSignatureFactory {
     $xmlObject = new ObjectXsd();
     $xmlObject
       //->setQualifyingProperties($qualifyingProperties)
-      ->value($qualifyingProperties)
+      ->setContent($qualifyingProperties)
       ->setMimeType($mimeType)
       ->setId($id)
       ->setEncoding($encoding);
@@ -355,6 +336,10 @@ class XMLSignatureFactory {
     return $this->provider;
   }
 
+  public function getXMLSignatureContext() {
+    //return $this->container->get('digipost_signature.xml_signature_context');
+    return new XMLDigitalSignatureContext();
+  }
 }
 
 /**

@@ -200,16 +200,18 @@ class ClientConfiguration implements ProvidesCertificateResourcePaths,
     KeyStoreConfig $keystoreConfig
   ) {
     return new ClientConfiguration(
-      $keystoreConfig,
-      $guzzleConfig,
-      $sender,
-      $serviceRoot,
-      $certificatePaths,
-      $documentBundleProcessors,
-      $clock
+//      $keystoreConfig,
+//      $guzzleConfig,
+//      $sender,
+//      $serviceRoot,
+//      $certificatePaths,
+//      $documentBundleProcessors,
+//      $clock
     );
   }
 }
+
+
 
 class ClientConfigurationBuilder {
 
@@ -414,7 +416,6 @@ class ClientConfigurationBuilder {
     return $this->addDocumentBundleProcessor($documentDumper);
   }
 
-
   /**
    * Add a {@link DocumentBundleProcessor} which will be passed the
    * generated zipped document bundle together with the
@@ -480,16 +481,35 @@ class ClientConfigurationBuilder {
     //$this->guzzleConfig->register(JaxbMessageReaderWriterProvider::class);
     //$this->guzzleConfig->property(RequestOptions::CERT, '/etc/ssl/certs/ca-certificates.crt');
     //$this->guzzleConfig->property(RequestOptions::SSL_KEY, ['/home/bendik/test/smt_test.pem', 'bvWsmJm8hbNxNj9L']);
-    $this->keyStoreConfig->getClientCertificate();
-
-    // TODO: Export this (server.pem) from the .p12 keystore
-    $this->guzzleConfig->property(
-      RequestOptions::CERT,
-      [realpath(__DIR__ . '/../../../../') . '/server2.pem', 'bvWsmJm8hbNxNj9L']
+    //$this->keyStoreConfig->getClientCertificate();
+    $keyStore = $this->container->get('digipost_signature.keystore');
+    //$chain = $keyStore->getClientCertificate();
+    $client_cert = $this->container->getParameter(
+      'digipost_signature.keystore.client_cert'
+    );
+    $client_key = $this->container->getParameter(
+      'digipost_signature.keystore.client_key'
+    );
+    $cert_passphrase = $this->container->getParameter(
+      'digipost_signature.keystore.key.password'
+    );
+    $ca_bundle_path = $this->container->getParameter(
+      'digipost_signature.ca_bundle.path'
     );
 
-    // TODO: Provide path to a CA bundle based on ClientConfiguration#getCertificatePaths
-    $this->guzzleConfig->property(RequestOptions::VERIFY, FALSE);
+    //$keystoreLoader = $this->container->get('digipost_signature.keystore_file_loader');
+    //$keystoreLoader->load();
+
+    $this->guzzleConfig->property(
+      RequestOptions::CERT, [$client_cert, $cert_passphrase]
+    );
+    $this->guzzleConfig->property(
+      RequestOptions::SSL_KEY, [$client_key, $cert_passphrase]
+    );
+    $this->guzzleConfig->property(
+      RequestOptions::VERIFY, ['true' => Certificates::TEST()->getCABundle()]
+    );
+
     $this->guzzleConfig->registerResponseHandler(
       function (ResponseInterface $response) {
         return $response->withHeader(

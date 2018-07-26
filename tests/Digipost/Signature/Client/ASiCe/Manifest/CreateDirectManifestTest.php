@@ -15,17 +15,9 @@ use Digipost\Signature\Client\Direct\DirectDocument;
 use Digipost\Signature\Client\Direct\DirectJob;
 use Digipost\Signature\Client\Direct\DirectSigner;
 use Digipost\Signature\Client\Direct\ExitUrls;
-use PHPUnit\Framework\TestCase;
+use Tests\DigipostSignatureBundle\Client\ClientBaseTestCase;
 
-class CreateDirectManifestTest extends TestCase {
-
-  private static function strToByteArray($str) {
-    return unpack('C*', $str);
-  }
-
-  private static function byteArrayToString($byteArray) {
-    return call_user_func_array('pack', array_merge(['C*'], $byteArray));
-  }
+class CreateDirectManifestTest extends ClientBaseTestCase {
 
   public function testBuildXmlManifest() {
     $createManifest = new CreateDirectManifest();
@@ -40,10 +32,6 @@ class CreateDirectManifestTest extends TestCase {
                               ->build();
 
     $signer1 = DirectSigner::withPersonalIdentificationNumber("28129307058");
-    //$signer1 = DirectSigner::withCustomIdentifier('Bendik Brenne sin');
-    //$signer1->withSignatureType(SignatureType::AUTHENTICATED_SIGNATURE());
-    //$signer1->onBehalfOf(OnBehalfOf::SELF());
-    //$signers = [$signer1->build()];
 
     $job = DirectJob::builder(
       $document, ExitUrls::of(
@@ -52,23 +40,7 @@ class CreateDirectManifestTest extends TestCase {
       "http://localhost/failed"
     ),
       $signer1->build()
-    )
-      //->requireAuthentication(\Digipost\Signature\Client\Core\AuthenticationLevel::THREE())
-      //->withIdentifierInSignedDocuments(IdentifierInSignedDocuments::NAME())
-                    ->build();
-
-    //    $naming_strategy = new \JMS\Serializer\Naming\SerializedNameAnnotationStrategy(
-    //      new \JMS\Serializer\Naming\CamelCaseNamingStrategy('-')
-    //    );
-    //
-    //    $xmlNode = new \DOMDocument('1.0', 'UTF-8');
-    //    $xmlNode->xmlStandalone = TRUE;
-    //    Marshalling::marshal($job, $xmlNode, NULL, $naming_strategy);
-    //    print $xmlNode->saveXML();
-
-
-    //$this->assertEquals("This is a text", $job->getDocument()->getBytes());
-    //$this->assertEquals('http://localhost/failed', $job->getErrorUrl());
+    )->build();
 
     try {
       $manifest = $createManifest->createManifest(

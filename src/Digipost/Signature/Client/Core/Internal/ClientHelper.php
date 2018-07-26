@@ -2,7 +2,6 @@
 
 namespace Digipost\Signature\Client\Core\Internal;
 
-use Confirmable;
 use Digipost\Signature\API\XML\XMLDirectSignatureJobRequest;
 use Digipost\Signature\API\XML\XMLDirectSignatureJobResponse;
 use Digipost\Signature\API\XML\XMLDirectSignatureJobStatusResponse;
@@ -26,6 +25,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Response;
 use PhpOffice\PhpWord\Exception\Exception;
+use Psr\Http\Message\ResponseInterface;
 
 class ClientHelper {
 
@@ -158,14 +158,14 @@ class ClientHelper {
 
   public function getPortalStatusChange(Sender $sender) {
     return $this->getStatusChange(
-      $sender, PORTAL,
+      $sender, Target::PORTAL(),
       XMLPortalSignatureJobStatusChangeResponse::class
     );
   }
 
   public function getDirectStatusChange(Sender $sender) {
     return $this->getStatusChange(
-      $sender, DIRECT,
+      $sender, Target::DIRECT(),
       XMLDirectSignatureJobStatusResponse::class
     );
   }
@@ -283,17 +283,19 @@ class ClientHelper {
                             ->delete();
   }
 
-  public function parseResponse(Response $response, $responseType) {
+
+  public function parseResponse(ResponseInterface $response, $responseType) {
     $status = ResponseStatus::resolve($response->getStatusCode());
     if ($status === 200) {
       return $response->getBody()->getContents();
     }
     else {
-      throw $this->exceptionForGeneralError($response);
+      return $this->exceptionForGeneralError($response);
+      //return $response->getBody()->getContents();
     }
   }
 
-  private function exceptionForGeneralError(Response $response) {
+  private function exceptionForGeneralError(ResponseInterface $response) {
     $error = $this::extractError($response);
     //        if (BROKER_NOT_AUTHORIZED->sameAs(error.getErrorCode())) {
     //            return new BrokerNotAuthorizedException(error);
@@ -304,7 +306,7 @@ class ClientHelper {
     );
   }
 
-  private static function extractError(Response $response) {
+  private static function extractError(ResponseInterface $response) {
     $error = NULL;
     //$responseContentType = $response->getHeaderString(HttpHeaders . CONTENT_TYPE);
     $responseContentType = $response->getHeader('Content-Type');
@@ -557,6 +559,7 @@ class UsingBodyParts {
       $response = $request->post(Entity::entity($multiPart,
                                                 $multiPart->getMediaType()));
       return $this->parseResponse(response, responseType);
+
       */
       //$test = new $responseType();
       //return $test;
@@ -565,6 +568,9 @@ class UsingBodyParts {
 
       try {
         $client = $this->parent->getHttpClient()->signatureServiceRoot();
+
+
+
         $body = new MultipartBodyStream($multiPart->toArray());
         $response = $client
           ->post(
@@ -572,12 +578,9 @@ class UsingBodyParts {
             'headers' => [
               'Content-Type' => $multiPart->getMediaType(
                 ) . '; boundary=' . $body->getBoundary(),
-              //'Content-Length' => $body->getSize(),
-              //'Content-Length' => 1914,
               'Accept' => 'application/xml',
             ],
             'body' => $body,
-            //'multipart' => $multiPart->toArray(),
           ]
           );
 
@@ -597,6 +600,7 @@ class UsingBodyParts {
     } catch (ConnectException $e) {
       $handler = $e->getHandlerContext();
       if ($handler && $handler['errno']) {
+
         switch ($handler['errno']) {
           case CURLE_SSL_CERTPROBLEM:
             throw new CertificateException(
@@ -611,6 +615,7 @@ class UsingBodyParts {
       }
       throw $e;
     } catch (\Exception $e) {
+      dump($e->getTraceAsString());
       throw new RuntimeIOException($e->getMessage(), 0, $e);
     }
   }

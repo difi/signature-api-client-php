@@ -8,6 +8,5 @@ namespace Digipost\Signature\API\XML\Thirdparty\XMLdSig;
 class Signature extends SignatureType
 {
 
-
 }
 

@@ -232,9 +232,9 @@ class Marshalling {
     $newNode = $output->importNode($docFragment->documentElement, TRUE);
     $output->appendChild($newNode);
 
-    if (!($newOutput = $this->cleanNamespaces($output))) {
-      $output = $newOutput;
-    }
+//    if (!($newOutput = $this->cleanNamespaces($output))) {
+//      $output = $newOutput;
+//    }
 
     // Return the raw XMLData for anyone who might want it.
     return $xmlData;
@@ -248,7 +248,7 @@ class Marshalling {
     $namespaces = DOMUtils::getDocNamespaces($dom);
     $replacements = [];
     foreach ($namespaces as $ns => $uri) {
-      if (empty($ns) || $ns === 'ns2') {
+      if (empty($ns) || !strpos($ns, 'ns-') === -1) {
         continue;
       }
       DOMUtils::removeDOMNamespace($dom, $ns);
@@ -268,9 +268,6 @@ class Marshalling {
     // issue on load. Fix: Put the Signatures node in the XAdES wrapper by hand.
     $xmlData = $dom->saveXML();
     $xmlData = strtr($xmlData, $replacements);
-    dump($replacements);
-
-    print $xmlData;
 
     $newDom = new \DOMDocument();
     $newDom->xmlStandalone = FALSE;

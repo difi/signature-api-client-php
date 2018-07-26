@@ -106,7 +106,7 @@ class ObjectType
    * @param array $content
    * @return ObjectType
    */
-  public function setContent(array $content)
+  public function setContent(... $content)
   {
     $this->content = $content;
     return $this;

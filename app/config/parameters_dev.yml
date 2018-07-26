@@ -4,6 +4,7 @@ parameters:
   #digipost_signature.keystore.filename: '@@DigipostSignatureBundle/Resources/certificates/test/bendik.pem'
   digipost_signature.keystore.password: bvWsmJm8hbNxNj9L
   digipost_signature.keystore.key.alias: smt_test
-  digipost_signature.keystore.key.password: bvWsmJm8hbNxNj9L
-  digipost_signature.keystore.client_cert: '%kernel.project_dir%/app/Resources/config/client.pem'
-  digipost_signature.client.organisation_number: 123456789
+  digipost_signature.keystore.key.password: 12345
+  digipost_signature.keystore.client_cert: '%kernel.project_dir%/app/Resources/config/smt_test.cer'
+  digipost_signature.keystore.client_key: '%kernel.project_dir%/app/Resources/config/smt_test.key'
+  digipost_signature.client.organisation_number: 991825827

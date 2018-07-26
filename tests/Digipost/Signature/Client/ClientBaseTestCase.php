@@ -12,6 +12,8 @@ class ClientBaseTestCase extends KernelTestCase {
   /** @var \Symfony\Component\DependencyInjection\ContainerInterface */
   static $container;
 
+  static $dumpFolder;
+
   protected function setUp() {
     parent::setUp();
 
@@ -23,6 +25,9 @@ class ClientBaseTestCase extends KernelTestCase {
     static::$container->get(
       'Digipost\Signature\Client\Core\Internal\XML\Marshalling'
     );
+
+    $root_path = $this->getContainer()->getParameter('kernel.project_dir');
+    self::$dumpFolder = $root_path . '/var/data';
   }
 
   protected function getKernel() {

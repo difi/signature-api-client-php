@@ -29,8 +29,6 @@ class CreateASiCETest extends ClientBaseTestCase {
 
   static $PORTAL_DOCUMENT;
 
-  static $dumpFolder;
-
   public function setUp() {
     parent::setUp();
 
@@ -51,9 +49,6 @@ class CreateASiCETest extends ClientBaseTestCase {
                                            ->message("Message")
                                            ->fileType(DocumentFileType::TXT())
                                            ->build();
-
-    $root_path = $this->getContainer()->getParameter('kernel.project_dir');
-    self::$dumpFolder = $root_path . '/var/output';
   }
 
   public function testCreateASiCE() {
@@ -81,7 +76,6 @@ class CreateASiCETest extends ClientBaseTestCase {
     $clientConfigBuilder = $this->getContainer()->get(
       'Digipost\Signature\Client\ClientConfigurationBuilder'
     );
-    //$clientConfigBuilder = ClientConfiguration::builder(TestKonfigurasjon::$CLIENT_KEYSTORE);
     $clientConfig = $clientConfigBuilder->globalSender(new Sender("983163327"))
                                         ->enableDocumentBundleDiskDump(
                                           self::$dumpFolder

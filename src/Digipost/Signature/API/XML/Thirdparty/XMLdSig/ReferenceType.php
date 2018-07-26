@@ -181,7 +181,7 @@ class ReferenceType
      * @param \Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod $digestMethod
      * @return self
      */
-    public function setDigestMethod(\Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestMethod $digestMethod)
+    public function setDigestMethod($digestMethod)
     {
         $this->digestMethod = $digestMethod;
         return $this;
@@ -203,7 +203,7 @@ class ReferenceType
      * @param DigestValue $digestValue
      * @return self
      */
-    public function setDigestValue(DigestValue $digestValue)
+    public function setDigestValue($digestValue)
     {
         $this->digestValue = $digestValue;
         return $this;

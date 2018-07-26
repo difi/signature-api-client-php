@@ -12,6 +12,7 @@ class Configuration implements ConfigurationInterface {
 
     $ca_path = '@DigipostSignatureBundle/Resources/certificates';
     $client_cert_path = 'app/Resources/config/client.pem';
+    $client_key_path = 'app/Resources/config/client.key';
 
     $rootNode = $treeBuilder->root('digipost_signature');
     $rootNode
@@ -28,6 +29,7 @@ class Configuration implements ConfigurationInterface {
             ->end()
             ->scalarNode('ca_path')->defaultValue($ca_path)->treatNullLike($ca_path)->end()
             ->scalarNode('client_cert')->defaultValue($client_cert_path)->isRequired()->end()
+            ->scalarNode('client_key')->defaultValue($client_key_path)->isRequired()->end()
           ->end()
         ->end()
         ->arrayNode('client')

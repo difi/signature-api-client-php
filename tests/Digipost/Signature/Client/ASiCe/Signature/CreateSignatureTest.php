@@ -8,7 +8,6 @@
 
 namespace Digipost\Signature\Client\ASiCe\Signature;
 
-use Digipost\Signature\Client\ClientConfiguration;
 use Digipost\Signature\Client\Core\DocumentFileType;
 use Digipost\Signature\Client\Core\IdentifierInSignedDocuments;
 use Digipost\Signature\Client\Core\OnBehalfOf;
@@ -20,31 +19,14 @@ use Digipost\Signature\Client\Direct\DirectJob;
 use Digipost\Signature\Client\Direct\DirectSigner;
 use Digipost\Signature\Client\Direct\ExitUrls;
 use Digipost\Signature\Client\Direct\StatusRetrievalMethod;
-use Digipost\Signature\Client\TestKonfigurasjon;
-use PHPUnit\Framework\TestCase;
+use Tests\DigipostSignatureBundle\Client\ClientBaseTestCase;
 
-class CreateSignatureTest extends TestCase {
-
-  static $dumpFolder = '/tmp';
-
-
-  private static function strToByteArray($str) {
-    return unpack('C*', $str);
-  }
-
-  private static function byteArrayToString($byteArray) {
-    return call_user_func_array('pack', array_merge(['C*'], $byteArray));
-  }
-
-  public function setUp() {
-    self::$dumpFolder = realpath(
-      dirname(realpath(PHPUNIT_COMPOSER_INSTALL)) . '/../output'
-    );
-  }
+class CreateSignatureTest extends ClientBaseTestCase {
 
   public function testCreateSignature() {
-    $clientConfigBuilder = ClientConfiguration::builder(
-      TestKonfigurasjon::$CLIENT_KEYSTORE
+
+    $clientConfigBuilder = $this->getContainer()->get(
+      'Digipost\Signature\Client\ClientConfigurationBuilder'
     );
     $clientConfig = $clientConfigBuilder->globalSender(new Sender("991825827"))
                                         ->enableDocumentBundleDiskDump(
@@ -69,7 +51,7 @@ class CreateSignatureTest extends TestCase {
                              SignatureType::AUTHENTICATED_SIGNATURE()
                            )
                            ->onBehalfOf(OnBehalfOf::OTHER());
-    //$signers = [$signer1->build()];
+
     $directJob = DirectJob::builder(
       $document,
       ExitUrls::of(
