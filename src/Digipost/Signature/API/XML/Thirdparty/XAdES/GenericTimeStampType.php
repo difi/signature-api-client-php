@@ -86,7 +86,7 @@ class GenericTimeStampType
     /**
      * isset include
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetInclude($index)
@@ -97,7 +97,7 @@ class GenericTimeStampType
     /**
      * unset include
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetInclude($index)
@@ -142,7 +142,7 @@ class GenericTimeStampType
     /**
      * isset referenceInfo
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetReferenceInfo($index)
@@ -153,7 +153,7 @@ class GenericTimeStampType
     /**
      * unset referenceInfo
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetReferenceInfo($index)
@@ -220,7 +220,7 @@ class GenericTimeStampType
     /**
      * isset encapsulatedTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetEncapsulatedTimeStamp($index)
@@ -231,7 +231,7 @@ class GenericTimeStampType
     /**
      * unset encapsulatedTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetEncapsulatedTimeStamp($index)
@@ -276,7 +276,7 @@ class GenericTimeStampType
     /**
      * isset xMLTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetXMLTimeStamp($index)
@@ -287,7 +287,7 @@ class GenericTimeStampType
     /**
      * unset xMLTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetXMLTimeStamp($index)

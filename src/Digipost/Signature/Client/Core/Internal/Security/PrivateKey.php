@@ -84,7 +84,7 @@ class PrivateKey implements PrivateKeyInterface {
    * @param mixed  $data The data to be signed
    * @param string $algorithm
    *
-   * @return binary
+   * @return string
    */
   public function sign($data, $algorithm = 'RSA-SHA256') {
     if (!in_array($algorithm, openssl_get_md_methods(TRUE))) {

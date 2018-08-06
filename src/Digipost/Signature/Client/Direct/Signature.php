@@ -53,7 +53,7 @@ class Signature {
   }
 
   public function __toString() {
-    return "Signature from " . PersonalIdentificationNumbers::mask($this->signer) . " with status '" . $this->status . "' since " . $this->statusDateTime . "" .
+    return "Signature from " . PersonalIdentificationNumbers::mask($this->signer) . " with status '" . $this->status . "' since " . $this->statusDateTime->format(\DateTime::RFC3339_EXTENDED) . "" .
       ($this->xAdESReference !== NULL ? ". XAdES available at " . $this->xAdESReference->getxAdESUrl() : "");
   }
 

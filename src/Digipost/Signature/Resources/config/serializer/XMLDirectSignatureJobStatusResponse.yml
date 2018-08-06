@@ -80,13 +80,13 @@ Digipost\Signature\API\XML\XMLDirectSignatureJobStatusResponse:
                 entry_name: xades-url
                 namespace: 'http://signering.posten.no/schema/v1'
             type: array<Digipost\Signature\API\XML\XMLSignerSpecificUrl>
-        padesUrls:
+        padesUrl:
             expose: true
             access_type: public_method
             serialized_name: pades-url
             xml_element:
                 namespace: 'http://signering.posten.no/schema/v1'
             accessor:
-                getter: getPadesUrls
-                setter: setPadesUrls
+                getter: getPadesUrl
+                setter: setPadesUrl
             type: string

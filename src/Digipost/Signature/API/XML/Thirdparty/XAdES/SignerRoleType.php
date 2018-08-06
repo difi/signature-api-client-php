@@ -36,7 +36,7 @@ class SignerRoleType
     /**
      * isset claimedRoles
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetClaimedRoles($index)
@@ -47,7 +47,7 @@ class SignerRoleType
     /**
      * unset claimedRoles
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetClaimedRoles($index)
@@ -92,7 +92,7 @@ class SignerRoleType
     /**
      * isset certifiedRoles
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCertifiedRoles($index)
@@ -103,7 +103,7 @@ class SignerRoleType
     /**
      * unset certifiedRoles
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCertifiedRoles($index)

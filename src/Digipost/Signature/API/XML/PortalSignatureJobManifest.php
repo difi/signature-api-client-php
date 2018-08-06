@@ -53,7 +53,7 @@ class PortalSignatureJobManifest
     /**
      * isset signers
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSigners($index)
@@ -64,7 +64,7 @@ class PortalSignatureJobManifest
     /**
      * unset signers
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSigners($index)

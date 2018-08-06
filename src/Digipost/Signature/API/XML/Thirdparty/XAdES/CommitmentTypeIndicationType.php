@@ -70,7 +70,7 @@ class CommitmentTypeIndicationType
     /**
      * isset objectReference
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetObjectReference($index)
@@ -81,7 +81,7 @@ class CommitmentTypeIndicationType
     /**
      * unset objectReference
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetObjectReference($index)
@@ -148,7 +148,7 @@ class CommitmentTypeIndicationType
     /**
      * isset commitmentTypeQualifiers
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCommitmentTypeQualifiers($index)
@@ -159,7 +159,7 @@ class CommitmentTypeIndicationType
     /**
      * unset commitmentTypeQualifiers
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCommitmentTypeQualifiers($index)

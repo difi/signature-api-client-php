@@ -144,7 +144,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset counterSignature
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCounterSignature($index)
@@ -155,7 +155,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset counterSignature
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCounterSignature($index)
@@ -200,7 +200,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset signatureTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSignatureTimeStamp($index)
@@ -211,7 +211,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset signatureTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSignatureTimeStamp($index)
@@ -256,7 +256,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset completeCertificateRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCompleteCertificateRefs($index)
@@ -267,7 +267,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset completeCertificateRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCompleteCertificateRefs($index)
@@ -312,7 +312,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset completeRevocationRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCompleteRevocationRefs($index)
@@ -323,7 +323,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset completeRevocationRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCompleteRevocationRefs($index)
@@ -368,7 +368,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset attributeCertificateRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetAttributeCertificateRefs($index)
@@ -379,7 +379,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset attributeCertificateRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetAttributeCertificateRefs($index)
@@ -424,7 +424,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset attributeRevocationRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetAttributeRevocationRefs($index)
@@ -435,7 +435,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset attributeRevocationRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetAttributeRevocationRefs($index)
@@ -480,7 +480,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset sigAndRefsTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSigAndRefsTimeStamp($index)
@@ -491,7 +491,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset sigAndRefsTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSigAndRefsTimeStamp($index)
@@ -536,7 +536,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset refsOnlyTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetRefsOnlyTimeStamp($index)
@@ -547,7 +547,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset refsOnlyTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetRefsOnlyTimeStamp($index)
@@ -592,7 +592,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset certificateValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCertificateValues($index)
@@ -603,7 +603,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset certificateValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCertificateValues($index)
@@ -648,7 +648,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset revocationValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetRevocationValues($index)
@@ -659,7 +659,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset revocationValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetRevocationValues($index)
@@ -704,7 +704,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset attrAuthoritiesCertValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetAttrAuthoritiesCertValues($index)
@@ -715,7 +715,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset attrAuthoritiesCertValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetAttrAuthoritiesCertValues($index)
@@ -760,7 +760,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset attributeRevocationValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetAttributeRevocationValues($index)
@@ -771,7 +771,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset attributeRevocationValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetAttributeRevocationValues($index)
@@ -816,7 +816,7 @@ class UnsignedSignaturePropertiesType
     /**
      * isset archiveTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetArchiveTimeStamp($index)
@@ -827,7 +827,7 @@ class UnsignedSignaturePropertiesType
     /**
      * unset archiveTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetArchiveTimeStamp($index)

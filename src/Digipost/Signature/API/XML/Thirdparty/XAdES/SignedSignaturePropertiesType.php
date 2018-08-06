@@ -100,7 +100,7 @@ class SignedSignaturePropertiesType
     /**
      * isset signingCertificate
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSigningCertificate($index)
@@ -111,7 +111,7 @@ class SignedSignaturePropertiesType
     /**
      * unset signingCertificate
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSigningCertificate($index)

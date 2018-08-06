@@ -67,7 +67,7 @@ class CertificateValuesType
     /**
      * isset encapsulatedX509Certificate
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetEncapsulatedX509Certificate($index)
@@ -78,7 +78,7 @@ class CertificateValuesType
     /**
      * unset encapsulatedX509Certificate
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetEncapsulatedX509Certificate($index)
@@ -123,7 +123,7 @@ class CertificateValuesType
     /**
      * isset otherCertificate
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetOtherCertificate($index)
@@ -134,7 +134,7 @@ class CertificateValuesType
     /**
      * unset otherCertificate
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetOtherCertificate($index)

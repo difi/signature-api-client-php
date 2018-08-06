@@ -81,7 +81,7 @@ class SignedDataObjectPropertiesType
     /**
      * isset dataObjectFormat
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetDataObjectFormat($index)
@@ -92,7 +92,7 @@ class SignedDataObjectPropertiesType
     /**
      * unset dataObjectFormat
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetDataObjectFormat($index)
@@ -137,7 +137,7 @@ class SignedDataObjectPropertiesType
     /**
      * isset commitmentTypeIndication
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCommitmentTypeIndication($index)
@@ -148,7 +148,7 @@ class SignedDataObjectPropertiesType
     /**
      * unset commitmentTypeIndication
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCommitmentTypeIndication($index)
@@ -193,7 +193,7 @@ class SignedDataObjectPropertiesType
     /**
      * isset allDataObjectsTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetAllDataObjectsTimeStamp($index)
@@ -204,7 +204,7 @@ class SignedDataObjectPropertiesType
     /**
      * unset allDataObjectsTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetAllDataObjectsTimeStamp($index)
@@ -249,7 +249,7 @@ class SignedDataObjectPropertiesType
     /**
      * isset individualDataObjectsTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetIndividualDataObjectsTimeStamp($index)
@@ -260,7 +260,7 @@ class SignedDataObjectPropertiesType
     /**
      * unset individualDataObjectsTimeStamp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetIndividualDataObjectsTimeStamp($index)

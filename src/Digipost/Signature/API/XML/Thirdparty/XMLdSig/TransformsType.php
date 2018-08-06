@@ -33,7 +33,7 @@ class TransformsType
     /**
      * isset transform
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetTransform($index)
@@ -44,7 +44,7 @@ class TransformsType
     /**
      * unset transform
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetTransform($index)

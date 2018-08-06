@@ -11,7 +11,6 @@ use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
 use Psr\Container\ContainerInterface;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use Sabre\Xml;
 use SimpleSAML\XMLSec\Constants as C;
 use SimpleSAML\XMLSec\Utils\XPath;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -123,10 +122,6 @@ class XMLDigitalSignatureContext extends XMLSecurityDSig {
    * @param null|\DOMNode       $appendToNode
    */
   public function sign($objKey = NULL, $appendToNode = NULL) {
-    if (!isset($objKey)) {
-      $objKey = $this->_privateKey->getXMLSecurityKey();
-    }
-
     // If we have a parent node append it now so C14N properly works
     if ($appendToNode != NULL) {
       $this->resetXPathObj();

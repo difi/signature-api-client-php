@@ -166,7 +166,7 @@ class DataObjectReferenceType
     /**
      * isset dataObjectReferenceExtensions
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetDataObjectReferenceExtensions($index)
@@ -177,7 +177,7 @@ class DataObjectReferenceType
     /**
      * unset dataObjectReferenceExtensions
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetDataObjectReferenceExtensions($index)

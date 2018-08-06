@@ -80,7 +80,7 @@ class XMLDirectSignatureJobStatusResponse {
   /**
    * @Serializer\Type("string")
    */
-  protected $padesUrls;
+  protected $padesUrl;
 
   function __construct(int $signatureJobId = NULL,
                        XMLDirectSignatureJobStatus $signatureJobStatus = NULL,
@@ -174,17 +174,14 @@ class XMLDirectSignatureJobStatusResponse {
   /**
    * @return mixed
    */
-  public function getPadesUrls() {
-    if ($this->padesUrls === NULL) {
-
-    }
-    return $this->padesUrls;
+  public function getPadesUrl() {
+    return $this->padesUrl;
   }
   /**
-   * @param mixed $padesUrls
+   * @param mixed $padesUrl
    */
-  public function setPadesUrls($padesUrls) {
-    $this->padesUrls = $padesUrls;
+  public function setPadesUrl($padesUrl) {
+    $this->padesUrl = $padesUrl;
   }
 }
 

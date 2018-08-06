@@ -68,7 +68,7 @@ class RevocationValuesType
     /**
      * isset cRLValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCRLValues($index)
@@ -79,7 +79,7 @@ class RevocationValuesType
     /**
      * unset cRLValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCRLValues($index)
@@ -124,7 +124,7 @@ class RevocationValuesType
     /**
      * isset oCSPValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetOCSPValues($index)
@@ -135,7 +135,7 @@ class RevocationValuesType
     /**
      * unset oCSPValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetOCSPValues($index)
@@ -180,7 +180,7 @@ class RevocationValuesType
     /**
      * isset otherValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetOtherValues($index)
@@ -191,7 +191,7 @@ class RevocationValuesType
     /**
      * unset otherValues
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetOtherValues($index)

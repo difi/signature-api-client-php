@@ -58,7 +58,7 @@ class CompleteCertificateRefsType
     /**
      * isset certRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCertRefs($index)
@@ -69,7 +69,7 @@ class CompleteCertificateRefsType
     /**
      * unset certRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCertRefs($index)

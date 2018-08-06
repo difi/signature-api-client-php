@@ -116,7 +116,7 @@ class DirectSignatureJobStatusResponse
     /**
      * isset status
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetStatus($index)
@@ -127,7 +127,7 @@ class DirectSignatureJobStatusResponse
     /**
      * unset status
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetStatus($index)
@@ -236,7 +236,7 @@ class DirectSignatureJobStatusResponse
     /**
      * isset xadesUrl
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetXadesUrl($index)
@@ -247,7 +247,7 @@ class DirectSignatureJobStatusResponse
     /**
      * unset xadesUrl
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetXadesUrl($index)

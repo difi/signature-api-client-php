@@ -61,7 +61,7 @@ class X509DataType
     /**
      * isset x509IssuerSerial
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetX509IssuerSerial($index)
@@ -72,7 +72,7 @@ class X509DataType
     /**
      * unset x509IssuerSerial
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetX509IssuerSerial($index)
@@ -117,7 +117,7 @@ class X509DataType
     /**
      * isset x509SKI
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetX509SKI($index)
@@ -128,7 +128,7 @@ class X509DataType
     /**
      * unset x509SKI
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetX509SKI($index)
@@ -173,7 +173,7 @@ class X509DataType
     /**
      * isset x509SubjectName
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetX509SubjectName($index)
@@ -184,7 +184,7 @@ class X509DataType
     /**
      * unset x509SubjectName
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetX509SubjectName($index)
@@ -229,7 +229,7 @@ class X509DataType
     /**
      * isset x509Certificate
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetX509Certificate($index)
@@ -240,7 +240,7 @@ class X509DataType
     /**
      * unset x509Certificate
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetX509Certificate($index)
@@ -285,7 +285,7 @@ class X509DataType
     /**
      * isset x509CRL
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetX509CRL($index)
@@ -296,7 +296,7 @@ class X509DataType
     /**
      * unset x509CRL
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetX509CRL($index)

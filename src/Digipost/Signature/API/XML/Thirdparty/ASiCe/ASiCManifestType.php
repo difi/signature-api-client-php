@@ -63,7 +63,7 @@ class ASiCManifestType {
   /**
    * isset dataObjectReference
    *
-   * @param scalar $index
+   * @param string|number $index
    *
    * @return boolean
    */
@@ -74,7 +74,7 @@ class ASiCManifestType {
   /**
    * unset dataObjectReference
    *
-   * @param scalar $index
+   * @param string|number $index
    *
    * @return void
    */
@@ -118,7 +118,7 @@ class ASiCManifestType {
   /**
    * isset aSiCManifestExtensions
    *
-   * @param scalar $index
+   * @param string|number $index
    *
    * @return boolean
    */
@@ -129,7 +129,7 @@ class ASiCManifestType {
   /**
    * unset aSiCManifestExtensions
    *
-   * @param scalar $index
+   * @param string|number $index
    *
    * @return void
    */

@@ -33,7 +33,7 @@ class XAdESSignaturesType
     /**
      * isset signature
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSignature($index)
@@ -44,7 +44,7 @@ class XAdESSignaturesType
     /**
      * unset signature
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSignature($index)

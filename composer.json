@@ -67,14 +67,11 @@
         "incenteev/composer-parameter-handler": "^2.0",
         "indigophp/doctrine-annotation-autoload": "^0.1.0",
         "jms/serializer": "^1.12",
-        "marcelxyz/php-xml-digital-signature": "^1.0",
         "myclabs/php-enum": "^1.6",
         "php-ds/php-ds": "^1.2",
         "phpseclib/phpseclib": "^2.0",
         "simplesamlphp/xmlseclibs": "dev-xmlsec-ng",
-        "sabre/xml": "^2.1",
         "sop/x509": "^0.6.0",
-        "symfony/dom-crawler": "^3.3",
         "symfony/symfony": "^3.3"
     },
     "require-dev": {

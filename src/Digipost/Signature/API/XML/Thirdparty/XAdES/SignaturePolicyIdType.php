@@ -68,7 +68,7 @@ class SignaturePolicyIdType
     /**
      * isset transforms
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetTransforms($index)
@@ -79,7 +79,7 @@ class SignaturePolicyIdType
     /**
      * unset transforms
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetTransforms($index)
@@ -146,7 +146,7 @@ class SignaturePolicyIdType
     /**
      * isset sigPolicyQualifiers
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSigPolicyQualifiers($index)
@@ -157,7 +157,7 @@ class SignaturePolicyIdType
     /**
      * unset sigPolicyQualifiers
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSigPolicyQualifiers($index)

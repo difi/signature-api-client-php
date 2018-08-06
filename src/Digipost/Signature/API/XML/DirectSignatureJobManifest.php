@@ -50,7 +50,7 @@ class DirectSignatureJobManifest
     /**
      * isset signer
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSigner($index)
@@ -61,7 +61,7 @@ class DirectSignatureJobManifest
     /**
      * unset signer
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSigner($index)

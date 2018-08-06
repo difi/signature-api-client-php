@@ -68,7 +68,7 @@ class CompleteRevocationRefsType
     /**
      * isset cRLRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCRLRefs($index)
@@ -79,7 +79,7 @@ class CompleteRevocationRefsType
     /**
      * unset cRLRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCRLRefs($index)
@@ -124,7 +124,7 @@ class CompleteRevocationRefsType
     /**
      * isset oCSPRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetOCSPRefs($index)
@@ -135,7 +135,7 @@ class CompleteRevocationRefsType
     /**
      * unset oCSPRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetOCSPRefs($index)
@@ -180,7 +180,7 @@ class CompleteRevocationRefsType
     /**
      * isset otherRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetOtherRefs($index)
@@ -191,7 +191,7 @@ class CompleteRevocationRefsType
     /**
      * unset otherRefs
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetOtherRefs($index)

@@ -60,7 +60,7 @@ class ManifestType
     /**
      * isset reference
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetReference($index)
@@ -71,7 +71,7 @@ class ManifestType
     /**
      * unset reference
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetReference($index)

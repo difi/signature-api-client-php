@@ -60,7 +60,7 @@ class UnsignedDataObjectPropertiesType
     /**
      * isset unsignedDataObjectProperty
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetUnsignedDataObjectProperty($index)
@@ -71,7 +71,7 @@ class UnsignedDataObjectPropertiesType
     /**
      * unset unsignedDataObjectProperty
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetUnsignedDataObjectProperty($index)

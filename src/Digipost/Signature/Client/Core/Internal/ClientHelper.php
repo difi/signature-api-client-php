@@ -433,6 +433,7 @@ class ClientHelper {
         throw new UnexpectedResponseException(
           "Content-Type " . $responseContentType->getOrElse("unknown") . ": " .
           Option::fromValue(get_class($error))->getOrElse(
+            /** @lang text */
             "<no content in response>"
           ),
           $e, ResponseStatus::resolve($response->getStatusCode()), Status::OK()
@@ -443,6 +444,7 @@ class ClientHelper {
       throw new UnexpectedResponseException(
         "Content-Type " . $responseContentType->getOrElse("unknown") . ": " .
         Option::fromValue(get_class($error))->getOrElse(
+          /** @lang text */
           "<no content in response>"
         ),
         NULL, ResponseStatus::resolve($response->getStatusCode()), Status::OK()

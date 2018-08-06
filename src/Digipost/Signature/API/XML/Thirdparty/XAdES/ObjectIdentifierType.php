@@ -85,7 +85,7 @@ class ObjectIdentifierType
     /**
      * isset documentationReferences
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetDocumentationReferences($index)
@@ -96,7 +96,7 @@ class ObjectIdentifierType
     /**
      * unset documentationReferences
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetDocumentationReferences($index)

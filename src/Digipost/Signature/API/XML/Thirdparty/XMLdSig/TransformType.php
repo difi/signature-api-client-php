@@ -60,7 +60,7 @@ class TransformType
     /**
      * isset xPath
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetXPath($index)
@@ -71,7 +71,7 @@ class TransformType
     /**
      * unset xPath
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetXPath($index)

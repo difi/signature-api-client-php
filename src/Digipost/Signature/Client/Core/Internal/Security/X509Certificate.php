@@ -10,6 +10,12 @@ use phpseclib\File\X509;
 use SimpleSAML\XMLSec\Key\X509Certificate as XMLSecLibX509Certificate;
 
 /**
+ * @property-read PublicKey publicKey
+ * @property-read string fingerprintCA
+ * @property-read string fingerprint
+ * @property-read boolean isSelfSigned
+ * @property-read crl
+ *
  * @property string crlURI
  * @property bool isCA
  * @property string name

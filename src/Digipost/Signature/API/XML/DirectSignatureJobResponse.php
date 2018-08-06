@@ -62,7 +62,7 @@ class DirectSignatureJobResponse
     /**
      * isset redirectUrl
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetRedirectUrl($index)
@@ -73,7 +73,7 @@ class DirectSignatureJobResponse
     /**
      * unset redirectUrl
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetRedirectUrl($index)

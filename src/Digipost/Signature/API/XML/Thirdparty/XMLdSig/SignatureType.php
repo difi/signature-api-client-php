@@ -141,7 +141,7 @@ class SignatureType
     /**
      * isset object
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetObject($index)
@@ -152,7 +152,7 @@ class SignatureType
     /**
      * unset object
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetObject($index)

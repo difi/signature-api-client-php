@@ -100,7 +100,7 @@ class KeyInfoType
     /**
      * isset keyName
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetKeyName($index)
@@ -111,7 +111,7 @@ class KeyInfoType
     /**
      * unset keyName
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetKeyName($index)
@@ -156,7 +156,7 @@ class KeyInfoType
     /**
      * isset keyValue
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetKeyValue($index)
@@ -167,7 +167,7 @@ class KeyInfoType
     /**
      * unset keyValue
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetKeyValue($index)
@@ -212,7 +212,7 @@ class KeyInfoType
     /**
      * isset retrievalMethod
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetRetrievalMethod($index)
@@ -223,7 +223,7 @@ class KeyInfoType
     /**
      * unset retrievalMethod
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetRetrievalMethod($index)
@@ -268,7 +268,7 @@ class KeyInfoType
     /**
      * isset x509Data
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetX509Data($index)
@@ -279,7 +279,7 @@ class KeyInfoType
     /**
      * unset x509Data
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetX509Data($index)
@@ -324,7 +324,7 @@ class KeyInfoType
     /**
      * isset pGPData
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetPGPData($index)
@@ -335,7 +335,7 @@ class KeyInfoType
     /**
      * unset pGPData
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetPGPData($index)
@@ -380,7 +380,7 @@ class KeyInfoType
     /**
      * isset sPKIData
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSPKIData($index)
@@ -391,7 +391,7 @@ class KeyInfoType
     /**
      * unset sPKIData
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSPKIData($index)
@@ -436,7 +436,7 @@ class KeyInfoType
     /**
      * isset mgmtData
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetMgmtData($index)
@@ -447,7 +447,7 @@ class KeyInfoType
     /**
      * unset mgmtData
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetMgmtData($index)

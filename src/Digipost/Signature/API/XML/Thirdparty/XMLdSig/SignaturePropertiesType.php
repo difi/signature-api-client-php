@@ -60,7 +60,7 @@ class SignaturePropertiesType
     /**
      * isset signatureProperty
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSignatureProperty($index)
@@ -71,7 +71,7 @@ class SignaturePropertiesType
     /**
      * unset signatureProperty
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSignatureProperty($index)

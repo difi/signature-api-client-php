@@ -33,7 +33,7 @@ class CertIDListType
     /**
      * isset cert
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetCert($index)
@@ -44,7 +44,7 @@ class CertIDListType
     /**
      * unset cert
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetCert($index)

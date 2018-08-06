@@ -2,6 +2,8 @@
 
 namespace Digipost\Signature\Client\Core\Internal\XML;
 
+use GuzzleHttp\Psr7\Stream;
+
 /**
  * Class XMLUtils
  *

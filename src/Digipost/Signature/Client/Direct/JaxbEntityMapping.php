@@ -108,7 +108,7 @@ class JaxbEntityMapping {
       ConfirmationReference::of($statusResponse->getConfirmationUrl()),
       DeleteDocumentsUrl::of($statusResponse->getDeleteDocumentsUrl()),
       $signatures,
-      PAdESReference::of($statusResponse->getPadesUrls()),
+      PAdESReference::of($statusResponse->getPadesUrl()),
       $nextPermittedPollTime);
   }
 }

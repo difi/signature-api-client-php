@@ -58,7 +58,7 @@ class NoticeReferenceType
     /**
      * isset noticeNumbers
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetNoticeNumbers($index)
@@ -69,7 +69,7 @@ class NoticeReferenceType
     /**
      * unset noticeNumbers
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetNoticeNumbers($index)

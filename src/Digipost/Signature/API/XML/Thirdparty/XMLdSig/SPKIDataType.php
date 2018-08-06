@@ -33,7 +33,7 @@ class SPKIDataType
     /**
      * isset sPKISexp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return boolean
      */
     public function issetSPKISexp($index)
@@ -44,7 +44,7 @@ class SPKIDataType
     /**
      * unset sPKISexp
      *
-     * @param scalar $index
+     * @param string|number $index
      * @return void
      */
     public function unsetSPKISexp($index)
