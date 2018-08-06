@@ -28,8 +28,6 @@ class CreateSignature {
 
   private $createXAdESProperties;
 
-  private $schema;
-
   /** @var Signature */
   private $signature;
 
@@ -41,6 +39,7 @@ class CreateSignature {
 
   public function __construct(\DateTime $clock) {
     $this->document = DOMDocumentFactory::fromString(
+      '<?xml version="1.0" encoding="UTF-8" standalone="no"?>'.
       '<XAdESSignatures xmlns="http://uri.etsi.org/2918/v1.2.1#">'.
         '<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature">'.
           '<ds:SignedInfo>'.
@@ -71,33 +70,12 @@ class CreateSignature {
     }
   }
 
-  private function loadSchema() {
-    try {
-
-      //      $reader = new SchemaReader();
-      $schema = SignatureApiSchemas::DIRECT_AND_PORTAL_API()->getSchema();
-      //      $schema = $reader->getGlobalSchema();
-      //      $schema->addSchema($reader->readFile(SignatureApiSchemas::DIRECT_AND_PORTAL_API()));
-      //      $fp = fopen(SignatureApiSchemas::DIRECT_AND_PORTAL_API(), 'r');
-      //      $data = '';
-      //      while (!feof($fp)) {
-      //        $data .= fread($fp, 2048);
-      //      }
-
-      return $schema;
-    } catch (SchemaException $e) {
-      throw new ConfigurationException(
-        "Failed to load schemas for validating signatures",
-        $e
-      );
-    }
-  }
-
   /**
    * @param                $attachedFiles
    * @param KeyStoreConfig $keyStoreConfig
    *
    * @return SignatureManifest
+   * @throws SchemaException
    */
   public function createSignature(
     $attachedFiles,
@@ -165,16 +143,12 @@ class CreateSignature {
 
     try {
       //$this->wrapSignatureInXADeSEnvelope($root->ownerDocument);
-
       $outputStream = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . $outputStream;
 
-      try {
-        //$this->validateXml($document);
-      } catch (\Exception $e) {
-        //        dump($e->getMessage());
-        //        print $outputStream;
-      }
+      $this->validateXml($root->ownerDocument);
     } catch (\RuntimeException $e) {
+      throw $e;
+    } catch (SchemaException $e) {
       throw $e;
     }
 
@@ -260,13 +234,13 @@ class CreateSignature {
    */
   protected function validateXml(\DOMDocument $dom) {
     libxml_use_internal_errors(TRUE);
-    foreach (SignatureApiSchemas::ASICE_SCHEMA()->getFileNames() as $f) {
-      $dom->schemaValidate($f, Marshalling::LIBXML_OPTIONS);
 
-      if ($error = libxml_get_errors()) {
-        $error = $this->formatXmlValidationErrors();
-        throw new SchemaException($error);
-      }
+    $xsd = SignatureApiSchemas::ASICE_AND_XADES_SCHEMA()->getXSD();
+    $dom->schemaValidateSource($xsd, Marshalling::LIBXML_OPTIONS);
+    if ($errors = $this->getXmlValidationErrors()) {
+      $error = $this->formatXmlValidationErrors();
+
+      throw new SchemaException($error);
     }
   }
 
@@ -295,6 +269,17 @@ class CreateSignature {
     $return .= " on line [" . $error->line . "]\n";
 
     return $return;
+  }
+
+  protected function getXmlValidationErrors() {
+    $errors = array_filter(libxml_get_errors(), function($error) {
+      if ($error->code === 1824) {
+        return FALSE;
+      }
+      return TRUE;
+    });
+
+    return count($errors) > 0 ? $errors : NULL;
   }
 
   /**

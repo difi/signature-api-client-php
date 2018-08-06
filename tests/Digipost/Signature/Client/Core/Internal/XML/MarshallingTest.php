@@ -169,15 +169,15 @@ class MarshallingTest extends ClientBaseTestCase {
   }
 
   function testUnmarshallingOfError() {
-    $xml =
-      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><ns4:error xmlns="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#" xmlns:ns3="http://uri.etsi.org/2918/v1.2.1#" xmlns:ns4="http://signering.posten.no/schema/v1"><ns4:error-code>ASICE_VALIDATION_FAILED</ns4:error-code><ns4:error-message>Error when valicating ASiCE: Parse error: Failed to parse XMLDirectSignatureJobManifest</ns4:error-message><ns4:error-type>CLIENT</ns4:error-type></ns4:error>';
+    $xml = '<ns4:error xmlns="http://uri.etsi.org/01903/v1.3.2#" xmlns:ns2="http://www.w3.org/2000/09/xmldsig#" xmlns:ns3="http://uri.etsi.org/2918/v1.2.1#" xmlns:ns4="http://signering.posten.no/schema/v1"><ns4:error-code>ASICE_VALIDATION_FAILED</ns4:error-code><ns4:error-message>Error when valicating ASiCE: Parse error: Failed to parse XMLDirectSignatureJobManifest</ns4:error-message><ns4:error-type>CLIENT</ns4:error-type></ns4:error>';
 
     $object = Marshalling::unmarshal($xml, XMLError::class);
     var_dump($object);
 
+    /** @var \DOMDocument $outputXML */
     Marshalling::marshal($object, $outputXML);
-    $xmlGenerated = $outputXML->saveXML();
-    $this->assertSame($xml, str_replace("\n", "", $xmlGenerated));
+    $xmlGenerated = $outputXML->documentElement->C14N(false, false);
+    $this->assertSame($xml, $xmlGenerated);
   }
 
   /**
@@ -192,7 +192,6 @@ class MarshallingTest extends ClientBaseTestCase {
     $xml = Marshalling::marshal($object, $outputXML);
     /** @var \DOMDocument $outputXML */
     $outputXML->formatOutput = FALSE;
-    print $outputXML->saveXML();
   }
 
   function testUnmarshallingOfDirectResponse() {
@@ -200,8 +199,6 @@ class MarshallingTest extends ClientBaseTestCase {
     $direct_response_example = file_get_contents(
       $schema_dir . '/examples/direct/response.xml'
     );
-    print $direct_response_example;
-    print "\n---\n";
 
     $object = Marshalling::unmarshal(
       $direct_response_example,
@@ -209,7 +206,7 @@ class MarshallingTest extends ClientBaseTestCase {
     );
 
     $xml = Marshalling::marshal($object, $outputXML);
-    print $outputXML->saveXML();
+    $outputXML->saveXML();
   }
 
   function testUnmarshallingOfXAdESSignatures() {
@@ -223,7 +220,7 @@ class MarshallingTest extends ClientBaseTestCase {
 
     //print_r($object->getSignatures()[0]);
     //dump($object);
-    dump($object);
+    //dump($object);
 
     //$str = print_r($object, TRUE);
     //var_dump($object);
@@ -259,14 +256,13 @@ class MarshallingTest extends ClientBaseTestCase {
 
     //removeAttributeNS('http://www.w3.org/2000/09/xmldsig#"', 'ds');
 
-    print $xmlOutput->saveXML();
+    print $xmlOutput->C14N(false, false);
     //    $config = new \DOMConfiguration();
     //    $config->setParameter('testings', 'ja');
     //    $xmlOutput->config = $config;
     //    $xmlOutput->documentElement->removeAttributeNS('http://www.w3.org/2000/09/xmldsig#"', 'ds');
     //    $namespaces = DOMUtils::getDocNamespaces($xmlOutput);
     //    dump($namespaces);
-    print "Hei";
   }
 
   function testUnmarshallingOfDirectManifest() {
@@ -277,8 +273,7 @@ class MarshallingTest extends ClientBaseTestCase {
 
     $object = Marshalling::unmarshal(
       $xml_example,
-      XMLDirectSignatureJobManifest::class,
-      ['snake-case' => TRUE]
+      XMLDirectSignatureJobManifest::class
     );
     /** @var $object XAdESSignatures */
     //print_r($object->getSignatures()[0]);

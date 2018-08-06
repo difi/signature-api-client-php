@@ -15,14 +15,12 @@ class Xsd2PhpConfiguration implements ConfigurationInterface {
       ->children()
         ->scalarNode('naming_strategy')
           ->defaultValue('short')
-          ->cannotBeEmpty()
         ->end()
         ->scalarNode('path_generator')
           ->defaultValue('psr4')
-          ->cannotBeEmpty()
         ->end()
         ->arrayNode('namespaces')->fixXmlConfig('namespace')
-          ->cannotBeEmpty()->isRequired()
+          ->isRequired()
           ->requiresAtLeastOneElement()
           ->prototype('scalar')
           ->end()
@@ -32,13 +30,13 @@ class Xsd2PhpConfiguration implements ConfigurationInterface {
           ->end()
         ->end()
           ->arrayNode('destinations_php')->fixXmlConfig('destination')
-          ->cannotBeEmpty()->isRequired()
+          ->isRequired()
           ->requiresAtLeastOneElement()
           ->prototype('scalar')
           ->end()
         ->end()
         ->arrayNode('destinations_jms')->fixXmlConfig('destination')
-          ->cannotBeEmpty()->isRequired()
+          ->isRequired()
           ->requiresAtLeastOneElement()
           ->prototype('scalar')
           ->end()
@@ -50,7 +48,6 @@ class Xsd2PhpConfiguration implements ConfigurationInterface {
           ->end()
         ->end()
       ->end();
-
     return $treeBuilder;
   }
 }

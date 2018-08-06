@@ -8,10 +8,13 @@
 
 namespace Tests\DigipostSignatureBundle\Client\ASiCe\Signature;
 
+use Digipost\Signature\Client\Core\AuthenticationLevel;
 use Digipost\Signature\Client\Core\DocumentFileType;
+use Digipost\Signature\Client\Core\IdentifierInSignedDocuments;
 use Digipost\Signature\Client\Core\Internal\Security\Constants as C;
 use Digipost\Signature\Client\Core\Internal\Security\Signature;
 use Digipost\Signature\Client\Core\Sender;
+use Digipost\Signature\Client\Core\SignatureType;
 use Digipost\Signature\Client\Direct\DirectClient;
 use Digipost\Signature\Client\Direct\DirectDocument;
 use Digipost\Signature\Client\Direct\DirectJob;
@@ -38,7 +41,8 @@ class CreateSignatureTest extends ClientBaseTestCase {
     parent::setUp();
     self::$root_dir = $this->getContainer()->getParameter('kernel.project_dir');
 
-    $this->privKey = PrivateKey::fromFile(self::$root_dir . '/vendor/simplesamlphp/xmlseclibs/tests/privkey.pem');
+    $this->privKey =
+      PrivateKey::fromFile(self::$root_dir . '/vendor/simplesamlphp/xmlseclibs/tests/privkey.pem');
     //$this->cert = X509Certificate::fromFile(self::$root_dir . '/vendor/simplesamlphp/xmlseclibs/tests/mycert.pem');
     $this->cert = X509Certificate::fromFile(self::$root_dir . '/app/Resources/config/smt_test.cer');
   }
@@ -101,19 +105,24 @@ class CreateSignatureTest extends ClientBaseTestCase {
                                           self::$dumpFolder
                                         )
                                         ->build();
-    //$statusQueryToken = '5fSdNIDcW6sxFfoowHz6b6KEAPLrbrP59pd9HkqhqF4';
+
     $statusQueryToken = 'bjv8Q5vJsN9_0BZeOLX1o9GZJi7r_HHGkwACf5p0TPw';
-    //$redirectUrl = 'https://difitest.signering.posten.no/signere/#/-/5fSdNIDcW6sxFfoowHz6b6KEAPLrbrP59pd9HkqhqF4';
     $redirectUrl = 'https://difitest.signering.posten.no/signere/#/-/ic74KVpCcBf0R_6vMwRxiXwmfRo5PBF3zmuOPUz_LxE';
-    $jobId = 12087;
+    $statusUrl = 'https://api.difitest.signering.posten.no/api/991825827/direct/signature-jobs/12106/status';
+    $jobId = 12106;
 
     $client = new DirectClient($clientConfig);
-    $directJobResponse = new DirectJobResponse($jobId, 'test-job', [
-      new RedirectUrl('28129307058',
-        $redirectUrl)
-    ], 'https://api.difitest.signering.posten.no/api/991825827/direct/signature-jobs/' . $jobId . '/status');
-    $directJobStatusResponse = $client->getStatus(StatusReference::of($directJobResponse)
-                                        ->withStatusQueryToken($statusQueryToken));
+    $directJobResponse = new DirectJobResponse(
+      $jobId, 'test-job', [
+      new RedirectUrl(
+        '28129307058',
+        $redirectUrl),
+    ], 'https://api.difitest.signering.posten.no/api/991825827/direct/signature-jobs/' . $jobId .
+      '/status');
+
+    $directJobStatusResponse = $client->getStatus(
+      StatusReference::ofUrl($statusUrl)
+                     ->withStatusQueryToken($statusQueryToken));
     $this->assertInstanceOf(DirectJobStatusResponse::class, $directJobStatusResponse);
 
     $pAdESUrl = $directJobStatusResponse->getpAdESUrl();
@@ -124,14 +133,13 @@ class CreateSignatureTest extends ClientBaseTestCase {
 
     $path = realpath(__DIR__ . '/../../../../../../var/data/');
     $filename = date('YmdHis_') . $directJobResponse->getReference() . '_%s.%s';
-    file_put_contents(sprintf($path.'/'.$filename, 'pAdES', 'pdf'), $data);
+    file_put_contents(sprintf($path . '/' . $filename, 'pAdES', 'pdf'), $data);
     $responseStream->close();
 
     $responseStream = $client->getXAdES($xAdESUrl);
     $data = $responseStream->getContents();
-    file_put_contents(sprintf($path.'/'.$filename, 'xAdES', 'xml'), $data);
+    file_put_contents(sprintf($path . '/' . $filename, 'xAdES', 'xml'), $data);
     $responseStream->close();
-
   }
 
   /**
@@ -150,26 +158,29 @@ class CreateSignatureTest extends ClientBaseTestCase {
 
     $client = new DirectClient($clientConfig);
 
-    $docData = file_get_contents(
-      '/home/difi/drupal7/profiles/samarbeid2lukket/signature-api-client-php/vendor/simplesamlphp/xmlseclibs/tests/asice-files/document1.pdf');
+    $docData = file_get_contents(self::$root_dir . '/exportDocuments_2017_17001_17103.pdf');
     $document = DirectDocument::builder("Document 1", "document1.pdf", $docData);
     $document = $document
       ->fileType(DocumentFileType::PDF())
+      ->message("Dette er en test!")
       ->build();
 
-    $signer1 = DirectSigner::withPersonalIdentificationNumber('28129307058');
+    //$signer1 = DirectSigner::withPersonalIdentificationNumber('28129307058');
     //->onBehalfOf(OnBehalfOf::OTHER());
-    //$signer1 = DirectSigner::withCustomIdentifier('bendik_brenne')->onBehalfOf(OnBehalfOf::OTHER());
-
-    $jobReference = 'test-job';
+    $signer1 = DirectSigner::withCustomIdentifier('bendik_brenne')
+                           ->withSignatureType(SignatureType::AUTHENTICATED_SIGNATURE());
+    $jobReference = 'test-job_' . sha1(microtime(FALSE));
 
     $directJob = DirectJob::builder(
       $document,
-      ExitUrls::of('https://7aa490c8.ngrok.io/complete', 'https://7aa490c8.ngrok.io/failed', 'https://7aa490c8.ngrok.io/error'),
+      ExitUrls::of(
+        'https://9b48608d.ngrok.io/complete', 'https://9b48608d.ngrok.io/failed',
+        'https://9b48608d.ngrok.io/error'),
       $signer1->build()
     )
+                          ->requireAuthentication(AuthenticationLevel::FOUR())
                           ->withReference($jobReference)
-                          //->withIdentifierInSignedDocuments(IdentifierInSignedDocuments::NAME())
+                          ->withIdentifierInSignedDocuments(IdentifierInSignedDocuments::NAME())
                           ->retrieveStatusBy(
                             StatusRetrievalMethod::WAIT_FOR_CALLBACK()
                           )

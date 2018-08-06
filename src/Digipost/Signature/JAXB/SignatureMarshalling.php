@@ -123,6 +123,22 @@ final class SignatureMarshalling {
     );
   }
 
+  private static function allApiClassesUsingSnakeCasing(): Set {
+    return self::unionOf(
+      [], self::commonJaxbClassesForResponses(),
+      XMLDirectSignatureJobRequest::class,
+      XMLDirectSignatureJobManifest::class,
+      XMLPortalSignatureJobRequest::class,
+      XMLPortalSignatureJobManifest::class,
+      self::directApiJaxbClassesForResponses(),
+      self::portalApiJaxbClassesForResponses()
+    );
+  }
+
+  public static function isUsingSnakeCase($entityType) {
+    return self::allApiClassesUsingSnakeCasing()->contains($entityType);
+  }
+
   private static function unionOf($set1, ...$more): Set {
     $union = $set1;
     if (!($union instanceof Set)) {

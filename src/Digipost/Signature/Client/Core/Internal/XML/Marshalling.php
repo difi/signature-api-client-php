@@ -210,10 +210,8 @@ class Marshalling {
       $context = SerializationContext::create();
     }
 
-    $responseClasses = SignatureMarshalling::allApiResponseClasses();
-
     // All responses from Digipost are snake-cased
-    if ($responseClasses->contains(get_class($object)) && !isset($configParams['snake-case'])) {
+    if (SignatureMarshalling::isUsingSnakeCase(get_class($object)) && !isset($configParams['snake-case'])) {
       $configParams['snake-case'] = TRUE;
     }
 
@@ -431,7 +429,8 @@ class Marshalling {
     )->setDocumentType($responseType);
 
     // All responses from Digipost are snake-cased
-    if ($objectConstructor->getSetClasses()->contains($responseType)) {
+
+    if (SignatureMarshalling::isUsingSnakeCase($responseType) && !isset($configParams['snake-case'])) {
       $configParams['snake-case'] = TRUE;
     }
 

@@ -78,7 +78,7 @@
     "require-dev": {
         "phpunit/phpunit": "^6.5",
         "symfony/phpunit-bridge": "^3.4",
-        "goetas-webservices/xsd2php": "^3.2",
+        "goetas-webservices/xsd2php": "0.3.2",
         "symfony/var-dumper": "^3.4"
     },
     "scripts": {

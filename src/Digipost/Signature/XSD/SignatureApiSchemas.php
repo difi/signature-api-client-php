@@ -30,10 +30,16 @@ define(
  *
  * @package Digipost\Signature\XSD
  *
+ * @method static SignatureApiSchemas DIRECT_AND_PORTAL_SCHEMA()
+ * @method static SignatureApiSchemas DIRECT_ONLY_SCHEMA()
+ * @method static SignatureApiSchemas PORTAL_ONLY_SCHEMA()
  * @method static SignatureApiSchemas XMLDSIG_SCHEMA()
- * @method static SignatureApiSchemas ASICE_SCHEMA()
- * @method static SignatureApiSchemas DIRECT_AND_PORTAL_API()
  * @method static SignatureApiSchemas XADES_SCHEMA()
+ * @method static SignatureApiSchemas ASICE_SCHEMA()
+ * @method static SignatureApiSchemas ASICE_AND_XADES_SCHEMA()
+ * @method static SignatureApiSchemas DIRECT_AND_PORTAL_API()
+ * @method static SignatureApiSchemas DIRECT_API()
+ * @method static SignatureApiSchemas PORTAL_API()
  */
 class SignatureApiSchemas extends Enum {
 
@@ -45,33 +51,53 @@ class SignatureApiSchemas extends Enum {
   const XMLDSIG_SCHEMA           = DIGIPOST_ROOT_PATH . '/thirdparty/xmldsig-core-schema.xsd';
   const XADES_SCHEMA             = DIGIPOST_ROOT_PATH . '/thirdparty/XAdES.xsd';
   const ASICE_SCHEMA             = DIGIPOST_ROOT_PATH . '/thirdparty/ts_102918v010201.xsd';
+
+  const ASICE_AND_XADES_SCHEMA = [
+    'ASICE_SCHEMA' => SignatureApiSchemas::ASICE_SCHEMA,
+    'XADES_SCHEMA' => SignatureApiSchemas::XADES_SCHEMA,
+  ];
+
   const DIRECT_AND_PORTAL_API    = [
     //    SignatureApiSchemas::DIRECT_AND_PORTAL_SCHEMA,
-    SignatureApiSchemas::ASICE_SCHEMA,
-    SignatureApiSchemas::XADES_SCHEMA,
-    SignatureApiSchemas::XMLDSIG_SCHEMA,
+    'ASICE_SCHEMA' => SignatureApiSchemas::ASICE_SCHEMA,
+    'XADES_SCHEMA' => SignatureApiSchemas::XADES_SCHEMA,
+    'XMLDSIG_SCHEMA' => SignatureApiSchemas::XMLDSIG_SCHEMA,
   ];
+
   const DIRECT_API               = [
-    SignatureApiSchemas::DIRECT_ONLY_SCHEMA,
-    SignatureApiSchemas::ASICE_SCHEMA,
-    SignatureApiSchemas::XADES_SCHEMA,
-    SignatureApiSchemas::XMLDSIG_SCHEMA,
+    'DIRECT_ONLY_SCHEMA' => SignatureApiSchemas::DIRECT_ONLY_SCHEMA,
+    'ASICE_SCHEMA' => SignatureApiSchemas::ASICE_SCHEMA,
+    'XADES_SCHEMA' => SignatureApiSchemas::XADES_SCHEMA,
+    'XMLDSIG_SCHEMA' => SignatureApiSchemas::XMLDSIG_SCHEMA,
   ];
+
   const PORTAL_API               = [
-    SignatureApiSchemas::DIRECT_AND_PORTAL_API,
-    SignatureApiSchemas::ASICE_SCHEMA,
-    SignatureApiSchemas::XADES_SCHEMA,
-    SignatureApiSchemas::XMLDSIG_SCHEMA,
+    'DIRECT_AND_PORTAL_API' => SignatureApiSchemas::DIRECT_AND_PORTAL_API,
+    'ASICE_SCHEMA' => SignatureApiSchemas::ASICE_SCHEMA,
+    'XADES_SCHEMA' => SignatureApiSchemas::XADES_SCHEMA,
+    'XMLDSIG_SCHEMA' => SignatureApiSchemas::XMLDSIG_SCHEMA,
   ];
 
   private $filename;
 
   public function __construct($value) {
     parent::__construct($value);
-    $this->filename = $value;
     if (is_array($value)) {
-      $this->filename = 'xsd://' . $this->getKey();
+      $value = array_map(function($v) {
+        return SignatureApiSchemas::$v();
+      }, array_keys($value));
+      $this->value = $value;
+    } else {
+      $this->filename = $value;
     }
+
+//    if (is_array($value)) {
+//      $this->filename = 'xsd://' . $this->getKey();
+//    }
+  }
+
+  private static function create($value) {
+    return new self($value);
   }
 
   public function getValue() {
@@ -83,11 +109,12 @@ class SignatureApiSchemas extends Enum {
    */
   public function getSchema() {
     $reader = new SchemaReader();
-    $schema = $reader->getGlobalSchema();
+    //$schema = $reader->getGlobalSchema();
     try {
-      foreach ($this->getFileNames() as $fileName) {
-        $schema->addSchema($reader->readFile($fileName));
-      }
+      //foreach ($this->getFileNames() as $fileName) {
+        //$schema->addSchema($reader->readFile($fileName));
+      //}
+      $schema = $reader->readFile($this->filename);
     } catch (SchemaException $e) {
       throw new \RuntimeException("An error occoured during merging of schemas", 0, $e);
     }
@@ -108,6 +135,22 @@ class SignatureApiSchemas extends Enum {
       stream_wrapper_register('xsd', XsdSchemaFileWrapper::class);
       static::$stream_wrapper = TRUE;
     }
+  }
+
+  public function getXSD() {
+    $values = is_array($this->value) ? $this->value : [$this->value];
+
+    $imports = array_map(function($schema) {
+      /** @var SignatureApiSchemas $schema */
+      $ns = $schema->getSchema()->getTargetNamespace();
+      return '<xsd:import namespace="' . $ns . '" schemaLocation="' . $schema->filename . '"/>' . "\n";
+    }, $values);
+
+    $xsd = '<?xml version="1.0" encoding="utf-8"?>'. "\n" .
+    '<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">'.
+      join("\n", $imports) .
+    '</xsd:schema>';
+    return $xsd;
   }
 }
 
