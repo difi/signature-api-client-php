@@ -65,7 +65,7 @@ class ClientConfiguration implements ProvidesCertificateResourcePaths,
   private $eventDispatcher;
 
   /**
-   * @var array<String>
+   * @var String[]
    */
   private $certificatePaths;
 
@@ -80,7 +80,7 @@ class ClientConfiguration implements ProvidesCertificateResourcePaths,
   private $signatureServiceRoot;
 
   /**
-   * @var array<DocumentBundleProcessor>
+   * @var DocumentBundleProcessor[]
    */
   private $documentBundleProcessors;
 
@@ -227,15 +227,18 @@ class ClientConfigurationBuilder {
   private $globalSender = NULL;
 
   /**
-   * @var array<String>
+   * @var String[]
    */
   private $certificatePaths;
 
   /**
-   * @var array<DocumentBundleProcessor>
+   * @var DocumentBundleProcessor[]
    */
   private $documentBundleProcessors = [];
 
+  /**
+   * @var \DateTime
+   */
   private $clock;
 
   /**
@@ -255,7 +258,7 @@ class ClientConfigurationBuilder {
     $this->guzzleConfig = $container->get(
       'digipost_signature.client_guzzle_config'
     );
-    $this->eventDispatcher = $container->get('event_dispatcher');
+    $this->eventDispatcher = $container->get('digipost_signature.event_dispatcher');
 
     $this->clock = new \DateTime();
   }

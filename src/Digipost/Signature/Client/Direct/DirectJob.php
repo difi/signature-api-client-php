@@ -165,6 +165,10 @@ class DirectJob implements JOB, WithExitUrls {
   public function setStatusRetrievalMethod(StatusRetrievalMethod $statusRetrievalMethod) {
     $this->statusRetrievalMethod = $statusRetrievalMethod;
   }
+
+  public function __toString() {
+    return self::class . ' with reference ' . $this->getReference();
+  }
 }
 
 class DirectJobBuilder implements JobCustomizations {

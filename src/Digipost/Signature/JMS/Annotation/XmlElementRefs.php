@@ -25,7 +25,7 @@ final class XmlElementRefs {
 
   /**
    * @Required
-   * @var array<Digipost\Signature\JMS\Annotation\XmlElementRef>
+   * @var Digipost\Signature\JMS\Annotation\XmlElementRef[]
    */
   public $values;
 

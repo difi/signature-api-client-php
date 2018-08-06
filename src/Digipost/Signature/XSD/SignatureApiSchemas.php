@@ -5,6 +5,7 @@ namespace Digipost\Signature\XSD;
 // TODO: Move this to config/resource loading
 
 use GoetasWebservices\XML\XSDReader\Schema\Exception\SchemaException;
+use GoetasWebservices\XML\XSDReader\Schema\Schema;
 use GoetasWebservices\XML\XSDReader\SchemaReader;
 use GuzzleHttp\Psr7\AppendStream;
 use MyCLabs\Enum\Enum;
@@ -112,18 +113,25 @@ class SignatureApiSchemas extends Enum {
 
 class XsdSchemaFileWrapper {
 
+  /** @var int */
   var $position;
+
+  /** @var string */
   var $varName;
+
+  /** @var string */
   private $schemaName;
+
   /** @var SignatureApiSchemas */
   private $schema;
 
   /** @var AppendStream */
   private $stream;
 
+  /** @var bool */
   private $start_tag_removed = FALSE;
 
-  /** @var */
+  /** @var Schema[] */
   private $schemas;
 
   function stream_open($path, $mode, $options, &$opened_path) {
