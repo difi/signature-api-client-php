@@ -51,7 +51,9 @@ services:
     class: Digipost\Signature\Client\Core\Internal\ClientHelper
     autowire: false
     arguments:
-      ['@?', '@?', '@logger']
+      ['@?', '@?']
+    calls:
+      - [setLogger, ['@?logger']]
 
   digipost_signature.client_configuration:
     class: Digipost\Signature\Client\ClientConfiguration

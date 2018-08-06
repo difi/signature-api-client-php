@@ -2,10 +2,10 @@
 
 namespace Digipost\Signature\Client\Direct;
 
+use Digipost\Signature\Client\Core\Internal\PersonalIdentificationNumbers;
 use Digipost\Signature\Client\Core\Internal\SignerCustomizations;
 use Digipost\Signature\Client\Core\OnBehalfOf;
 use Digipost\Signature\Client\Core\SignatureType;
-use Digipost\Signature\Client\Core\Internal\PersonalIdentificationNumbers;
 
 class DirectSigner {
 
@@ -27,8 +27,7 @@ class DirectSigner {
     return new DirectSignerBuilder($personalIdentificationNumber, NULL);
   }
 
-  public static function withCustomIdentifier($customIdentifier) // [String customIdentifier]
-  {
+  public static function withCustomIdentifier($customIdentifier) {
     return new DirectSignerBuilder(NULL, $customIdentifier);
   }
 

@@ -464,6 +464,12 @@ class ClientHelper {
     $self = new ClientHelper($httpClient, $globalSender, $logger);
     return $self;
   }
+
+  public function setLogger(LoggerInterface $logger = NULL) {
+    if (isset($logger)) {
+      self::$LOG = $logger;
+    }
+  }
 }
 
 class BodyPart {

@@ -61,6 +61,7 @@
         "digipost/signature-api-specification": "^2.3",
         "doctrine/cache": "^1.6",
         "doctrine/collections": "^1.4",
+        "goetas-webservices/xsd2php": "^0.3.2",
         "goetas-webservices/xsd2php-runtime": "^0.2.8",
         "guzzlehttp/guzzle": "^6.3",
         "guzzlehttp/psr7": "^1.4",
@@ -75,7 +76,6 @@
         "symfony/symfony": "^3.3"
     },
     "require-dev": {
-        "goetas-webservices/xsd2php": "^0.3.2",
         "phpunit/phpunit": "^6.5",
         "symfony/phpunit-bridge": "^3.0"
     },

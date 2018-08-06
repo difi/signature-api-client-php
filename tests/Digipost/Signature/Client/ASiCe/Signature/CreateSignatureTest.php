@@ -16,6 +16,7 @@ use Digipost\Signature\Client\Direct\DirectClient;
 use Digipost\Signature\Client\Direct\DirectDocument;
 use Digipost\Signature\Client\Direct\DirectJob;
 use Digipost\Signature\Client\Direct\DirectJobResponse;
+use Digipost\Signature\Client\Direct\DirectJobStatusResponse;
 use Digipost\Signature\Client\Direct\DirectSigner;
 use Digipost\Signature\Client\Direct\ExitUrls;
 use Digipost\Signature\Client\Direct\RedirectUrl;
@@ -37,8 +38,7 @@ class CreateSignatureTest extends ClientBaseTestCase {
     parent::setUp();
     self::$root_dir = $this->getContainer()->getParameter('kernel.project_dir');
 
-    $this->privKey =
-      PrivateKey::fromFile(self::$root_dir . '/vendor/simplesamlphp/xmlseclibs/tests/privkey.pem');
+    $this->privKey = PrivateKey::fromFile(self::$root_dir . '/vendor/simplesamlphp/xmlseclibs/tests/privkey.pem');
     //$this->cert = X509Certificate::fromFile(self::$root_dir . '/vendor/simplesamlphp/xmlseclibs/tests/mycert.pem');
     $this->cert = X509Certificate::fromFile(self::$root_dir . '/app/Resources/config/smt_test.cer');
   }
@@ -114,7 +114,7 @@ class CreateSignatureTest extends ClientBaseTestCase {
     ], 'https://api.difitest.signering.posten.no/api/991825827/direct/signature-jobs/' . $jobId . '/status');
     $directJobStatusResponse = $client->getStatus(StatusReference::of($directJobResponse)
                                         ->withStatusQueryToken($statusQueryToken));
-
+    $this->assertInstanceOf(DirectJobStatusResponse::class, $directJobStatusResponse);
 
     $pAdESUrl = $directJobStatusResponse->getpAdESUrl();
     $xAdESUrl = $directJobStatusResponse->getSignatureFrom('28129307058')->getxAdESUrl();
@@ -131,6 +131,7 @@ class CreateSignatureTest extends ClientBaseTestCase {
     $data = $responseStream->getContents();
     file_put_contents(sprintf($path.'/'.$filename, 'xAdES', 'xml'), $data);
     $responseStream->close();
+
   }
 
   /**

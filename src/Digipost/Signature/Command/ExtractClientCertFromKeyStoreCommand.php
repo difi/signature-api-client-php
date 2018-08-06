@@ -51,7 +51,7 @@ class ExtractClientCertFromKeyStoreCommand extends ContainerAwareCommand {
     }
     if (!is_writable($file_privateKey) || !is_writable($file_cert)) {
       foreach ([$file_privateKey, $file_cert] as $f) {
-        if (is_writable($f)) {
+        if (is_writable($f) || is_writable(dirname($f))) {
           continue;
         }
         throw new FileException(sprintf('Unable to write to file "%s".', str_replace($root_dir, '', $f)));
