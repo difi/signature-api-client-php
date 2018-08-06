@@ -7,7 +7,7 @@ use Digipost\Signature\Client\Core\DocumentFileType;
 
 class PortalDocument extends Document {
 
-  protected $nonsensitiveTitle;  // String
+  protected $nonsensitiveTitle;
 
   function __construct(String $title = NULL,
                        String $nonsensitiveTitle = NULL,

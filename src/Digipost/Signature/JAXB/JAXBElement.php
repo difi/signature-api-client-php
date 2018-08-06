@@ -38,6 +38,11 @@ class JAXBElement implements \Serializable {
   }
 
   /**
+   * @param String $name
+   * @param String $declaredType
+   * @param String $scope
+   * @param mixed  $value
+   *
    * @return JAXBElement
    */
   public static function fromString(
@@ -51,15 +56,17 @@ class JAXBElement implements \Serializable {
 
   /**
    * @inheritdoc
+   * @throws \Exception
    */
   public function serialize() {
-    // TODO: Implement serialize() method.
+    throw new \Exception('Not implemented');
   }
 
   /**
    * @inheritdoc
+   * @throws \Exception
    */
   public function unserialize($serialized) {
-    // TODO: Implement unserialize() method.
+    throw new \Exception('Not implemented');
   }
 }

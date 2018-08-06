@@ -13,23 +13,23 @@ use Digipost\Signature\API\XML\XMLPortalSignatureJobManifest;
 use Digipost\Signature\API\XML\XMLPortalSignatureJobRequest;
 use Digipost\Signature\API\XML\XMLPortalSignatureJobResponse;
 use Digipost\Signature\API\XML\XMLPortalSignatureJobStatusChangeResponse;
+use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
 use Ds\Set;
 
 /**
  * Different sets of classes to be bound by a
- * {@link javax.xml.bind.JAXBContext JAXB context} in order to create
- * marshallers and unmarshallers. All the sets are immutable.
- * <p>
- * If you use Spring, there are ready preconfigured
- * {@link org.springframework.oxm.jaxb.Jaxb2Marshaller}s available in
- * {@link SignatureJaxb2Marshaller}.
+ * {@link \JMS\Serializer\Context JMS context} in order to create
+ * {@link \JMS\Serializer\SerializerInterface::serialize() marshallers} and
+ * {@link \JMS\Serializer\SerializerInterface::deserialize() unmarshallers}. All the sets are immutable.
+ *
+ * @see Marshalling::marshal()
+ * @see Marshalling::unmarshal()
  */
 final class SignatureMarshalling {
 
   /**
-   * All classes necessary for a {@code JAXBContext} to handle marshalling and
-   * unmarshalling
-   * <em>requests and reponses</em> for both the Direct- and Portal API.
+   * All classes necessary to handle marshalling and unmarshalling
+   * *requests and responses* for both the {@link DirectClient Direct-} and {@link PortalClient Portal API}.
    */
   public static function allApiClasses(): Set {
     return self::unionOf(
@@ -39,8 +39,8 @@ final class SignatureMarshalling {
   }
 
   /**
-   * All classes necessary for a {@code JAXBContext} to handle marshalling
-   * <em>requests</em> to both the Direct and Portal API.
+   * All classes necessary to handle marshalling
+   * *requests* to both the {@link DirectClient Direct} and {@link PortalClient Portal API}.
    */
   public static function allApiRequestClasses(): Set {
     return self::unionOf(
@@ -51,8 +51,8 @@ final class SignatureMarshalling {
   }
 
   /**
-   * All classes necessary for a {@code JAXBContext} to handle unmarshalling
-   * <em>responses</em> from both the Direct and Portal API.
+   * All classes necessary to handle unmarshalling
+   * *responses* from both the {@link DirectClient Direct} and {@link PortalClient Portal API}.
    */
   public static function allApiResponseClasses(): Set {
     return self::unionOf(
@@ -64,8 +64,8 @@ final class SignatureMarshalling {
 
 
   /**
-   * All classes necessary for a {@code JAXBContext} to handle marshalling
-   * <em>requests</em> to the Direct API.
+   * All classes necessary to handle marshalling
+   * *requests* to the {@link DirectClient Direct API}.
    */
   public static function directApiJaxbClassesForRequests(): Set {
     return self::unionOf(
@@ -76,8 +76,8 @@ final class SignatureMarshalling {
   }
 
   /**
-   * All classes necessary for a {@code JAXBContext} to handle unmarshalling
-   * <em>responses</em> from the Direct API.
+   * All classes necessary to handle unmarshalling
+   * *responses* from the {@link DirectClient Direct API}.
    */
   public static function directApiJaxbClassesForResponses(): Set {
     return self::unionOf(
@@ -88,8 +88,8 @@ final class SignatureMarshalling {
   }
 
   /**
-   * All classes necessary for a {@code JAXBContext} to handle marshalling
-   * <em>requests</em> to the Portal API.
+   * All classes necessary to handle marshalling
+   * *requests* to the {@link PortalClient Portal API}.
    */
   public static function portalApiJaxbClassesForRequests(): Set {
     return self::unionOf(
@@ -100,8 +100,8 @@ final class SignatureMarshalling {
   }
 
   /**
-   * All classes necessary for a {@code JAXBContext} to handle unmarshalling
-   * <em>responses</em> from the Portal API.
+   * All classes necessary to handle unmarshalling
+   * *responses* from the {@link PortalClient Portal API}.
    */
   public static function portalApiJaxbClassesForResponses(): Set {
     return self::unionOf(
@@ -113,7 +113,6 @@ final class SignatureMarshalling {
 
 
   private static function commonJaxbClassesForResponses(): Set {
-    /*return Collections.<Class<?>>singleton(XMLError.class);*/
     return new Set([XMLError::class]);
   }
 

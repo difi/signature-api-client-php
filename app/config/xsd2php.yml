@@ -14,16 +14,17 @@ xsd2php:
     'Digipost\Signature\API\XML\Thirdparty\ASiCe': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer/ASiCe'
     'Digipost\Signature\API\XML\Thirdparty\XAdES': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer/XAdES'
     'Digipost\Signature\API\XML': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer'
+#    'Digipost\Signature\Client\Core\Internal\XML': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer'
   aliases:
     'http://signering.posten.no/schema/v1':
       'authentication-level': 'Digipost\Signature\API\XML\XMLAuthenticationLevel'
       'availability': 'Digipost\Signature\API\XML\XMLAvailability'
       'direct-document': 'Digipost\Signature\API\XML\XMLDirectDocument'
-      'direct-signature-job-manifest': 'Digipost\Signature\API\XML\XMLDirectSignatureJobManifest'
-      'direct-signature-job-request': 'Digipost\Signature\API\XML\XMLDirectSignatureJobRequest'
-      'direct-signature-job-response': 'Digipost\Signature\API\XML\XMLDirectSignatureJobResponse'
-      'direct-signature-job-status': 'Digipost\Signature\API\XML\XMLDirectSignatureJobStatus'
-      'direct-signature-job-status-response': 'Digipost\Signature\API\XML\XMLDirectSignatureJobStatusResponse'
+      'direct-signature-job-manifest': 'Digipost\Signature\API\XML\DirectSignatureJobManifest'
+      'direct-signature-job-request': 'Digipost\Signature\API\XML\DirectSignatureJobRequest'
+      'direct-signature-job-response': 'Digipost\Signature\API\XML\DirectSignatureJobResponse'
+      'direct-signature-job-status': 'Digipost\Signature\API\XML\DirectSignatureJobStatus'
+      'direct-signature-job-status-response': 'Digipost\Signature\API\XML\DirectSignatureJobStatusResponse'
       'direct-signer': 'Digipost\Signature\API\XML\XMLDirectSigner'
       'email': 'Digipost\Signature\API\XML\XMLEmail'
       'enabled': 'Digipost\Signature\API\XML\XMLEnabled'
@@ -60,5 +61,5 @@ xsd2php:
 #    'http://uri.etsi.org/2918/v1.2.1#':
 #      AnyType: 'Digipost\Signature\JMS\Handler\CustomAnyTypeHandler'
     '##any':
-      any: 'Digipost\Signature\API\XML\AnyAnyType'
+      'any': 'Digipost\Signature\API\XML\AnyAnyType'
   naming_strategy: short

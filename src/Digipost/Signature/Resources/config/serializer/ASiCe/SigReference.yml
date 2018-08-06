@@ -1,2 +1,3 @@
 Digipost\Signature\API\XML\Thirdparty\ASiCe\SigReference:
     xml_root_name: SigReference
+    xml_root_namespace: 'http://uri.etsi.org/2918/v1.2.1#'

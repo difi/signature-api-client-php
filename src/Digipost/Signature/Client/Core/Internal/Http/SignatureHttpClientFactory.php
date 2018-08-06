@@ -5,19 +5,26 @@ namespace Digipost\Signature\Client\Core\Internal\Http;
 use Digipost\Signature\Client\ClientConfiguration;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Uri as URI;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SignatureHttpClientFactory {
 
-  public static function create(ClientConfiguration $config
-  ) // [HttpIntegrationConfiguration config]
-  {
+  public static function create(ClientConfiguration $config) {
     $params = $config->getGuzzleConfiguration();
     $guzzleClient = new Client($params);
-    return new DefaultClient($guzzleClient, $config->getServiceRoot());
+    $client = new DefaultClient($guzzleClient, $config->getServiceRoot(), $config->getContainer());
+
+    //$client->setContainer($config->getContainer());
+    return $client;
   }
 }
 
 class DefaultClient implements SignatureHttpClient {
+
+  /**
+   * @var ContainerInterface
+   */
+  protected $container;
 
   private $guzzleClient;
 
@@ -26,29 +33,31 @@ class DefaultClient implements SignatureHttpClient {
    */
   private $_signatureServiceRoot;
 
-  function __construct(Client $guzzleClient, URI $root) {
-
+  function __construct(Client $guzzleClient, URI $root, ContainerInterface $container) {
     $this->guzzleClient = $guzzleClient;
     $this->_signatureServiceRoot = $this->target($root);
+    $this->setContainer($container);
   }
 
-  /**
-   * @param String $uri
-   *
-   * @return Client
-   */
-  public function target(String $uri) {
+  public function getContainer() {
+    return $this->container;
+  }
+
+  public function target(String $uri): Client {
     $config = $this->guzzleClient->getConfig();
     $config['base_uri'] = $uri;
-    return new Client($config);
+
+    $client = new Client($config);
+
+    return $client;
   }
 
-  /**
-   * @return Client
-   */
-  public function signatureServiceRoot() {
+  public function signatureServiceRoot(): Client {
     return $this->_signatureServiceRoot;
   }
 
+  public function setContainer(ContainerInterface $container) {
+    $this->container = $container;
+  }
 }
 

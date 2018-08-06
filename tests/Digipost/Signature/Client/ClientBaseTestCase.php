@@ -12,7 +12,11 @@ class ClientBaseTestCase extends KernelTestCase {
   /** @var \Symfony\Component\DependencyInjection\ContainerInterface */
   static $container;
 
+  /** @var String */
   static $dumpFolder;
+
+  /** @var String */
+  static $resourcesFolder;
 
   protected function setUp() {
     parent::setUp();
@@ -22,12 +26,12 @@ class ClientBaseTestCase extends KernelTestCase {
     static::$kernel->boot();
     static::$container = static::$kernel->getContainer();
 
-    static::$container->get(
-      'Digipost\Signature\Client\Core\Internal\XML\Marshalling'
-    );
+    static::$container->get('digipost_signature.xml_marshaller');
 
     $root_path = $this->getContainer()->getParameter('kernel.project_dir');
     self::$dumpFolder = $root_path . '/var/data';
+
+    self::$resourcesFolder = $root_path . '/tests/Resources';
   }
 
   protected function getKernel() {

@@ -7,10 +7,6 @@ use Digipost\Signature\Client\Core\IdentifierInSignedDocuments;
 use Digipost\Signature\Client\Core\Internal\JobCustomizations;
 use Digipost\Signature\Client\Core\JOB;
 use Digipost\Signature\Client\Core\Sender;
-use Time\Unit\TimeUnitInterface;
-use Time\Unit\TimeUnitDay;
-use Time\Unit\TimeUnitHour;
-use Time\Unit\TimeUnitMinute;
 
 /**
  * Class PortalJob
@@ -149,14 +145,13 @@ class PortalJobBuilder implements JobCustomizations {
     $this->target = new PortalJob($signers, $document);
   }
 
-  public function withReference($reference) {
+  public function withReference(String $reference) {
     if (!is_string($reference)) {
-      $reference = $reference->toString();
+      $reference = (string) $reference;
     }
     $this->target->setReference($reference);
     return $this;
   }
-
 
   public function withSender(Sender $sender) {
     $this->target->setSender($sender);
@@ -180,20 +175,20 @@ class PortalJobBuilder implements JobCustomizations {
     return $this;
   }
 
-  public function availableFor(int $duration, TimeUnitInterface $unit) {
-    $seconds = $duration;
-    switch (get_class($unit)) {
-      case TimeUnitDay::class:
-        $seconds = TimeUnitDay::toSeconds($duration); break;
-      case TimeUnitHour::class:
-        $seconds = TimeUnitHour::toSeconds($duration); break;
-      case TimeUnitMinute::class:
-        $seconds = TimeUnitMinute::toSeconds($duration); break;
-    }
-
-    $this->target->setAvailableSeconds($seconds);
-    return $this;
-  }
+//  public function availableFor(int $duration, TimeUnitInterface $unit) {
+//    $seconds = $duration;
+//    switch (get_class($unit)) {
+//      case TimeUnitDay::class:
+//        $seconds = TimeUnitDay::toSeconds($duration); break;
+//      case TimeUnitHour::class:
+//        $seconds = TimeUnitHour::toSeconds($duration); break;
+//      case TimeUnitMinute::class:
+//        $seconds = TimeUnitMinute::toSeconds($duration); break;
+//    }
+//
+//    $this->target->setAvailableSeconds($seconds);
+//    return $this;
+//  }
 
   public function build() {
     if ($this->built) {
@@ -204,7 +199,7 @@ class PortalJobBuilder implements JobCustomizations {
   }
 
   function withReference_UUID($uuid) {
-    return $this->withReference_String($uuid->toString());
+    return $this->withReference_String((string) $uuid);
   }
 
   function withReference_String(String $reference) {

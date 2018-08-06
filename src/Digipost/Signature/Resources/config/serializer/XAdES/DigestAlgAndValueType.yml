@@ -1,5 +1,4 @@
 Digipost\Signature\API\XML\Thirdparty\XAdES\DigestAlgAndValueType:
-    xml_root_namespace: 'http://www.w3.org/2000/09/xmldsig#'
     properties:
         digestMethod:
             expose: true

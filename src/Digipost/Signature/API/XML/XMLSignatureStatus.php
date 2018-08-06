@@ -9,9 +9,11 @@ namespace Digipost\Signature\API\XML;
  */
 class XMLSignatureStatus {
 
-  protected $value;  // String
+  /** @var String */
+  protected $value;
 
-  protected $since;  // ZonedDateTime
+  /** @var \DateTime */
+  protected $since;
 
   function __construct(String $value = NULL, \DateTime $since = NULL) {
     $this->value = $value;

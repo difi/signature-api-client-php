@@ -2,6 +2,9 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XMLdSig;
 
+use Digipost\Signature\Client\Core\Internal\XML\XMLStructure;
+use Doctrine\Common\Proxy\ProxyDefinition;
+
 /**
  * Class representing ObjectType
  *
@@ -11,6 +14,7 @@ namespace Digipost\Signature\API\XML\Thirdparty\XMLdSig;
 class ObjectType
 {
 
+  /** @var XMLStructure[] $content */
     private $content = [];
 
     /**
@@ -28,7 +32,12 @@ class ObjectType
      */
     private $encoding = null;
 
-    /**
+  /**
+   * @var XMLStructure
+   */
+    private $proxy;
+
+  /**
      * Gets as id
      *
      * @return string
@@ -95,10 +104,9 @@ class ObjectType
     }
 
   /**
-   * @return array
+   * @return XMLStructure[]
    */
-  public function getContent(): array
-  {
+  public function getContent(){
     return $this->content;
   }
 
@@ -106,9 +114,17 @@ class ObjectType
    * @param array $content
    * @return ObjectType
    */
-  public function setContent(... $content)
+  public function setContent($content)
   {
-    $this->content = $content;
+    $this->content = array_map($cb = function($c) use (&$cb) {
+      if (is_array($c)) {
+        return array_map($cb, $c);
+      }
+      if ($c instanceof XMLStructure) {
+        return $c->getContent();
+      }
+      return $c;
+    }, $content);
     return $this;
   }
 }

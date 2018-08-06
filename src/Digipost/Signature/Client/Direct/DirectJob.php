@@ -76,16 +76,13 @@ class DirectJob implements JOB, WithExitUrls {
     return $this->sender;
   }
 
-
   public function getDocument() {
     return $this->document;
   }
 
-
   public function getCompletionUrl() {
     return $this->completionUrl;
   }
-
 
   public function getRejectionUrl() {
     return $this->rejectionUrl;
@@ -115,17 +112,17 @@ class DirectJob implements JOB, WithExitUrls {
   /**
    * Create a new DirectJob.
    *
-   * @param DirectDocument $document
-   * @param WithExitUrls   $hasExitUrls
-   * @param DirectSigner[] $signers
+   * @param DirectDocument $document    The {@link DirectDocument} that should be signed.
+   * @param WithExitUrls   $hasExitUrls specifies the urls the user will be redirected back to upon completing/rejecting/failing
+   *                                    the signing ceremony. See {@link \Digipost\Signature\Client\Direct\ExitUrls::of ExitUrls::of(String, String, String)}, and alternatively
+   *                                    {@link \Digipost\Signature\Client\Direct\ExitUrls::singleExitUrl ExitUrls::singleExitUrl(String)}.
+   * @param DirectSigner[] $signers     The {@link \Digipost\Signature\Client\Direct\DirectSigner DirectSigners} of the document.
    *
    * @return DirectJobBuilder
-   * @see DirectJob#builder(DirectDocument, WithExitUrls, List)
    */
   public static function builder(DirectDocument $document,
                                  WithExitUrls $hasExitUrls,
                                  DirectSigner... $signers) {
-    //return $this->builder($document, $hasExitUrls, Arrays . asList(signers));
     $signers = is_array($signers) ? $signers : [$signers];
     return new DirectJobBuilder(
       $signers,
@@ -184,16 +181,19 @@ class DirectJobBuilder implements JobCustomizations {
                                   $rejectionUrl, $errorUrl);
   }
 
+  /** @inheritdoc */
   public function withSender(Sender $sender) {
     $this->target->setSender($sender);
     return $this;
   }
 
+  /** @inheritdoc */
   public function requireAuthentication(AuthenticationLevel $level) {
     $this->target->setRequiredAuthentication($level);
     return $this;
   }
 
+  /** @inheritdoc */
   public function withIdentifierInSignedDocuments(IdentifierInSignedDocuments $identifier) {
     $this->target->setIdentifierInSignedDocuments($identifier);
     return $this;
@@ -212,7 +212,8 @@ class DirectJobBuilder implements JobCustomizations {
     return $this->target;
   }
 
-  function withReference($reference) {
+  /** @inheritdoc */
+  function withReference(String $reference) {
     $this->target->setReference($reference);
     return $this;
   }

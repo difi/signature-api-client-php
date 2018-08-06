@@ -8,11 +8,13 @@ namespace Digipost\Signature\Client\Portal;
  * @package Digipost\Signature\Client\Portal
  */
 class SignerIdentifier {
-
+  /** @var String  */
   protected $personalIdentificationNumber;
 
+  /** @var String */
   protected $emailAddress;
 
+  /** @var String */
   protected $mobileNumber;
 
   function __construct(String $personalIdentificationNumber = NULL,

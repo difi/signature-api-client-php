@@ -17,7 +17,7 @@ class X509IssuerSerialType
     private $x509IssuerName = null;
 
     /**
-     * @property integer $x509SerialNumber
+     * @property string $x509SerialNumber
      */
     private $x509SerialNumber = null;
 
@@ -56,10 +56,10 @@ class X509IssuerSerialType
     /**
      * Sets a new x509SerialNumber
      *
-     * @param integer $x509SerialNumber
+     * @param String $x509SerialNumber
      * @return self
      */
-    public function setX509SerialNumber($x509SerialNumber)
+    public function setX509SerialNumber(String $x509SerialNumber)
     {
         $this->x509SerialNumber = $x509SerialNumber;
         return $this;

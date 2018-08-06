@@ -1,5 +1,6 @@
 Digipost\Signature\API\XML\Thirdparty\XAdES\QualifyingProperties:
     xml_root_name: QualifyingProperties
+    xml_root_namespace: 'http://uri.etsi.org/01903/v1.3.2#'
     xml_namespaces:
         '': 'http://uri.etsi.org/01903/v1.3.2#'
         'ns2': 'http://www.w3.org/2000/09/xmldsig#'

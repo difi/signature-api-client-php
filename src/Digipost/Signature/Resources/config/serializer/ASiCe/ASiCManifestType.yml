@@ -14,6 +14,8 @@ Digipost\Signature\API\XML\Thirdparty\ASiCe\ASiCManifestType:
             expose: true
             access_type: public_method
             serialized_name: DataObjectReference
+            xml_element:
+                namespace: 'http://uri.etsi.org/2918/v1.2.1#'
             accessor:
                 getter: getDataObjectReference
                 setter: setDataObjectReference
@@ -26,6 +28,8 @@ Digipost\Signature\API\XML\Thirdparty\ASiCe\ASiCManifestType:
             expose: true
             access_type: public_method
             serialized_name: ASiCManifestExtensions
+            xml_element:
+                namespace: 'http://uri.etsi.org/2918/v1.2.1#'
             accessor:
                 getter: getASiCManifestExtensions
                 setter: setASiCManifestExtensions

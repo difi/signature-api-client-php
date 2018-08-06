@@ -3,8 +3,12 @@
 namespace Digipost\Signature\Client\Portal;
 
 use Digipost\Signature\API\XML\XMLPortalSignatureJobRequest;
+use Digipost\Signature\API\XML\XMLPortalSignatureJobStatusChangeResponse;
+use Digipost\Signature\Client\Core\ConfirmationReference;
+use Digipost\Signature\Client\Core\DeleteDocumentsUrl;
 use Digipost\Signature\Client\Core\Internal\ActualSender;
 use Digipost\Signature\Client\Core\Internal\JobStatusResponse;
+use Digipost\Signature\Client\Core\PAdESReference;
 use Digipost\Signature\Client\Core\Sender;
 use Digipost\Signature\Client\Core\XAdESReference;
 
@@ -15,6 +19,12 @@ use Digipost\Signature\Client\Core\XAdESReference;
  */
 final class JaxbEntityMapping {
 
+  /**
+   * @param PortalJob   $job
+   * @param Sender|NULL $globalSender
+   *
+   * @return XMLPortalSignatureJobRequest
+   */
   static function toJaxb(PortalJob $job, Sender $globalSender = NULL) {
     $actualSender = ActualSender::getActualSender($job->getSender(), $globalSender);
 
@@ -24,20 +34,17 @@ final class JaxbEntityMapping {
       ->withPollingQueue($actualSender->getPollingQueue()->value);
   }
 
-  //static function fromJaxb(XMLPortalSignatureJobResponse $xmlPortalSignatureJobResponse) {
-  //  return new PortalJobResponse($xmlPortalSignatureJobResponse->getSignatureJobId(), CancellationUrl::of($xmlPortalSignatureJobResponse->getCancellationUrl()));
-  //}
-
   static function fromJaxb(JobStatusResponse $statusChangeResponse) {
+    /** @var XMLPortalSignatureJobStatusChangeResponse $statusChange */
     $statusChange = $statusChangeResponse->getStatusResponse();
     $signatures = [];
-    foreach ($statusChange->getSignatures()->getSignatures() as $xmlSignature) {
+    foreach ($statusChange->getSignatures() as $xmlSignature) {
       /** @var \Digipost\Signature\API\XML\XMLSignature $xmlSignature */
       array_push($signatures, new Signature(
         $xmlSignature->getPersonalIdentificationNumber(),
         $xmlSignature->getIdentifier(),
         SignatureStatus::fromXmlType($xmlSignature->getStatus()),
-        $xmlSignature->getStatus()->getSince()->toInstant(),
+        new \DateTime($xmlSignature->getStatus()->getSince()->getTimestamp()),
         XAdESReference::of($xmlSignature->getXadesUrl())
       ));
     }

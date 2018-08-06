@@ -1,6 +1,6 @@
 Digipost\Signature\API\XML\Thirdparty\ASiCe\DataObjectReferenceType:
     properties:
-        uRI:
+        URI:
             expose: true
             access_type: public_method
             serialized_name: URI
@@ -51,6 +51,8 @@ Digipost\Signature\API\XML\Thirdparty\ASiCe\DataObjectReferenceType:
             expose: true
             access_type: public_method
             serialized_name: DataObjectReferenceExtensions
+            xml_element:
+                namespace: 'http://uri.etsi.org/2918/v1.2.1#'
             accessor:
                 getter: getDataObjectReferenceExtensions
                 setter: setDataObjectReferenceExtensions

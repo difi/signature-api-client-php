@@ -1,0 +1,23 @@
+Digipost\Signature\API\XML\XMLSignerSpecificUrl:
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        value:
+            expose: true
+            access_type: public_method
+            accessor:
+                getter: getValue
+                setter: setValue
+            xml_value: true
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            type: string
+        signer:
+            expose: true
+            access_type: public_method
+            serialized_name: signer
+            accessor:
+                getter: getSigner
+                setter: setSigner
+            xml_attribute:
+                namespace: 'http://signering.posten.no/schema/v1'
+            type: string

@@ -40,19 +40,18 @@ class Base64BinaryTypeHandler implements SubscribingHandlerInterface
     Context $context
   ) {
     //$v = $date->format(\DateTime::RFC3339_EXTENDED);
-    if (is_array($data)) {
-
-    }
     $base64Data = strval($data);
-    $base64Data = strtr($base64Data, ["\n" => '', ' ' => '']);
-    $base64Data = wordwrap($base64Data, 77, "\n", TRUE);
+    $base64Data = X509Certificate::stripDelimitersAndLineWraps($base64Data);
+    $base64Data = strtr($base64Data, ["\n" => '']);
+    $base64Data = wordwrap($base64Data, 76, "\n", TRUE);
+    //$base64Data = "-----BEGIN CERTIFICATE-----\n$base64Data\n-----END CERTIFICATE-----\n";
     //return $visitor->visitSimpleString($v, $type, $context);
     return $visitor->visitSimpleString($base64Data, $type, $context);
   }
 
   public function deserializeBase64Data(XmlDeserializationVisitor $visitor, $data, array $type)
   {
-    $cert = (string)$data;
+    $cert = trim((string)$data);
     return $cert;
   }
 }

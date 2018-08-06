@@ -17,12 +17,9 @@ use MyCLabs\Enum\Enum;
 class ServiceUri extends Enum {
 
   const PRODUCTION = "https://api.signering.posten.no/api/";
-
-  const DIFI_QA = "https://api.difiqa.signering.posten.no/api/";
-
-  const DIFI_TEST = "https://api.difitest.signering.posten.no/api/";
-
-  //const DIFI_TEST = "https://de22e73a.ngrok.io/api/";
+  const DIFI_QA    = "https://api.difiqa.signering.posten.no/api/";
+  const DIFI_TEST  = "https://api.difitest.signering.posten.no/api/";
+  //const DIFI_TEST = "https://6a760b32.ngrok.io/api/";
 
   protected $uri;
 

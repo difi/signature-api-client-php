@@ -2,20 +2,20 @@
 
 namespace Digipost\Signature\Client\Core\Internal\Http;
 
-class AddRequestHeaderFilter implements ClientRequestFilter {
+use Psr\Http\Message\RequestInterface;
 
-  protected $headerName;  // String
+class AddRequestHeaderFilter implements ClientRequestFilterInterface {
 
-  protected $value;  // String
+  protected $headerName;
+
+  protected $value;
 
   function __construct($headerName, $value) {
     $this->headerName = $headerName;
     $this->value = $value;
   }
 
-  public function filter($clientRequestContext) // [ClientRequestContext clientRequestContext]
-  {
-    $clientRequestContext->getHeaders()->add($this->headerName, $this->value);
+  public function filter(RequestInterface $request): RequestInterface {
+    return $request->withHeader($this->headerName, $this->value);
   }
 }
-

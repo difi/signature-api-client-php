@@ -1,0 +1,13 @@
+Digipost\Signature\Client\Core\Internal\XML\XMLStructure:
+  properties:
+    content:
+      expose: true
+      access_type: public_method
+      accessor:
+        getter: getContent
+        setter: setContent
+      xml_list:
+        entry_name: Object
+        namespace: 'http://www.w3.org/2000/09/xmldsig#'
+        inline: true
+      type: Digipost\Signature\API\XML\Thirdparty\XMLdSig\ObjectXsd

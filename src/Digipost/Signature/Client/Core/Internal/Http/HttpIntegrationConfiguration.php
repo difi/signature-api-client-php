@@ -10,4 +10,3 @@ interface HttpIntegrationConfiguration {
 
   function getServiceRoot();
 }
-

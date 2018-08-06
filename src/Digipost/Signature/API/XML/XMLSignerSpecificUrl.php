@@ -27,13 +27,14 @@ class XMLSignerSpecificUrl {
 
   /**
    * @Serializer\Type("string")
-   * @Serializer\XmlValue()
+   * @Serializer\Inline()
+   * @Serializer\XmlElement(namespace="http://signering.posten.no/schema/v1", cdata=false)
    */
   protected $value;
 
   /**
    * @Serializer\Type("string")
-   * @Serializer\XmlAttribute()
+   * @Serializer\XmlAttribute(namespace="http://signering.posten.no/schema/v1")
    */
   protected $signer;
 
@@ -56,6 +57,10 @@ class XMLSignerSpecificUrl {
 
   public function setSigner($value) {
     $this->signer = $value;
+  }
+
+  public static function create(String $value = NULL, String $signer = NULL) {
+    return new self($value, $signer);
   }
 }
 

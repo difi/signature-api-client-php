@@ -33,7 +33,7 @@ Digipost\Signature\API\XML\Thirdparty\XMLdSig\ObjectType:
             accessor:
                 getter: getContent
                 setter: setContent
-            xml_map:
+            xml_list:
                 inline: true
                 entry_name: QualifyingProperties
                 namespace: 'http://uri.etsi.org/01903/v1.3.2#'

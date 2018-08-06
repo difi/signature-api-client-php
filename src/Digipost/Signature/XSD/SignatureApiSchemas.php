@@ -4,10 +4,15 @@ namespace Digipost\Signature\XSD;
 
 // TODO: Move this to config/resource loading
 
+use GoetasWebservices\XML\XSDReader\Schema\Exception\SchemaException;
+use GoetasWebservices\XML\XSDReader\SchemaReader;
+use GuzzleHttp\Psr7\AppendStream;
+use MyCLabs\Enum\Enum;
+
 define(
   'DIGIPOST_ROOT_PATH', realpath(
-  __DIR__ . '/../../../../vendor/digipost/signature-api-specification/schema/xsd'
-)
+    __DIR__ . '/../../../../vendor/digipost/signature-api-specification/schema/xsd'
+  )
 );
 
 /**
@@ -15,8 +20,7 @@ define(
  *
  * If depending on
  * [signature-api-specification](http://search.maven.org/#search%7Cga%7C1%7Cg%3Ano.digipost.signature%20a%3Asignature-api-specification),
- * these {@code String} constants can be used to resolve the schemas from
- * classpath.
+ * these {@code String} constants can be used to resolve the schemas from classpath.
  * <p>
  * The {@code String} constants contains the resource names for the individual
  * schema files, but the sets
@@ -24,51 +28,202 @@ define(
  * compiles all relevant schemas for the possible API integration cases.
  *
  * @package Digipost\Signature\XSD
+ *
+ * @method static SignatureApiSchemas XMLDSIG_SCHEMA()
+ * @method static SignatureApiSchemas ASICE_SCHEMA()
+ * @method static SignatureApiSchemas DIRECT_AND_PORTAL_API()
+ * @method static SignatureApiSchemas XADES_SCHEMA()
  */
-final class SignatureApiSchemas {
+class SignatureApiSchemas extends Enum {
 
-  public static $DIRECT_AND_PORTAL_SCHEMA = DIGIPOST_ROOT_PATH . "/direct-and-portal.xsd";
+  static $stream_wrapper;
 
-  public static $DIRECT_ONLY_SCHEMA = DIGIPOST_ROOT_PATH . "/direct.xsd";
+  const DIRECT_AND_PORTAL_SCHEMA = DIGIPOST_ROOT_PATH . '/direct-and-portal.xsd';
+  const DIRECT_ONLY_SCHEMA       = DIGIPOST_ROOT_PATH . '/direct.xsd';
+  const PORTAL_ONLY_SCHEMA       = DIGIPOST_ROOT_PATH . '/direct.xsd';
+  const XMLDSIG_SCHEMA           = DIGIPOST_ROOT_PATH . '/thirdparty/xmldsig-core-schema.xsd';
+  const XADES_SCHEMA             = DIGIPOST_ROOT_PATH . '/thirdparty/XAdES.xsd';
+  const ASICE_SCHEMA             = DIGIPOST_ROOT_PATH . '/thirdparty/ts_102918v010201.xsd';
+  const DIRECT_AND_PORTAL_API    = [
+    //    SignatureApiSchemas::DIRECT_AND_PORTAL_SCHEMA,
+    SignatureApiSchemas::ASICE_SCHEMA,
+    SignatureApiSchemas::XADES_SCHEMA,
+    SignatureApiSchemas::XMLDSIG_SCHEMA,
+  ];
+  const DIRECT_API               = [
+    SignatureApiSchemas::DIRECT_ONLY_SCHEMA,
+    SignatureApiSchemas::ASICE_SCHEMA,
+    SignatureApiSchemas::XADES_SCHEMA,
+    SignatureApiSchemas::XMLDSIG_SCHEMA,
+  ];
+  const PORTAL_API               = [
+    SignatureApiSchemas::DIRECT_AND_PORTAL_API,
+    SignatureApiSchemas::ASICE_SCHEMA,
+    SignatureApiSchemas::XADES_SCHEMA,
+    SignatureApiSchemas::XMLDSIG_SCHEMA,
+  ];
 
-  public static $PORTAL_ONLY_SCHEMA = DIGIPOST_ROOT_PATH . "/direct.xsd";
+  private $filename;
 
-  public static $XMLDSIG_SCHEMA = DIGIPOST_ROOT_PATH . "/thirdparty/xmldsig-core-schema.xsd";
+  public function __construct($value) {
+    parent::__construct($value);
+    $this->filename = $value;
+    if (is_array($value)) {
+      $this->filename = 'xsd://' . $this->getKey();
+    }
+  }
 
-  public static $XADES_SCHEMA = DIGIPOST_ROOT_PATH . "/thirdparty/XAdES.xsd";
+  public function getValue() {
+    return $this;
+  }
 
-  public static $ASICE_SCHEMA = DIGIPOST_ROOT_PATH . "/thirdparty/ts_102918v010201.xsd";
+  /**
+   * @return \GoetasWebservices\XML\XSDReader\Schema\Schema
+   */
+  public function getSchema() {
+    $reader = new SchemaReader();
+    $schema = $reader->getGlobalSchema();
+    try {
+      foreach ($this->getFileNames() as $fileName) {
+        $schema->addSchema($reader->readFile($fileName));
+      }
+    } catch (SchemaException $e) {
+      throw new \RuntimeException("An error occoured during merging of schemas", 0, $e);
+    }
 
-  public static $DIRECT_AND_PORTAL_API;
+    return $schema;
+  }
 
-  public static $DIRECT_API;
+  public function __toString() {
+    return $this->filename;
+  }
 
-  public static $PORTAL_API;
+  public function getFileNames() {
+    return is_array($this->value) ? $this->value : [$this->value];
+  }
 
-  public static function __staticInit() {
-
-
-    self::$DIRECT_AND_PORTAL_API = [
-      self::$DIRECT_AND_PORTAL_SCHEMA,
-      self::$XMLDSIG_SCHEMA,
-      self::$XADES_SCHEMA,
-      self::$ASICE_SCHEMA,
-    ];
-
-    self::$DIRECT_API = [
-      self::$DIRECT_ONLY_SCHEMA,
-      self::$XMLDSIG_SCHEMA,
-      self::$XADES_SCHEMA,
-      self::$ASICE_SCHEMA,
-    ];
-
-    self::$PORTAL_API = [
-      self::$PORTAL_ONLY_SCHEMA,
-      self::$XMLDSIG_SCHEMA,
-      self::$XADES_SCHEMA,
-      self::$ASICE_SCHEMA,
-    ];
+  private function init() {
+    if (!isset(static::$stream_wrapper)) {
+      stream_wrapper_register('xsd', XsdSchemaFileWrapper::class);
+      static::$stream_wrapper = TRUE;
+    }
   }
 }
 
-SignatureApiSchemas::__staticInit();
+class XsdSchemaFileWrapper {
+
+  var $position;
+  var $varName;
+  private $schemaName;
+  /** @var SignatureApiSchemas */
+  private $schema;
+
+  /** @var AppendStream */
+  private $stream;
+
+  private $start_tag_removed = FALSE;
+
+  /** @var */
+  private $schemas;
+
+  function stream_open($path, $mode, $options, &$opened_path) {
+    $url = parse_url($path);
+    $this->schemaName = $url['host'];
+    $this->schema = call_user_func([SignatureApiSchemas::class, $this->schemaName]);
+
+    $reader = new SchemaReader();
+
+    $filenames = $this->schema->getFileNames();
+    $this->schemas = array_map(
+      function ($filename) use ($reader) {
+        return $reader->readFile($filename);
+      }, $filenames
+    );
+
+    return TRUE;
+    //
+    //    $schema = new Schema();
+    //    foreach ($schemas as $s) {
+    //      $schema->addSchema($s);
+    //    }
+
+    //    $this->stream = \GuzzleHttp\Psr7\stream_for($xsd);
+    //    return TRUE;
+    //    $streams = array_map(function($filename) {
+    //      return \GuzzleHttp\Psr7\stream_for(file_get_contents($filename));
+    //    }, $this->schema->getFileNames());
+    //    $this->stream = new AppendStream($streams);
+    //    $this->position = 0;
+    //    return TRUE;
+  }
+
+  function stream_read($count) {
+    return $this->schemas;
+    //    return $this->stream->read($count);
+    //    $str = \GuzzleHttp\Psr7\readline($this->stream, $count);
+    //    $re = '/\<\?xml[^>]+>/im';
+    //    $str = preg_replace($re, '', $str, -1, $count);
+    //
+    //    if ($count > 0 && !$this->start_tag_removed) {
+    //      $this->start_tag_removed = TRUE;
+    /*      $str = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . $str;*/
+    //    }
+    //    if ($matches[0] && !empty($matches[0][0])) {
+    //      $opening_tag = '';
+    //      if (!$this->start_tag_removed) {
+    //        $opening_tag = array_shift($matches[0]);
+    //      }
+    //      $str = preg_replace($re, "", $str, -1, $count);
+    ////      foreach (array_keys($matches[0]) as $k) {
+    ////        if (!$this->start_tag_removed) {
+    ////          $len = mb_strlen($matches[0][$k]);
+    ////          $this->start_tag_removed = TRUE;
+    ////        }
+    ////      }
+    ////      if (!$this->start_tag_removed) {
+    ////        $str = preg_replace($re, "\n", $str, 1, $count);
+    ////      }
+    //      if (!$this->start_tag_removed && $count > 0) {
+    /*        $str = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . $str;*/
+    //        $this->start_tag_removed = TRUE;
+    //      }
+    //    }
+    //    return $str;
+  }
+
+  function stream_tell() {
+    return $this->stream->tell();
+  }
+
+  function stream_eof() {
+    return $this->stream->eof();
+  }
+
+  function stream_seek($offset, $whence) {
+    $this->stream->seek($offset, $whence);
+  }
+
+  function url_stat($path, $flags) {
+    try {
+      $url = parse_url($path);
+      $schemaName = $url['host'];
+      $schema = call_user_func([SignatureApiSchemas::class, $schemaName]);
+    } catch (\Exception $e) {
+      return FALSE;
+    }
+
+    return [
+      'filename' => 'xsd://' . $path,
+      'schema'   => $schemaName,
+      'files'    => $schema->getFileNames(),
+    ];
+  }
+
+  function stream_metadata($path, $option, $var) {
+    if ($option == STREAM_META_TOUCH) {
+      return TRUE;
+    }
+
+    return FALSE;
+  }
+}

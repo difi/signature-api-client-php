@@ -52,7 +52,6 @@ class DirectDocumentBuilder {
   private $fileType;
 
   public function __construct(String $title, String $fileName, $document) {
-    $this->fileType = DocumentFileType::PDF();
     $this->title = $title;
     $this->fileName = $fileName;
     $this->document = $document;

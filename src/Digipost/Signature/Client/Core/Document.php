@@ -7,24 +7,24 @@ use MyCLabs\Enum\Enum;
 
 class Document implements ASiCEAttachable {
 
-  protected $title;  // String
+  protected $title;
 
-  protected $message;  // String
+  protected $message;
 
-  protected $fileName;  // String
+  protected $fileName;
 
-  protected $document;  // String
+  protected $document;
 
-  protected $fileType;  // FileType
+  protected $fileType;
 
   //const FileType_PDF = DocumentFileType::PDF;
   //const FileType_TXT = DocumentFileType::TXT;
   public function __construct(
     String $title,
-    String $message,
-    String $fileName,
-    DocumentFileType $fileType,
-    $document
+    String $message = NULL,
+    String $fileName = NULL,
+    DocumentFileType $fileType = NULL,
+    $document = NULL
   ) {
     $this->title = $title;
     $this->message = $message;
@@ -67,6 +67,4 @@ class DocumentFileType extends Enum {
   const PDF = "application/pdf";
 
   const TXT = "text/plain";
-}
-
-
+  }

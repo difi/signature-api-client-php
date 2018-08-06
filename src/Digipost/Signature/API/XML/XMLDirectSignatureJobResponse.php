@@ -2,10 +2,6 @@
 
 namespace Digipost\Signature\API\XML;
 
-use Doctrine\Common\Annotations\Annotation\Required;
-use Ds\Set;
-use JMS\Serializer\Annotation as Serializer;
-
 /**
  * Class XMLDirectSignatureJobResponse
  *
@@ -28,42 +24,28 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @package Digipost\Signature\API\XML
  *
- * @Serializer\XmlRoot(name="direct-signature-job-response", namespace="http://signering.posten.no/schema/v1")
- * @Serializer\AccessorOrder("custom", custom={
- *   "signatureJobId",
- *   "redirectUrls",
- *   "statusUrl"
- * })
  */
 class XMLDirectSignatureJobResponse {
 
-  /**
-   * @var int
-   * @Serializer\Type("int")
-   * @Serializer\XmlElement()
-   * @Serializer\SerializedName("signature-job-id")
-   */
+  /** @var int */
   protected $signatureJobId;
 
-  /**
-   * @Serializer\Type("array<Digipost\Signature\API\XML\XMLSignerSpecificUrl>")
-   * @Serializer\XmlList(inline=true, entry="redirect-url")
-   */
-  protected $redirectUrls;
+  /** @var String */
+  private $reference;
 
-  /**
-   * @var String
-   * @Serializer\Type("string")
-   * @Serializer\XmlElement()
-   * @Serializer\SerializedName("status-url")
-   */
+  /** @var XMLSignerSpecificUrl[] */
+  protected $redirectUrl;
+
+  /** @var String */
   protected $statusUrl;
 
   function __construct(int $signatureJobId = NULL,
-                       array $redirectUrls = NULL,
+                       String $reference = NULL,
+                       array $redirectUrl = NULL,
                        String $statusUrl = NULL) {
     $this->signatureJobId = $signatureJobId;
-    $this->redirectUrls = $redirectUrls;
+    $this->reference = $reference;
+    $this->redirectUrl = $redirectUrl;
     $this->statusUrl = $statusUrl;
   }
 
@@ -75,13 +57,18 @@ class XMLDirectSignatureJobResponse {
     $this->signatureJobId = $value;
   }
 
-  public function getRedirectUrls() {
-    if (($this->redirectUrls === NULL)) {
-      $this->redirectUrls = [];
+  /**
+   * @return XMLSignerSpecificUrl[]|null
+   */
+  public function getRedirectUrl() {
+    if (($this->redirectUrl === NULL)) {
+      $this->redirectUrl = [];
     }
-    //return new Set($this->redirectUrls);
-    //return new \ArrayObject($this->redirectUrls);
-    return $this->redirectUrls;
+    return $this->redirectUrl;
+  }
+
+  public function setRedirectUrl(array $redirectUrl) {
+    $this->redirectUrl = $redirectUrl;
   }
 
   public function getStatusUrl() {
@@ -91,5 +78,14 @@ class XMLDirectSignatureJobResponse {
   public function setStatusUrl($value) {
     $this->statusUrl = $value;
   }
+
+  public function getReference() {
+    return $this->reference;
+  }
+
+  public function setReference(String $reference) {
+    $this->reference = $reference;
+  }
+
 }
 

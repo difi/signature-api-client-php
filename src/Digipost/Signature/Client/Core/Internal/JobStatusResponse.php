@@ -4,9 +4,9 @@ namespace Digipost\Signature\Client\Core\Internal;
 
 class JobStatusResponse {
 
-  protected $status;  // JOB_STATUS
+  protected $status;
 
-  protected $nextPermittedPollTime;  // Instant
+  protected $nextPermittedPollTime;
 
   public function __construct($status, $nextPermittedPollTime) {
     $this->status = $status;

@@ -75,6 +75,8 @@ Digipost\Signature\API\XML\Thirdparty\XMLdSig\KeyInfoType:
             expose: true
             access_type: public_method
             serialized_name: SPKIData
+            xml_element:
+                namespace: 'http://www.w3.org/2000/09/xmldsig#'
             accessor:
                 getter: getSPKIData
                 setter: setSPKIData

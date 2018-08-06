@@ -20,7 +20,7 @@ class PortalJobResponse implements Cancellable {
     return $this->signatureJobId;
   }
 
-  public function getCancellationUrl() {
+  public function getCancellationUrl(): CancellationUrl {
     return $this->cancellationUrl;
   }
 }

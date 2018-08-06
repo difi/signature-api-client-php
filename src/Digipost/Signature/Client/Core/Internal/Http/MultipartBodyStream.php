@@ -52,6 +52,10 @@ class MultipartBodyStream implements StreamInterface {
 
   /**
    * Get the headers needed before transferring the content of a POST file
+   *
+   * @param array $headers
+   *
+   * @return string
    */
   private function getHeaders(array $headers) {
     $str = '';
@@ -64,6 +68,10 @@ class MultipartBodyStream implements StreamInterface {
 
   /**
    * Create the aggregate stream that will be used to upload the POST data
+   *
+   * @param array $elements
+   *
+   * @return AppendStream
    */
   protected function createStream(array $elements) {
     $stream = new AppendStream();
@@ -106,19 +114,24 @@ class MultipartBodyStream implements StreamInterface {
   }
 
   /**
+   * @param string          $name
+   * @param StreamInterface $stream
+   * @param string          $filename
+   * @param array           $headers
+   *
    * @return array
    */
   private function createElement($name, StreamInterface $stream, $filename,
                                  array $headers) {
     // Set a default content-disposition header if one was no provided
-    //    $disposition = $this->getHeader($headers, 'content-disposition');
-    //    if (!$disposition) {
-    //      $headers['Content-Disposition'] = ($filename === '0' || $filename)
-    //        ? sprintf('form-data; name="%s"; filename="%s"',
-    //                  $name,
-    //                  basename($filename))
-    //        : "form-data; name=\"{$name}\"";
-    //    }
+    $disposition = $this->getHeader($headers, 'content-disposition');
+    if (!$disposition) {
+      $headers['Content-Disposition'] = ($filename === '0' || $filename)
+        ? sprintf('form-data; name="%s"; filename="%s"',
+                  $name,
+                  basename($filename))
+        : "form-data; name=\"{$name}\"";
+    }
 
     // Set a default content-length header if one was no provided
     $length = $this->getHeader($headers, 'content-length');
@@ -136,6 +149,7 @@ class MultipartBodyStream implements StreamInterface {
       }
     }
 
+    unset($headers['Content-Disposition']);
     return [$stream, $headers];
   }
 
@@ -207,14 +221,14 @@ class MultipartBodyStream implements StreamInterface {
    * @inheritdoc
    */
   public function seek($offset, $whence = SEEK_SET) {
-    return $this->stream->seek($offset, $whence);
+    $this->stream->seek($offset, $whence);
   }
 
   /**
    * @inheritdoc
    */
   public function rewind() {
-    return $this->stream->rewind();
+    $this->stream->rewind();
   }
 
   /**

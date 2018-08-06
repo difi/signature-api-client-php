@@ -1,4 +1,3 @@
 Digipost\Signature\API\XML\Thirdparty\ASiCe\XAdESSignatures:
     xml_root_name: XAdESSignatures
-    xml_namespaces:
-        '': 'http://uri.etsi.org/2918/v1.2.1#'
+    xml_root_namespace: 'http://uri.etsi.org/2918/v1.2.1#'

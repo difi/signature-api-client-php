@@ -7,9 +7,10 @@ Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509DataType:
             accessor:
                 getter: getX509IssuerSerial
                 setter: setX509IssuerSerial
-            xml_list:
+            xml_map:
                 inline: true
                 entry_name: X509IssuerSerial
+                cdata: false
                 namespace: 'http://www.w3.org/2000/09/xmldsig#'
             type: array<Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType>
         x509SKI:

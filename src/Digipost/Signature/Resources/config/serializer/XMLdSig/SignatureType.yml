@@ -46,7 +46,7 @@ Digipost\Signature\API\XML\Thirdparty\XMLdSig\SignatureType:
             accessor:
                 getter: getObject
                 setter: setObject
-            xml_list:
+            xml_map:
                 inline: true
                 entry_name: Object
                 namespace: 'http://www.w3.org/2000/09/xmldsig#'

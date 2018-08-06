@@ -3,8 +3,8 @@
 namespace Digipost\Signature\Client\Portal;
 
 class CancellationUrl {
-
-  protected $url;  // String
+  /** @var string */
+  protected $url;
 
   public static function of(String $url) {
     return isset($url) ? new CancellationUrl($url) : NULL;

@@ -11,8 +11,7 @@ use MyCLabs\Enum\Enum;
  *
  * @package Digipost\Signature\Client\Core
  *
- * @method static IdentifierInSignedDocuments
- *         PERSONAL_IDENTIFICATION_NUMBER_AND_NAME
+ * @method static IdentifierInSignedDocuments PERSONAL_IDENTIFICATION_NUMBER_AND_NAME
  * @method static IdentifierInSignedDocuments DATE_OF_BIRTH_AND_NAME
  * @method static IdentifierInSignedDocuments NAME
  */

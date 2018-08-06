@@ -1,2 +1,3 @@
 Digipost\Signature\API\XML\Thirdparty\XAdES\CertificateValues:
     xml_root_name: CertificateValues
+    xml_root_namespace: 'http://uri.etsi.org/01903/v1.3.2#'

@@ -4,52 +4,53 @@ namespace Digipost\Signature\Client;
 
 use Digipost\Signature\Client\ASiCe\ASiCEConfiguration;
 use Digipost\Signature\Client\ASiCe\DocumentBundleProcessor;
-use Digipost\Signature\Client\Core\Internal\Http\ClientConfig;
+use Digipost\Signature\Client\Core\Internal\Http\AddRequestHeaderFilter;
+use Digipost\Signature\Client\Core\Internal\Http\ClientGuzzleConfig;
 use Digipost\Signature\Client\Core\Internal\Http\HttpIntegrationConfiguration;
+use Digipost\Signature\Client\Core\Internal\Http\PostenEnterpriseCertificateStrategy;
 use Digipost\Signature\Client\Core\Internal\Security\ProvidesCertificateResourcePaths;
 use Digipost\Signature\Client\Core\Sender;
 use Digipost\Signature\Client\Security\KeyStoreConfig;
+use Digipost\Signature\Event\ConfigureClientEvent;
 use GuzzleHttp\Psr7\Uri as URI;
 use GuzzleHttp\RequestOptions;
-use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\TransferStats;
+use Sop\CryptoEncoding\PEM;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use X509\Certificate\CertificateChain;
 
 class ClientConfiguration implements ProvidesCertificateResourcePaths,
                                      HttpIntegrationConfiguration,
                                      ASiCEConfiguration {
 
-  //private static final Logger LOG = LoggerFactory::getLogger(ClientConfiguration::class);
-
   /**
-   * The {@link HttpHeaders#USER_AGENT User-Agent} header which will be
-   * included in all requests. You may include a custom part using
-   * {@link ClientConfigurationBuilder}.
+   * The `User-Agent` header which will be included in all requests. You may include a custom part
+   * using {@link ClientConfigurationBuilder::includeInUserAgent() ->includeInUserAgent(String)}.
    */
   static $MANDATORY_USER_AGENT;
 
   /**
-   * {@value #HTTP_REQUEST_RESPONSE_LOGGER_NAME} is the name of the logger
-   * which will log the HTTP requests and responses, if enabled with
-   * {@link ClientConfiguration#builder}.
+   * `HTTP_REQUEST_RESPONSE_LOGGER_NAME` is the name of the logger which will log the HTTP requests
+   * and responses, if enabled with
+   * {@link ClientConfiguration::builder}.
    */
   static $HTTP_REQUEST_RESPONSE_LOGGER_NAME = "no.digipost.signature.client.http.requestresponse";
 
   /**
    * Socket timeout is used for both requests and, if any,
    * underlying layered sockets (typically for
-   * secure sockets). The default value is {@value DEFAULT_SOCKET_TIMEOUT_MS}
-   * ms.
+   * secure sockets).
    */
   const DEFAULT_SOCKET_TIMEOUT_MS = 10000;
 
   /**
-   * The default connect timeout for requests:
-   * {@value #DEFAULT_CONNECT_TIMEOUT_MS} ms.
+   * The default connect timeout for requests.
    */
   const DEFAULT_CONNECT_TIMEOUT_MS = 10000;
 
   /**
-   * @var ClientConfig
+   * @var ClientGuzzleConfig
    */
   private $guzzleConfig;
 
@@ -57,6 +58,11 @@ class ClientConfiguration implements ProvidesCertificateResourcePaths,
    * @var KeyStoreConfig
    */
   private $keyStoreConfig;
+
+  /**
+   * @var EventDispatcherInterface
+   */
+  private $eventDispatcher;
 
   /**
    * @var array<String>
@@ -83,28 +89,36 @@ class ClientConfiguration implements ProvidesCertificateResourcePaths,
    */
   private $clock;
 
-  function __staticInit() {
-    self::$MANDATORY_USER_AGENT = "Posten signering PHP API Client/" . ClientMetadata::$VERSION . " (PHP " . PHP_VERSION . ")";
+  /** @var ContainerInterface */
+  private $container;
 
+  function __staticInit() {
+    self::$MANDATORY_USER_AGENT =
+      "Posten signering PHP API Client/" . ClientMetadata::$VERSION . " (PHP " . PHP_VERSION . ")";
   }
 
   function __construct(
     KeyStoreConfig $keyStoreConfig,
-    ClientConfig $guzzleConfig,
+    ClientGuzzleConfig $guzzleConfig,
+    ContainerInterface $container,
     Sender $sender = NULL,
     URI $serviceRoot = NULL,
     $certificatePaths = NULL,
     $documentBundleProcessors = NULL,
     \DateTime $clock = NULL
   ) {
-
     $this->keyStoreConfig = $keyStoreConfig;
     $this->guzzleConfig = $guzzleConfig;
+    $this->container = $container;
+    $this->eventDispatcher = $container->get('digipost_signature.event_dispatcher');
     $this->sender = $sender;
     $this->signatureServiceRoot = $serviceRoot;
     $this->certificatePaths = $certificatePaths;
     $this->documentBundleProcessors = $documentBundleProcessors;
     $this->clock = $clock;
+
+    $event = new ConfigureClientEvent($this);
+    $this->eventDispatcher->dispatch('client.configure', $event);
   }
 
   public function getKeyStoreConfig(): KeyStoreConfig {
@@ -135,49 +149,27 @@ class ClientConfiguration implements ProvidesCertificateResourcePaths,
     return $this->guzzleConfig->getConfiguration();
   }
 
+  /**
+   * @return ClientGuzzleConfig
+   */
+  public function getGuzzle(): ClientGuzzleConfig {
+    return $this->guzzleConfig;
+  }
+
+  public function getContainer(): ContainerInterface {
+    return $this->container;
+  }
+
   public function getSSLContext() {
     $context = stream_context_create(
       [
         'ssl' => [
-          //'local_cert' => $this->keyStoreConfig->getCertificate(),
-          //'local_pk' => $this->keyStoreConfig->getPrivateKey(),
-          //'passphrase' => $this->keyStoreConfig->privatekeyPassword,
-          //'peer_name' => '',
-          //'peer_fingerprint' => '',
-          //'verify_peer' => '',
-          //'verify_peer_name' => TRUE,
-          //'allow_self_signed' => FALSE,
-          //'verify_depth' => 0,
-          'capath' => '/home/bendik/test',
         ],
       ]
     );
-    return $context;
-    //try {
-    //        return SSLContexts.custom()
-    //                .loadKeyMaterial(keyStoreConfig.keyStore,
-    //                                 keyStoreConfig.privatekeyPassword.toCharArray(),
-    //                                 new PrivateKeyStrategy() {
-    //                    @Override
-    //                    public String chooseAlias(Map<String, PrivateKeyDetails> aliases, Socket socket) {
-    //                        return keyStoreConfig.alias;
-    //                    }
-    //                })
-    //                .loadTrustMaterial(TrustStoreLoader.build(this), new PostenEnterpriseCertificateStrategy())
-    //                .build();
-    //        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException | UnrecoverableKeyException e) {
-    //            if (e instanceof UnrecoverableKeyException && "Given final block not properly padded".equals(e.getMessage())) {
-    //                throw new KeyException(
-    //                        "Unable to load key from keystore, because " + e.getClass().getSimpleName() + ": '" + e.getMessage() + "'. Possible causes:\n" +
-    //                        "* Wrong password for private key (the password for the keystore and the private key may not be the same)\n" +
-    //                        "* Multiple private keys in the keystore with different passwords (private keys in the same key store must have the same password)", e);
-    //            } else {
-    //                throw new KeyException("Unable to create the SSLContext, because " + e.getClass().getSimpleName() + ": '" + e.getMessage() + "'", e);
-    //            }
-    //        }
-    //}
-  }
 
+    return $context;
+  }
 
   /**
    * Build a new {@link ClientConfiguration}.
@@ -191,27 +183,9 @@ class ClientConfiguration implements ProvidesCertificateResourcePaths,
     ContainerInterface $container,
     KeyStoreConfig $keystoreConfig
   ) {
-
     return new ClientConfigurationBuilder($container, $keystoreConfig);
   }
-
-  public static function factory(
-    ContainerInterface $container,
-    KeyStoreConfig $keystoreConfig
-  ) {
-    return new ClientConfiguration(
-//      $keystoreConfig,
-//      $guzzleConfig,
-//      $sender,
-//      $serviceRoot,
-//      $certificatePaths,
-//      $documentBundleProcessors,
-//      $clock
-    );
-  }
 }
-
-
 
 class ClientConfigurationBuilder {
 
@@ -219,9 +193,14 @@ class ClientConfigurationBuilder {
   protected $container;
 
   /**
-   * @var ClientConfig
+   * @var ClientGuzzleConfig
    */
   private $guzzleConfig;
+
+  /**
+   * @var EventDispatcherInterface
+   */
+  private $eventDispatcher;
 
   /**
    * @var KeyStoreConfig
@@ -270,22 +249,27 @@ class ClientConfigurationBuilder {
     KeyStoreConfig $keyStoreConfig
   ) {
     $this->container = $container;
-    $this->serviceRoot = ServiceUri::DIFI_TEST()->uri();
-    $this->certificatePaths = Certificates::TEST()->certificatePaths();
+    $this->serviceRoot = ServiceUri::PRODUCTION()->uri();
+    $this->certificatePaths = Certificates::PRODUCTION()->certificatePaths();
     $this->keyStoreConfig = $keyStoreConfig;
     $this->guzzleConfig = $container->get(
       'digipost_signature.client_guzzle_config'
     );
+    $this->eventDispatcher = $container->get('event_dispatcher');
 
     $this->clock = new \DateTime();
   }
 
   /**
    * Set the service URI to one of the predefined environments.
+   *
+   * @param ServiceUri $environment
+   *
+   * @return ClientConfigurationBuilder
    */
-  //public function serviceUri(ServiceUri $environment) {
-  //  return serviceUri($environment . $this->uri);
-  //}
+  public function serviceUri(ServiceUri $environment) {
+    return $this->serviceRoot($environment->uri());
+  }
 
   /**
    * Override the service endpoint URI to a custom environment.
@@ -294,8 +278,9 @@ class ClientConfigurationBuilder {
    *
    * @return ClientConfigurationBuilder
    */
-  public function serviceUri(URI $uri) {
+  public function serviceRoot(URI $uri) {
     $this->serviceRoot = $uri;
+
     return $this;
   }
 
@@ -308,8 +293,8 @@ class ClientConfigurationBuilder {
    * @return self
    */
   public function socketTimeoutMillis(int $millis) {
-
     $this->socketTimeoutMs = $millis;
+
     return $this;
   }
 
@@ -322,11 +307,19 @@ class ClientConfigurationBuilder {
    * @return ClientConfigurationBuilder
    */
   public function connectTimeoutMillis(int $millis) {
-
     $this->connectTimeoutMs = $millis;
+
     return $this;
   }
 
+  /**
+   * Override the trust store configuration to load DER-encoded certificates from the given
+   * folder(s).
+   *
+   * @param Certificates|string[] $certificates
+   *
+   * @return ClientConfigurationBuilder
+   */
   public function trustStore($certificates) {
     if ($certificates instanceof Certificates) {
       if ($certificates === Certificates::TEST()) {
@@ -335,6 +328,7 @@ class ClientConfigurationBuilder {
           E_USER_WARNING
         );
       }
+
       return $this->setCertificatePaths($certificates->certificatePaths());
     }
 
@@ -343,6 +337,7 @@ class ClientConfigurationBuilder {
 
   private function setCertificatePaths(array $certificatePaths) {
     $this->certificatePaths = $certificatePaths;
+
     return $this;
   }
 
@@ -350,7 +345,10 @@ class ClientConfigurationBuilder {
    * Set the sender used globally for every signature job.
    * <p>
    * Use
-   * {@link no.digipost.signature.client.portal.PortalJob.Builder#withSender(Sender)} or {@link no.digipost.signature.client.direct.DirectJob.Builder#withSender(Sender)} if you need to specify different senders per signature job (typically when acting as a broker on behalf of multiple other organizations)
+   * {@link \Digipost\Signature\Client\Portal\PortalJobBuilder::withSender(Sender)} or
+   * {@link \Digipost\Signature\Client\Direct\DirectJobBuilder::withSender(Sender)} if you need
+   * to specify different senders per signature job (typically when acting as a broker on behalf of
+   * multiple other organizations)
    *
    * @param Sender $sender
    *
@@ -358,6 +356,7 @@ class ClientConfigurationBuilder {
    */
   public function globalSender(Sender $sender) {
     $this->globalSender = $sender;
+
     return $this;
   }
 
@@ -371,6 +370,7 @@ class ClientConfigurationBuilder {
    */
   public function includeInUserAgent(String $userAgentCustomPart) {
     $this->customUserAgentPart = $userAgentCustomPart;
+
     return $this;
   }
 
@@ -389,10 +389,10 @@ class ClientConfigurationBuilder {
    * disk before they are sent to the service to create signature jobs.
    * <p>
    * The files will be given names on the format
-   * <pre>{@code timestamp-[reference_from_job-]asice.zip}</pre>
+   * `timestamp-[reference_from_job-]asice.zip}`
    * The <em>timestamp</em> part may use a clock of your choosing, make
    * sure to override the system clock with
-   * {@link #usingClock(Clock)} before calling this method if that is
+   * {@link ::usingClock()} before calling this method if that is
    * desired.
    * <p>
    * The <em>reference_from_job</em> part is only included if the job is
@@ -409,9 +409,8 @@ class ClientConfigurationBuilder {
    */
   public function enableDocumentBundleDiskDump(String $directory) {
     $documentDumper = $this->container->get(
-      'Digipost\Signature\Client\ASiCe\DumpDocumentBundleToDisk'
-    )
-                                      ->setup($directory, $this->clock);
+      'digipost_signature.asice.document_bundle_dumper'
+    )->setup($directory, $this->clock);
 
     return $this->addDocumentBundleProcessor($documentDumper);
   }
@@ -441,15 +440,15 @@ class ClientConfigurationBuilder {
   public function addDocumentBundleProcessor(DocumentBundleProcessor $processor
   ) {
     $this->documentBundleProcessors[] = $processor;
+
     return $this;
   }
 
   /**
-   * Allows for overriding which {@link Clock} is used to convert between
+   * Allows for overriding which {@link \DateTime Clock} is used to convert between
    * Java and XML, may be useful for e.g. automated tests.
    * <p>
-   * Uses {@link Clock#systemDefaultZone() the best available system
-   * clock} if not specified.
+   * Uses {@link \date_default_timezone_get() the best available system clock} if not specified.
    *
    * @param \DateTime $clock
    *
@@ -457,16 +456,37 @@ class ClientConfigurationBuilder {
    */
   public function usingClock(\DateTime $clock) {
     $this->clock = $clock;
+
     return $this;
+  }
+
+  /**
+   * Set a {@link RequestOptions::ON_STATS ON_STATS} callback to Guzzle Client which is used to verify
+   * the server certificate.
+   */
+  private function setTrustStrategy() {
+    $trustStrategy = new PostenEnterpriseCertificateStrategy(
+      $this->keyStoreConfig->keyStore, $this->eventDispatcher
+    );
+    $this->guzzleConfig->property(
+      RequestOptions::ON_STATS,
+      function (TransferStats $stats) use ($trustStrategy) {
+        $certInfo = $stats->getHandlerStat('certinfo');
+        $pems = array_map(
+          function ($info) {
+            return PEM::fromString($info['Cert']);
+          }, $certInfo
+        );
+        $chain = CertificateChain::fromPEMs(...$pems);
+
+        return $trustStrategy->isTrusted($chain);
+      });
   }
 
   /**
    * @return \Digipost\Signature\Client\ClientConfiguration
    */
   public function build(): ClientConfiguration {
-
-    //    $this->container = $container;
-    //    $this->keyStoreConfig = $keyStoreConfig;
     $this->guzzleConfig->property(
       RequestOptions::READ_TIMEOUT,
       $this->socketTimeoutMs
@@ -479,11 +499,7 @@ class ClientConfigurationBuilder {
     //$this->guzzleConfig->register(MultiPartFeature::class);
     //$this->guzzleConfig->property(RequestOptions::MULTIPART, []);
     //$this->guzzleConfig->register(JaxbMessageReaderWriterProvider::class);
-    //$this->guzzleConfig->property(RequestOptions::CERT, '/etc/ssl/certs/ca-certificates.crt');
-    //$this->guzzleConfig->property(RequestOptions::SSL_KEY, ['/home/bendik/test/smt_test.pem', 'bvWsmJm8hbNxNj9L']);
-    //$this->keyStoreConfig->getClientCertificate();
-    $keyStore = $this->container->get('digipost_signature.keystore');
-    //$chain = $keyStore->getClientCertificate();
+
     $client_cert = $this->container->getParameter(
       'digipost_signature.keystore.client_cert'
     );
@@ -491,39 +507,42 @@ class ClientConfigurationBuilder {
       'digipost_signature.keystore.client_key'
     );
     $cert_passphrase = $this->container->getParameter(
+      'digipost_signature.keystore.password'
+    );
+    $key_passphrase = $this->container->getParameter(
       'digipost_signature.keystore.key.password'
     );
     $ca_bundle_path = $this->container->getParameter(
       'digipost_signature.ca_bundle.path'
     );
 
-    //$keystoreLoader = $this->container->get('digipost_signature.keystore_file_loader');
-    //$keystoreLoader->load();
+    // Initialization
+    Certificates::build($this->container, $ca_bundle_path);
 
     $this->guzzleConfig->property(
       RequestOptions::CERT, [$client_cert, $cert_passphrase]
     );
     $this->guzzleConfig->property(
-      RequestOptions::SSL_KEY, [$client_key, $cert_passphrase]
+      RequestOptions::SSL_KEY, [$client_key, $key_passphrase]
     );
+
+    // TODO: The CA-bundle has a self-signed root certificate, so we need to verify manually
     $this->guzzleConfig->property(
-      RequestOptions::VERIFY, ['true' => Certificates::TEST()->getCABundle()]
+      RequestOptions::VERIFY, Certificates::TEST()->getCABundle()
     );
 
-    $this->guzzleConfig->registerResponseHandler(
-      function (ResponseInterface $response) {
-        return $response->withHeader(
-          'User-Agent',
-          $this->createUserAgentString()
-        );
-      }
+    $this->guzzleConfig->registerRequestFilter(
+      new AddRequestHeaderFilter('User-Agent', $this->createUserAgentString())
     );
 
-
+    $this->setTrustStrategy();
+    //$this->guzzleConfig->mapRequestHandler($this->requestHandlerEventDispatcher(), 'push', 'client_configure');
     //$this->loggingFeature->ifPresent($this->guzzleConfig::register);
+
     return new ClientConfiguration(
       $this->keyStoreConfig,
       $this->guzzleConfig,
+      $this->container,
       $this->globalSender,
       $this->serviceRoot,
       $this->certificatePaths,

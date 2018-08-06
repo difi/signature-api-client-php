@@ -39,6 +39,9 @@ class KeyStoreConfig {
     $this->privateKeyPassword = $privateKeyPassword;
   }
 
+  /**
+   * @return Certificate[]
+   */
   public function getCertificateChain() {
     return $this->keyStore->getCertificateChain($this->alias);
   }
@@ -181,9 +184,6 @@ class KeyStoreConfig {
 
   public function getClientCertificate() {
     $this->keyStore->getCertificateChain();
-
-
     return '';
   }
-
 }

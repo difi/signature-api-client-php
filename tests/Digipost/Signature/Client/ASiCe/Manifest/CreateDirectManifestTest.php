@@ -6,9 +6,9 @@
  * Time: 01:18
  */
 
-namespace Digipost\Signature\Client\ASiCe\Manifest;
+namespace Tests\DigipostSignatureBundle\Client\ASiCe\Manifest;
 
-
+use Digipost\Signature\Client\ASiCe\Manifest\CreateDirectManifest;
 use Digipost\Signature\Client\Core\DocumentFileType;
 use Digipost\Signature\Client\Core\Sender;
 use Digipost\Signature\Client\Direct\DirectDocument;
@@ -31,7 +31,7 @@ class CreateDirectManifestTest extends ClientBaseTestCase {
                               ->fileType(DocumentFileType::TXT())
                               ->build();
 
-    $signer1 = DirectSigner::withPersonalIdentificationNumber("28129307058");
+    $signer1 = DirectSigner::withPersonalIdentificationNumber("12345678910");
 
     $job = DirectJob::builder(
       $document, ExitUrls::of(

@@ -4,6 +4,7 @@ namespace Digipost\Signature\JMS\Handler;
 
 use Digipost\Signature\API\XML\Thirdparty\XAdES\QualifyingProperties;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\ObjectType;
+use Digipost\Signature\Client\Core\Internal\XML\XMLStructure;
 use JMS\Serializer\Context;
 use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\Handler\SubscribingHandlerInterface;
@@ -29,7 +30,27 @@ class XmldSigObjectTypeHandler implements SubscribingHandlerInterface
         'type' => ObjectType::class,
         'method' => 'serializeObjectType',
       ],
+      [
+          'direction' => GraphNavigator::DIRECTION_SERIALIZATION,
+          'format' => 'xml',
+          'type' => XMLStructure::class,
+          'method' => 'serializeXMLStructure',
+        ],
     ];
+  }
+
+  public function serializeXMLStructure(
+    XmlSerializationVisitor $visitor,
+    $object,
+    array $type,
+    Context $context
+  ) {
+    if (is_array($object)) {
+      foreach ($object as $x => $obj) {
+        print gettype($obj);
+      }
+    }
+    print gettype($obj);
   }
 
   public function serializeObjectType(
@@ -43,6 +64,12 @@ class XmldSigObjectTypeHandler implements SubscribingHandlerInterface
     if (is_array($object)) {
       return $visitor->visitArray($object, $type, $context);
     }
+
+    if ($object instanceof XMLStructure) {
+      $classMetadata = $context->getMetadataFactory()->getMetadataForClass(XMLStructure::class);
+      return $visitor->visitArray($object, $type, $context);
+    }
+
     if ($object instanceof ObjectType) {
       $classMetadata = $context->getMetadataFactory()->getMetadataForClass(ObjectType::class);
       $visitor->startVisitingObject($classMetadata, $object, $type, $context);

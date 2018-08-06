@@ -21,6 +21,7 @@ final class Util {
   }
 
   public static function hashCode($s) {
+    $s = strval($s);
     $h = 0;
     $len = strlen($s);
     for ($i = 0; $i < $len; $i++) {

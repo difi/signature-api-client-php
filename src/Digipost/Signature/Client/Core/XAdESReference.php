@@ -17,5 +17,9 @@ class XAdESReference {
   public function getxAdESUrl() {
     return $this->xAdESUrl;
   }
+
+  public function __toString() {
+    return $this->xAdESUrl;
+  }
 }
 

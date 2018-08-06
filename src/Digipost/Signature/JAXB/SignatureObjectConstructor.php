@@ -141,4 +141,12 @@ class SignatureObjectConstructor implements ObjectConstructorInterface {
     $self->setClasses = $classes;
     return $self;
   }
+
+  public function getSetClasses(): Set {
+    return $this->setClasses;
+  }
+
+  public function setSetClasses(Set $setClasses) {
+    $this->setClasses = $setClasses;
+  }
 }

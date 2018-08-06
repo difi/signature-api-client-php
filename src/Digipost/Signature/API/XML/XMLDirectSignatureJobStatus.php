@@ -2,6 +2,7 @@
 
 namespace Digipost\Signature\API\XML;
 
+use Digipost\Signature\Client\Core\Internal\MarshallableEnum;
 use MyCLabs\Enum\Enum;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Digipost\Signature\Client\Core\Internal\XML;
 
-use Digipost\Signature\JAXB\JAXBElement;
 use Digipost\Signature\JAXB\SignatureMarshalling;
 use Digipost\Signature\JAXB\SignatureObjectConstructor;
 use Digipost\Signature\JMS\Handler\Base64BinaryTypeHandler;
@@ -33,6 +32,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package Digipost\Signature\Client\Core\Internal\XML
  */
 class Marshalling {
+
+  const LIBXML_OPTIONS = LIBXML_DTDATTR | LIBXML_SCHEMA_CREATE | LIBXML_NSCLEAN | LIBXML_NOENT | LIBXML_NOCDATA;
 
   /** @var ContainerInterface */
   protected $container;
@@ -86,7 +87,6 @@ class Marshalling {
     SerializerBuilder $builder,
     array $params = NULL
   ) {
-
     $config = self::defaultSerializerConfig($params);
     $xsdConfig = $this->container->getParameter(
       'goetas_webservices.xsd2php.config'
@@ -151,35 +151,39 @@ class Marshalling {
   }
 
   /**
-   * @param Object $object
+   * @param Object       $object
    * @param \DOMDocument $output
-   * @param Context $context
-   * @param array $configParams
+   * @param Context      $context
+   * @param array        $configParams
    *
    * @return mixed|string
    */
   public static function marshal(
     $object,
-    &$output,
+    \DOMDocument &$output = NULL,
     Context $context = NULL,
     array $configParams = []
   ) {
     $self = Marshalling::factory();
     $self->setDirection(GraphNavigator::DIRECTION_SERIALIZATION);
 
+    /** @var \DOMDocument $output */
     return $self->_marshal($object, $output, $context, $configParams);
   }
 
   /**
-   * @param       $entityStream
-   * @param       $responseType
-   * @param array $configParams
+   * @param String $entityStream
+   * @param String $responseType
+   * @param array  $configParams
    *
-   * @return array|\JMS\Serializer\scalar|mixed|object
+   * @return object
+   * @throws \JMS\Serializer\Exception\XmlErrorException
+   * @throws \JMS\Serializer\Exception\UnsupportedFormatException
+   * @throws \JMS\Serializer\Exception\ObjectConstructionException
    */
   public static function unmarshal(
-    $entityStream,
-    $responseType,
+    String $entityStream,
+    String $responseType,
     $configParams = []
   ) {
     $self = Marshalling::factory();
@@ -189,28 +193,28 @@ class Marshalling {
   }
 
   /**
-   * @param       $object
-   * @param       $output
-   * @param null  $context
-   * @param array $configParams
+   * @param object       $object
+   * @param \DOMDocument $output
+   * @param null         $context
+   * @param array        $configParams
    *
    * @return mixed|string
    */
   protected function _marshal(
     $object,
-    &$output,
+    \DOMDocument &$output = NULL,
     $context = NULL,
     $configParams = []
   ) {
-
-    // Make sure we've got a DOMNode instance
-    if (!isset($output)) {
-      $output = new \DOMDocument('1.0', 'UTF-8');
-      $output->xmlStandalone = FALSE;
-    }
-
     if (!isset($context)) {
       $context = SerializationContext::create();
+    }
+
+    $responseClasses = SignatureMarshalling::allApiResponseClasses();
+
+    // All responses from Digipost are snake-cased
+    if ($responseClasses->contains(get_class($object)) && !isset($configParams['snake-case'])) {
+      $configParams['snake-case'] = TRUE;
     }
 
     $serializer = $this->_configure(SerializerBuilder::create(), $configParams)
@@ -224,117 +228,216 @@ class Marshalling {
       //throw new \RuntimeException("Serialization error", 0, $e);
     }
 
+    // Make sure we've got a DOMNode instance
+    //if (!isset($output)) {
+    $output = new \DOMDocument('1.0', 'UTF-8');
+    $output->formatOutput = FALSE;
+    $output->xmlStandalone = FALSE;
+    $output->preserveWhiteSpace = FALSE;
+
+    $output->loadXML($xmlData, self::LIBXML_OPTIONS);
+    //DOMUtils::removeWhiteSpace($output);
+
+    //$output->C14N()
+    //    DOMUtils::removeWhiteSpace($output);
+    //    $output = DOMDocumentFactory::fromString($xmlData);
+    //    $output->formatOutput = FALSE;
+    //    $output->xmlStandalone = FALSE;
+
+    //    $re = '/(?:(xmlns\:(ns-[a-z0-9]+)))="([^"]+)"/m';
+    //    preg_match_all($re, $xmlData, $matches);
+    //    if (!empty($matches) && !empty($matches[0])) {
+    //      $nsPrefix = $matches[2][0];
+    //      $nsUri = $matches[3][0];
+    //      $xmlData = strtr($xmlData, ["xmlns:$nsPrefix" => "xmlns", "$nsPrefix:" => ""]);
+    //      print "Removed $nsPrefix\n\n";
+    //    }
     // Load the XML data in to a DOMDocument ..
-    $docFragment = new \DOMDocument();
-    $docFragment->loadXML($xmlData, LIBXML_NOCDATA | LIBXML_NOXMLDECL);
+    //    $docFragment = new \DOMDocument('1.0', 'UTF-8');
+    //    $docFragment->formatOutput = FALSE;
+    //    $docFragment->loadXML($xmlData, LIBXML_NOCDATA | LIBXML_NOXMLDECL);
 
     // .. and append the XML body of that document to our output
-    $newNode = $output->importNode($docFragment->documentElement, TRUE);
-    $output->appendChild($newNode);
+    //    $newNode = $output->importNode($docFragment->documentElement, TRUE);
+    //    $output->appendChild($newNode);
 
-//    if (!($newOutput = $this->cleanNamespaces($output))) {
-//      $output = $newOutput;
-//    }
+    //    if (($newOutputXML = $this->cleanNamespaces($output)) !== FALSE) {
+    //      //$output = $newOutput;
+    //      if ($newOutputXML instanceof \DOMDocument) {
+    //        $output = $newOutputXML;
+    //      }
+    //      else {
+    //        $xmlData = $newOutputXML;
+    //      }
+    //    }
 
     // Return the raw XMLData for anyone who might want it.
     return $xmlData;
   }
 
+  /**
+   * @param $object
+   *
+   * @return \DOMElement
+   */
+  public static function toDOMElement($object) {
+    /** @var \DOMDocument $domDoc */
+    self::marshal($object, $domDoc);
 
-  private function cleanNamespaces(\DOMDocument $dom, $cleanWhitespace = TRUE) {
+    return $domDoc->documentElement;
+  }
+
+  private function cleanNamespaces(
+    \DOMDocument $dom,
+    $cleanWhitespace = TRUE,
+    $object_type = NULL
+  ) {
     if ($cleanWhitespace) {
       DOMUtils::removeWhiteSpace($dom);
     }
-    $namespaces = DOMUtils::getDocNamespaces($dom);
+    $localName = $dom->documentElement->localName;
+    if (!in_array($localName, ['Signature'])) {
+      return FALSE;
+    }
+
+    //$signature = $dom->documentElement->childNodes;
+    //DOMUtils::renameDOMElement($dom->documentElement, 'Signature');
+    //$dom->documentElement->removeAttributeNS('')
+    //DOMUtils::removeDOMNamespace($dom, 'ns2');
+    //DOMUtils::removeDOMNamespace($dom, 'default');
+
+    DOMUtils::getDocNamespaces($dom->documentElement);
+    //DOMUtils::removeDOMNamespace($dom, 'xsd');
+    //$dom->saveXML($dom->documentElement);
+
+    DOMUtils::renameDOMElementNS(
+      $dom->documentElement, 'Signature', 'http://www.w3.org/2000/09/xmldsig#', ['Id']
+    );
+
+    //$object = DOMUtils::renameDOMElementNS($dom->documentElement->getElementsByTagName('Object')->item(0), 'Object');
+    //$dom->documentElement->setAttributeNS('')
+    //    $dom->documentElement->setAttributeNS(
+    //        'http://www.w3.org/2000/xmlns/',
+    //        'xmlns:ns1',
+    //        'http://uri.etsi.org/01903/v1.3.2#'
+    //      );
+    //$dom->saveXML();
+
+    //
+    //DOMUtils::removeDOMNamespace($dom, 'xsd');
+    $obj = $dom->getElementsByTagName('Object')->item(0);
+    DOMUtils::renameDOMElement($obj, 'Object', FALSE);
+
+    //$dom->createElementNS('http://www.w3.org/2000/xmlns/', 'xmlns:')
+    //$element = $dom->documentElement->getElementsByTagName('QualifyingProperties')->item(0);
+    //$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:ns1', 'http://uri.etsi.org/01903/v1.3.2#');
+    //$element->setAttribute('xmlns', 'http://uri.etsi.org/01903/v1.3.2#');
+    //    DOMUtils::renameDOMElementNS($element, 'QualifyingProperties', 'http://uri.etsi.org/01903/v1.3.2#', TRUE);
+    $el = $dom->documentElement->getElementsByTagName('QualifyingProperties')->item(0);
+    $el
+      ->setAttributeNS(
+        'http://www.w3.org/2000/xmlns/', 'xmlns:ns2', 'http://www.w3.org/2000/09/xmldsig#'
+      );
+    $el
+      ->setAttributeNS(
+        'http://www.w3.org/2000/xmlns/', 'xmlns', 'http://uri.etsi.org/01903/v1.3.2#'
+      );
+
+    //$el = $dom->documentElement->getElementsByTagName('SigningCertificate')->item(0);
+    //DOMUtils::renameDOMElement($el, 'SigningCertificate', FALSE);
+
+    //$dom->documentElement->setAttribute('xmlns', 'http://uri.etsi.org/01903/v1.3.2#');
+    DOMUtils::removeDOMNamespace($dom, 'xsd');
+
+    //DOMUtils::removeDOMNamespace($dom, 'default');
+    return $dom->saveXML($dom->documentElement);
+
+    $namespaces = DOMUtils::getDocNamespaces($dom->documentElement, TRUE);
     $replacements = [];
     foreach ($namespaces as $ns => $uri) {
-      if (empty($ns) || !strpos($ns, 'ns-') === -1) {
+      if (empty($ns) || !strpos($ns, 'ns-') === -1 || $ns === 'ns2') {
         continue;
       }
-      DOMUtils::removeDOMNamespace($dom, $ns);
-      $replacements["xmlns:$ns"] = 'xmlns';
+      $ret = DOMUtils::removeDOMNamespace($dom, $ns);
       if ($uri === 'http://uri.etsi.org/01903/v1.3.2#') {
-        //$element = $xmlOutput->documentElement->getElementsByTagName('QualifyingProperties')->item(0);
-        //$element->removeAttributeNS($uri, $ns);
+        $element = $dom->getElementsByTagName('QualifyingProperties')->item(0);
+        $element->removeAttributeNS($uri, $ns);
       }
       if ($uri === 'http://www.w3.org/2000/09/xmldsig#') {
-        //$element = $xmlOutput->documentElement->getElementsByTagName('Signature')->item(0);
-        //$element->removeAttributeNS($uri, $ns);
-        //$element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:dsig', $uri);
+        $element = $dom->getElementsByTagName('Signature')->item(0);
+        $element->removeAttributeNS($uri, $ns);
+        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:dsig', $uri);
       }
+      $replacements["$ns:"] = '';
+      $replacements["xmlns:$ns=\""] = 'xmlns="';
     }
 
     // TODO: This won't work, because LIBXML reassembles the namespace
     // issue on load. Fix: Put the Signatures node in the XAdES wrapper by hand.
-    $xmlData = $dom->saveXML();
+    $dom->formatOutput = FALSE;
+    $xmlData = strval($dom->saveXML($dom->documentElement));
+    array_filter(
+      $replacements, function ($k) {
+      return !empty($k);
+    }, ARRAY_FILTER_USE_KEY
+    );
     $xmlData = strtr($xmlData, $replacements);
 
-    $newDom = new \DOMDocument();
-    $newDom->xmlStandalone = FALSE;
-    $newDom->formatOutput = FALSE;
-    $newDom->loadXML($xmlData);
+    if ($localName === 'QualifyingProperties') {
+      $newDom = new \DOMDocument();
+      $newDom->xmlStandalone = FALSE;
+      $newDom->formatOutput = FALSE;
+      $newDom->loadXML($xmlData);
+
+      return $newDom;
+    }
+    $xmlData = str_replace(
+      ' xmlns="http://uri.etsi.org/01903/v1.3.2#" Id="Signature"', ' Id="Signature"', $xmlData
+    );
+    //    $newDom = new \DOMDocument();
+    //    $newDom->xmlStandalone = FALSE;
+    //    $newDom->formatOutput = FALSE;
+    //    $newDom->loadXML($xmlData);
+
     //$newDom->normalizeDocument();
-    return $newDom;
+    return $xmlData;
   }
 
-
   /**
-   * @param       $entityStream
-   * @param       $responseType
-   * @param array $configParams
+   * @param string $entityStream
+   * @param string $responseType
+   * @param array  $configParams
    *
-   * @return array|\JMS\Serializer\scalar|mixed|object
+   * @return object
+   *
+   * @throws \JMS\Serializer\Exception\XmlErrorException
+   * @throws \JMS\Serializer\Exception\UnsupportedFormatException
+   * @throws \JMS\Serializer\Exception\ObjectConstructionException
    */
   protected function _unmarshal(
-    $entityStream,
-    $responseType,
-    $configParams = []
+    String $entityStream,
+    String $responseType,
+    array $configParams = []
   ) {
-
-    ///$marshaller = Marshalling::createInstance();
-
-    //$SignatureJaxb2Marshaller->ForResponsesOfAllApis->singleton()->unmarshal(new StreamSource($entityStream));
-    //SignatureMarshalling::allApiResponseClasses()->
-    //$objectConstructor = new S
     $cacheDir = '/tmp/JMS-serializer';
     if (!is_dir($cacheDir)) {
       mkdir($cacheDir);
     }
-    $context = DeserializationContext::create()
-                                     ->setAttribute(
-                                       'target', new JAXBElement()
-                                     );
+    $context = DeserializationContext::create();
+    //->setAttribute('target', new JAXBElement());
 
-    //    $serializerBuilder = SerializerBuilder::create();
-    //    $serializer = $serializerBuilder
-    //      ->configureHandlers(function (HandlerRegistryInterface $h) use (
-    //        $serializerBuilder
-    //      ) {
-    //        $serializerBuilder->addDefaultHandlers();
-    //        //$serializerBuilder->addDefaultDeserializationVisitors();
-    //        $h->registerSubscribingHandler(new XmlSchemaKeyInfoHandler());
-    //      })
-    //      ->setObjectConstructor(SignatureObjectConstructor::fromClassSet(SignatureMarshalling::allApiResponseClasses())
-    //                               ->setDocumentType($responseType))
-    //      //->setCacheDir('/tmp/JMS-serializer')
-    //      ->setDebug(TRUE)
-    //      //->setAdvancedNamingStrategy(AdvancedNamingStrategyInterface::class)
-    //      //->setPropertyNamingStrategy($naming_strategy)
-    //      ->setAdvancedNamingStrategy($naming_strategy)
-    //      ->build();
-    //    $serializer = Marshalling::configure(SerializerBuilder::create(),
-    //                                         $configParams)->build();
+    $objectConstructor = SignatureObjectConstructor::fromClassSet(
+      SignatureMarshalling::allApiResponseClasses()
+    )->setDocumentType($responseType);
+
+    // All responses from Digipost are snake-cased
+    if ($objectConstructor->getSetClasses()->contains($responseType)) {
+      $configParams['snake-case'] = TRUE;
+    }
+
     $serializer = $this->_configure(SerializerBuilder::create(), $configParams)
-                       ->setObjectConstructor(
-                         SignatureObjectConstructor::fromClassSet(
-                           SignatureMarshalling::allApiResponseClasses()
-                         )
-                                                   ->setDocumentType(
-                                                     $responseType
-                                                   )
-                       )
+                       ->setObjectConstructor($objectConstructor)
                        ->build();
-
     $object = $serializer->deserialize(
       $entityStream,
       $responseType,

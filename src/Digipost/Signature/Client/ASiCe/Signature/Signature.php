@@ -11,7 +11,7 @@ use Digipost\Signature\Client\ASiCe\ASiCEAttachable;
  */
 class Signature implements ASiCEAttachable {
 
-  protected $xmlBytes;  // byte[]
+  protected $xmlBytes;
 
   public function __construct($xmlBytes) {
     $this->xmlBytes = $xmlBytes;

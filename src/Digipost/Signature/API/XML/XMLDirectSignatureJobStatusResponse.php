@@ -14,6 +14,7 @@ use JMS\Serializer\Annotation as Serializer;
  *   <complexContent>
  *     <restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       <sequence>
+ *         <element name="reference" type="{http://signering.posten.no/schema/v1}signature-job-reference" minOccurs="0" maxOccurs="1"/>
  *         <element name="signature-job-id" type="{http://signering.posten.no/schema/v1}signature-job-id"/>
  *         <element name="signature-job-status" type="{http://signering.posten.no/schema/v1}direct-signature-job-status"/>
  *         <element name="status" type="{http://signering.posten.no/schema/v1}signer-status" maxOccurs="10"/>
@@ -31,6 +32,7 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @Serializer\XmlRoot(name="direct-signature-job-status-response")
  * @Serializer\AccessorOrder("custom", custom={
+ *   "reference",
  *   "signatureJobId",
  *   "signatureJobStatus",
  *   "statuses",
@@ -42,13 +44,15 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class XMLDirectSignatureJobStatusResponse {
 
+  protected $reference;
+
   /**
    * @Serializer\Type("string")
    */
   protected $signatureJobId;
 
   /**
-   * @Serializer\Type("string")
+   * @Serializer\Type("Digipost\Signature\API\XML\XMLDirectSignatureJobStatus")
    */
   protected $signatureJobStatus;
 
@@ -76,7 +80,7 @@ class XMLDirectSignatureJobStatusResponse {
   /**
    * @Serializer\Type("string")
    */
-  protected $padesUrl;
+  protected $padesUrls;
 
   function __construct(int $signatureJobId = NULL,
                        XMLDirectSignatureJobStatus $signatureJobStatus = NULL,
@@ -110,11 +114,21 @@ class XMLDirectSignatureJobStatusResponse {
     $this->signatureJobStatus = $value;
   }
 
+  /**
+   * @return XMLSignerStatus[]|NULL
+   */
   public function getStatuses() {
-    if (($this->statuses === NULL)) {
+    if ($this->statuses === NULL) {
       $this->statuses = [];
     }
     return $this->statuses;
+  }
+
+  /**
+   * @param XMLSignerStatus[] $statuses
+   */
+  public function setStatuses($statuses) {
+    $this->statuses = $statuses;
   }
 
   public function getConfirmationUrl() {
@@ -134,18 +148,43 @@ class XMLDirectSignatureJobStatusResponse {
   }
 
   public function getXadesUrls() {
-    if (($this->xadesUrls === NULL)) {
+    if ($this->xadesUrls === NULL) {
       $this->xadesUrls = [];
     }
     return $this->xadesUrls;
   }
-
-  public function getPadesUrl() {
-    return $this->padesUrl;
+  /**
+   * @return mixed
+   */
+  public function getReference() {
+    return $this->reference;
   }
+  /**
+   * @param mixed $reference
+   */
+  public function setReference($reference) {
+    $this->reference = $reference;
+  }
+  /**
+   * @param XMLSignerSpecificUrl[] $xadesUrls
+   */
+  public function setXadesUrls($xadesUrls) {
+    $this->xadesUrls = $xadesUrls;
+  }
+  /**
+   * @return mixed
+   */
+  public function getPadesUrls() {
+    if ($this->padesUrls === NULL) {
 
-  public function setPadesUrl($value) {
-    $this->padesUrl = $value;
+    }
+    return $this->padesUrls;
+  }
+  /**
+   * @param mixed $padesUrls
+   */
+  public function setPadesUrls($padesUrls) {
+    $this->padesUrls = $padesUrls;
   }
 }
 

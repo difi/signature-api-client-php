@@ -2,12 +2,11 @@
 
 namespace Digipost\Signature\Client\Core\Internal\Http;
 
+use GuzzleHttp\Client;
+
 interface SignatureHttpClient {
 
-  /**
-   * @return \GuzzleHttp\Client
-   */
-  function signatureServiceRoot();
+  function signatureServiceRoot(): Client;
 
-  function target(String $uri);
+  function target(String $uri): Client;
 }

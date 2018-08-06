@@ -4,7 +4,7 @@ namespace Digipost\Signature\Client\Core;
 
 class PAdESReference {
 
-  protected $pAdESUrl;  // String
+  protected $pAdESUrl;
 
   public static function of($url) {
     return isset($url) ? new PAdESReference($url) : NULL;
@@ -16,6 +16,10 @@ class PAdESReference {
   }
 
   public function getpAdESUrl() {
+    return $this->pAdESUrl;
+  }
+
+  public function __toString() {
     return $this->pAdESUrl;
   }
 }

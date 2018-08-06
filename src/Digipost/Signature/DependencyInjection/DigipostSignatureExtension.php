@@ -38,47 +38,6 @@ class DigipostSignatureExtension extends Extension {
       $config = array_replace_recursive($config, $subConfig);
     }
 
-
-    //$paths = ['@app/config', '@DigipostSignatureBundle/Resources/config'];
-    //$jkcs = new KeyStoreFileLoader(new FileLocator());
-    //$jkcs->load($config['filename']);
-    //$definition = $container->getDefinition('digipost_signature.client.keystore_config');
-    //$definition->addMethodCall('setConfig')
-    //$definition->addArgument('')
-    //$definition = $container->getDefinition('Digipost\Signature\Client\Security\KeyStore');
-    //$keyStoreBytes = file_get_contents($config['keystore']['filename']);
-    //$keyStoreLoader = $container->get('DigipostSignatureBundle\Loader\KeyStoreFileLoader');
-    //$keyStoreLoader->getFile($container->getParameter('digipost_keystore_filename'));
-
-
-    //    $definition = $container->getDefinition('Digipost\Signature\Client\Security\KeyStoreConfig');
-    //    $definition->addArgument($keyStoreBytes);
-    //    $definition->addArgument('');
-
-    //    $definitionDecorator = new Definition(
-    //      'Digipost\Signature\Client\Security\KeyStoreConfig'
-    //    );
-    //    $definitionDecorator->setFactory(
-    //      [
-    //        'Digipost\Signature\Client\Core\Internal\Security\KeyStoreFactory',
-    //        'createFromFile',
-    //      ]
-    //    );
-    //    $definitionDecorator->setArguments(
-    //      [
-    //        $config['keystore']['filename'],
-    //        $config['keystore']['password'],
-    //        $config['keystore']['key']['alias'],
-    //        $config['keystore']['key']['password'],
-    //        new Reference(
-    //          sprintf('swiftmailer.mailer.%s.transport.eventdispatcher', $name)
-    //        ),
-    //      ]
-    //    );
-    if (!isset($config['keystore']['ca_path'])) {
-      //$config['keystore']['ca_path'] = $configs['keystore']['ca_path'];
-    }
-
     $container->setParameter(
       'digipost_signature.keystore.filename', $config['keystore']['filename']
     );
@@ -100,7 +59,6 @@ class DigipostSignatureExtension extends Extension {
       'digipost_signature.keystore.client_cert',
       $config['keystore']['client_cert']
     );
-    //$container->setParameter('digipost_signature.config', $config);
   }
 
   protected static function sanitizePhp($ns) {

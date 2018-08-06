@@ -2,7 +2,6 @@
 
 namespace DigipostSignatureBundle;
 
-use Digipost\Signature\Client\CertificatesBuilder;
 use DigipostSignatureBundle\DependencyInjection\Compiler\Xsd2PhpLoaderPass;
 use GoetasWebservices\Xsd\XsdToPhp\DependencyInjection\Xsd2PhpExtension;
 use Symfony\Component\Config\Resource\FileResource;
@@ -25,6 +24,5 @@ class DigipostSignatureBundle extends Bundle {
       ) . '/app/Resources/config';
     $resource = new FileResource($root_dir);
     $container->addResource($resource);
-    //$container->addClassResource(CertificatesBuilder::class);
   }
 }

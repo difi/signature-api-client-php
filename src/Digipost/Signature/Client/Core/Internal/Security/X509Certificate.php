@@ -2,15 +2,14 @@
 
 namespace Digipost\Signature\Client\Core\Internal\Security;
 
-use CRLCheckException;
 use Digipost\Signature\Client\Core\Exceptions\CertificateParsingFailedException;
 use Digipost\Signature\Client\Core\Exceptions\InvalidCertificateAuthorityException;
 use Digipost\Signature\Client\Core\Exceptions\OpenSSLExtensionNotLoadedException;
 use JMS\Serializer\Annotation as Serializer;
 use phpseclib\File\X509;
+use SimpleSAML\XMLSec\Key\X509Certificate as XMLSecLibX509Certificate;
 
 /**
- * @property \CertificateRevocationList|CertificateRevocationList|null fingerprintCA
  * @property string crlURI
  * @property bool isCA
  * @property string name
@@ -172,13 +171,20 @@ class X509Certificate extends Certificate implements \Serializable {
   public static function toPEM($certificate) {
     // Make sure we don't wrap something that's already wrapped
     $compact = self::stripDelimitersAndLineWraps($certificate);
-    $certificateWrapped = wordwrap($compact, 64, "\r\n", TRUE);
+    $certificateWrapped = wordwrap($compact, 64, "\n", TRUE);
     $certificateDelimited = <<<End
 -----BEGIN CERTIFICATE-----
 $certificateWrapped
 -----END CERTIFICATE-----
 End;
     return $certificateDelimited;
+  }
+
+  /**
+   * @return \SimpleSAML\XMLSec\Key\X509Certificate
+   */
+  public function toXmlSecLibCertificate() {
+    return new XMLSecLibX509Certificate($this->getClearText());
   }
 
   /**
@@ -534,7 +540,9 @@ End;
    * @return String
    */
   public function getSerialNumber(): String {
-    return $this->info['subject']['serialNumber'];
+    return $this->info['serialNumber'];
+//    return json_encode($this->info['subject']);
+//    return isset($this->info['subject']['serialNumber']) ? $this->info['subject']['serialNumber'] : '';
   }
 
   /**
@@ -549,6 +557,17 @@ End;
       throw new \Exception('The part "' . $part . '" does not exist in the certificate subject.');
     }
     return $this->info['subject'][$part];
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getSubjectDN() {
+    try {
+      return $this->getSubjectPart('DN');
+    } catch (\Exception $e) {
+    }
+    return NULL;
   }
 
   /**

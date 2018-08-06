@@ -162,7 +162,7 @@ class XMLDirectDocument implements XMLDocument {
     return $this;
   }
 
-  public function withDescription(String $description) {
+  public function withDescription(String $description = NULL) {
     $this->description = $description;
     return $this;
   }

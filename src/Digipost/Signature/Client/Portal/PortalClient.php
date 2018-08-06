@@ -12,9 +12,6 @@ use Digipost\Signature\Client\Core\Internal\Http\SignatureHttpClientFactory;
 use Digipost\Signature\Client\Core\PAdESReference;
 use Digipost\Signature\Client\Core\Sender;
 use Digipost\Signature\Client\Core\XAdESReference;
-use Digipost\Signature\Client\Direct\DirectJobResponse;
-use Digipost\Signature\Client\Direct\JaxbEntityMapping;
-//use Digipost\Signature\Client\Portal\PortalJobStatusChanged;
 
 class PortalClient {
 
@@ -31,26 +28,25 @@ class PortalClient {
 
     public function create(PortalJob $job) {
         $documentBundle = $this->aSiCECreator->createASiCE($job);
-        $signatureJobRequest = $this->toJaxb($job, $this->clientConfiguration->getGlobalSender());
+        $signatureJobRequest = JaxbEntityMapping::toJaxb($job, $this->clientConfiguration->getGlobalSender());
 
         $xmlPortalSignatureJobResponse = $this->client->sendPortalSignatureJobRequest($signatureJobRequest, $documentBundle, $job->getSender());
-        return $this->fromJaxb($xmlPortalSignatureJobResponse);
+        return JaxbEntityMapping::fromJaxb($xmlPortalSignatureJobResponse);
     }
 
 
   /**
    * If there is a job with an updated {@link PortalJobStatus status}, the returned object contains
    * necessary information to act on the status change. The returned object can be queried using
-   * {@link PortalJobStatusChanged#is(PortalJobStatus) .is(}{@link PortalJobStatus#NO_CHANGES NO_CHANGES)}
+   * {@link PortalJobStatusChanged::is() .is(}{@link PortalJobStatus::NO_CHANGES NO_CHANGES})
    * to determine if there has been a status change. When processing of the status change is complete, (e.g. retrieving
-   * {@link #getPAdES(PAdESReference) PAdES} and/or {@link #getXAdES(XAdESReference) XAdES} documents for a
-   * {@link PortalJobStatus#COMPLETED_SUCCESSFULLY completed} job where all signers have {@link SignatureStatus signed} their documents),
-   * the returned status must be {@link #confirm(PortalJobStatusChanged) confirmed}.
+   * {@link PortalClient::getPAdES() PAdES} and/or {@link PortalClient::getXAdES() XAdES} documents for a
+   * {@link PortalJobStatus::COMPLETED_SUCCESSFULLY completed} job where all signers have {@link SignatureStatus signed} their documents),
+   * the returned status must be {@link PortalClient::confirm() confirmed}.
    *
    * @param Sender|null $sender
    *
-   * @return DirectJobResponse,
-   *         never {@code null}.
+   * @return PortalJobStatusChanged The changed status for a job, or an instance indicating {@link PortalJobStatus::NO_CHANGES no changes}
    */
 
     public function getStatusChange(Sender $sender = NULL) {
@@ -58,7 +54,7 @@ class PortalClient {
         if ($statusChangeResponse->gotStatusChange()) {
             return JaxbEntityMapping::fromJaxb($statusChangeResponse);
         } else {
-            return $this->noUpdatedStatus($statusChangeResponse->getNextPermittedPollTime());
+            return PortalJobStatusChanged::noUpdatedStatus($statusChangeResponse->getNextPermittedPollTime());
         }
     }
 

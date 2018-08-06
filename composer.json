@@ -11,18 +11,22 @@
     ],
     "repositories": [
         {
+            "type": "vcs",
+            "url": "https://github.com/simplesamlphp/xmlsec.git"
+        },
+        {
             "type": "package",
             "package": {
                 "name": "digipost/signature-api-specification",
-                "version": "2.2",
+                "version": "2.3",
                 "dist": {
-                    "url": "https://github.com/digipost/signature-api-specification/archive/2.2.zip",
+                    "url": "https://github.com/digipost/signature-api-specification/archive/2.3.zip",
                     "type": "zip"
                 },
                 "source": {
                     "url": "https://github.com/digipost/signature-api-specification.git",
                     "type": "git",
-                    "reference": "tag/2.2"
+                    "reference": "tag/2.3"
                 }
             }
         }
@@ -30,7 +34,8 @@
     "autoload": {
         "psr-4": {
             "DigipostSignatureBundle\\": "src/Digipost/Signature/",
-            "Digipost\\": "src/Digipost/"
+            "Digipost\\": "src/Digipost/",
+            "RobRichards\\XMLSecLibs\\": "vendor/simplesamlphp/xmlseclibs/src/"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
@@ -45,13 +50,15 @@
         "php": "^7.0",
         "ext-SimpleXML": "*",
         "ext-curl": "*",
+        "ext-gmp": "*",
         "ext-dom": "*",
+        "ext-json": "*",
         "ext-libxml": "*",
         "ext-openssl": "*",
         "ext-pdo_sqlite": "*",
         "ext-zip": "*",
         "cweagans/composer-patches": "^1.6",
-        "digipost/signature-api-specification": "^2.2",
+        "digipost/signature-api-specification": "^2.3",
         "doctrine/cache": "^1.6",
         "doctrine/collections": "^1.4",
         "goetas-webservices/xsd2php-runtime": "^0.2.8",
@@ -64,13 +71,15 @@
         "myclabs/php-enum": "^1.6",
         "php-ds/php-ds": "^1.2",
         "phpseclib/phpseclib": "^2.0",
-        "robrichards/xmlseclibs": "^3.0",
+        "simplesamlphp/xmlseclibs": "dev-xmlsec-ng",
         "sabre/xml": "^2.1",
+        "sop/x509": "^0.6.0",
         "symfony/dom-crawler": "^3.3",
         "symfony/symfony": "^3.3"
     },
     "require-dev": {
         "goetas-webservices/xsd2php": "^0.3.2",
+        "phpunit/phpunit": "^6.5",
         "symfony/phpunit-bridge": "^3.0"
     },
     "scripts": {

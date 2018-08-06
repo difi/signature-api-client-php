@@ -4,63 +4,60 @@ namespace Digipost\Signature\Client\Direct;
 
 use Digipost\Signature\Client\Core\ConfirmationReference;
 use Digipost\Signature\Client\Core\DeleteDocumentsUrl;
+use Digipost\Signature\Client\Core\Exceptions\IllegalStateException;
 use Digipost\Signature\Client\Core\Internal\Confirmable;
 use Digipost\Signature\Client\Core\PAdESReference;
+use Ds\Set;
 
 class DirectJobStatusResponse implements Confirmable {
 
   /**
    * This instance indicates that there has been no status updates since the last poll request for
-   * {@link DirectJobStatusResponse}. Its status is {@link DirectJobStatus#NO_CHANGES NO_CHANGES}.
+   * {@link DirectJobStatusResponse}. Its status is {@link DirectJobStatus::NO_CHANGES NO_CHANGES}.
    *
    * @param \DateTime $nextPermittedPollTime
    *
-   * @return \Digipost\Signature\Client\Direct\DirectJobStatusResponse
+   * @return DirectJobStatusResponse
    */
   static function noUpdatedStatus(\DateTime $nextPermittedPollTime) {
     return new DirectJobStatusResponse(NULL, DirectJobStatus::NO_CHANGES(),
                                        NULL, NULL, NULL, NULL,
                                        $nextPermittedPollTime);
-    //      {
-    //            public function getSignatureJobId() {
-    //                throw new IllegalStateException(
-    //                        "There were " . this . ", and querying the job ID is a programming error. " +
-    //                        "Use the method is(" . DirectJobStatusResponse.class.getSimpleName() . "." . NO_CHANGES.name() . ") " +
-    //                        "to check if there were any status change before attempting to get any further information.");
-    //            }
-    //
-    //            public function toString() {
-    //                return "no direct jobs with updated status";
-    //            }
-    //        };
   }
 
+  /** @var int */
   private $signatureJobId;
 
+  /** @var DirectJobStatus */
   private $status;
 
+  /** @var ConfirmationReference */
   private $confirmationReference;
 
+  /** @var DeleteDocumentsUrl */
   private $deleteDocumentsUrl;
 
+  /** @var Signature[] */
   private $signatures;
 
+  /** @var PAdESReference */
   private $pAdESReference;
 
+  /** @var \DateTime */
   private $nextPermittedPollTime;
 
-  public function __construct(int $signatureJobId,
-                              DirectJobStatus $signatureJobStatus,
-                              ConfirmationReference $confirmationUrl,
-                              DeleteDocumentsUrl $deleteDocumentsUrl,
-                              array $signatures,
-                              PAdESReference $pAdESReference,
-                              \DateTime $nextPermittedPollTime) {
+  public function __construct(int $signatureJobId = NULL,
+                              DirectJobStatus $signatureJobStatus = NULL,
+                              ConfirmationReference $confirmationUrl = NULL,
+                              DeleteDocumentsUrl $deleteDocumentsUrl = NULL,
+                              array $signatures = NULL,
+                              PAdESReference $pAdESReference = NULL,
+                              \DateTime $nextPermittedPollTime = NULL) {
     $this->signatureJobId = $signatureJobId;
     $this->status = $signatureJobStatus;
     $this->confirmationReference = $confirmationUrl;
     $this->deleteDocumentsUrl = $deleteDocumentsUrl;
-    $this->signatures = $signatures;
+    $this->signatures = new Set($signatures);
     $this->pAdESReference = $pAdESReference;
     $this->nextPermittedPollTime = $nextPermittedPollTime;
   }
@@ -85,38 +82,55 @@ class DirectJobStatusResponse implements Confirmable {
     return $this->pAdESReference;
   }
 
-  public function getSignatures() {
+  public function getSignatures(): Set {
     return $this->signatures;
   }
 
   /**
    * Gets the signature from a given signer.
    *
-   * @param Strig signer a string referring to a signer of the job. It may be a personal identification number or
-   *               a custom signer reference, depending of how the {@link DirectSigner signer} was initially created
-   *               (using {@link DirectSigner#withPersonalIdentificationNumber(String)} or
-   *               {@link DirectSigner#withCustomIdentifier(String)}).
+   * @param String $signer a string referring to a signer of the job. It may be a personal
+   *                       identification number or a custom signer reference, depending of how the
+   *                       {@link DirectSigner signer} was initially created
+   *                       (using
+   *                       {@link DirectSigner::withPersonalIdentificationNumber #withPersonalIdentificationNumber} or
+   *                       {@link DirectSigner::withCustomIdentifier #withCustomIdentifier}).
    *
-   * @throws IllegalArgumentException if the job response doesn't contain a signature from this signer
-   * @see #getSignatures()
+   * @return Signature
+   * @throws \InvalidArgumentException if the job response doesn't contain a signature from this
+   *                                   signer
+   * @see DirectJobStatusResponse::getSignatures()
    */
   public function getSignatureFrom(String $signer) {
-    //        return $this->signatures.stream()
-    //                .filter(signatureFrom(signer))
-    //                .findFirst()
-    //                .orElseThrow(() -> new IllegalArgumentException("Unable to find signature from this signer"));
+    try {
+      return $this->signatures->filter(self::signatureFrom($signer))
+                              ->first();
+    } catch (\UnderflowException $e) {
+      throw new \InvalidArgumentException('Unable to find signature from this signer');
+    }
   }
 
   /**
-   * Gets the point in time where you are allowed to {@link DirectClient#getStatusChange() get status changes}.
-   * <p>
-   * Only applicable for jobs with {@link DirectJob.Builder#retrieveStatusBy(StatusRetrievalMethod) status retrieval method}
-   * set to {@link StatusRetrievalMethod#POLLING POLLING}.
+   * @param String $signer
    *
-   * @throws IllegalStateException for jobs with {@link DirectJob.Builder#retrieveStatusBy(StatusRetrievalMethod) status retrieval method}
-   * <b>not</b> set to {@link StatusRetrievalMethod#POLLING POLLING}.
+   * @return \Closure
    */
-  public function getNextPermittedPollTime() {
+  static private function signatureFrom(String $signer) {
+    return function($signature) use ($signer) {
+      /** @var Signature $signature */
+      return $signature->isFrom($signer);
+    };
+  }
+  /**
+   * Gets the point in time where you are allowed to {@link DirectClient::getStatusChange() get status changes}.
+   * <p>
+   * Only applicable for jobs with {@link DirectJobBuilder::retrieveStatusBy() status retrieval method}
+   * set to {@link StatusRetrievalMethod::POLLING POLLING}.
+   *
+   * @throws IllegalStateException for jobs with {@link DirectJobBuilder::retrieveStatusBy() status retrieval method}
+   * <b>not</b> set to {@link StatusRetrievalMethod::POLLING POLLING}.
+   */
+  public function getNextPermittedPollTime(): \DateTime {
     if ($this->nextPermittedPollTime === NULL) {
       throw new IllegalStateException("Retrieving the next permitted poll time for " . get_class($this) . " is a programming error. " .
                                       "This is only allowed for jobs with status retrieval method set to '" . StatusRetrievalMethod::POLLING() . "'.");
@@ -124,16 +138,15 @@ class DirectJobStatusResponse implements Confirmable {
     return $this->nextPermittedPollTime;
   }
 
-  public function getConfirmationReference() {
+  public function getConfirmationReference(): ConfirmationReference {
     return $this->confirmationReference;
   }
 
-  public function getDeleteDocumentsUrl() {
+  public function getDeleteDocumentsUrl(): DeleteDocumentsUrl {
     return $this->deleteDocumentsUrl;
   }
 
   public function __toString() {
     return "status for direct job with ID " . $this->signatureJobId . ": " . $this->status;
   }
-
 }

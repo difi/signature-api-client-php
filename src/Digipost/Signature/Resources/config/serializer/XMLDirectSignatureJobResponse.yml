@@ -1,4 +1,4 @@
-Digipost\Signature\API\XML\DirectSignatureJobResponse:
+Digipost\Signature\API\XML\XMLDirectSignatureJobResponse:
     xml_root_name: direct-signature-job-response
     xml_root_namespace: 'http://signering.posten.no/schema/v1'
     properties:
@@ -12,12 +12,20 @@ Digipost\Signature\API\XML\DirectSignatureJobResponse:
                 getter: getSignatureJobId
                 setter: setSignatureJobId
             type: integer
+        reference:
+            expose: true
+            access_type: public_method
+            serialized_name: reference
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getReference
+                setter: setReference
+            type: string
         redirectUrl:
             expose: true
             access_type: public_method
             serialized_name: redirect-url
-            xml_element:
-                namespace: 'http://signering.posten.no/schema/v1'
             accessor:
                 getter: getRedirectUrl
                 setter: setRedirectUrl

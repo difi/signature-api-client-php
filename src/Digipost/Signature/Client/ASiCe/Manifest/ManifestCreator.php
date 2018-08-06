@@ -4,6 +4,7 @@ namespace Digipost\Signature\Client\ASiCe\Manifest;
 
 use Digipost\Signature\Client\Core\Exceptions\RuntimeIOException;
 use Digipost\Signature\Client\Core\Exceptions\XmlValidationException;
+use Digipost\Signature\Client\Core\Internal\XML\DOMUtils;
 use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
 use Digipost\Signature\Client\Core\Sender;
 use Digipost\Signature\Client\Core\SignatureJob;
@@ -29,15 +30,17 @@ abstract class ManifestCreator {
     $xmlManifest = $this->buildXmlManifest($job, $sender);
 
     try {
-      $xmlNode = new \DOMDocument('1.0', 'UTF-8');
-      $xmlNode->xmlStandalone = FALSE;
+//      $xmlNode = new \DOMDocument('1.0', 'UTF-8');
+//      $xmlNode->xmlStandalone = FALSE;
       Marshalling::marshal(
         $xmlManifest, $xmlNode, NULL, ['snake-case' => TRUE]
       );
-
-      $stream = stream_for($xmlNode->saveXML());
-      return new Manifest($xmlNode->saveXML());
-
+      /** @var \DOMDocument $xmlNode */
+      $xmlNode->xmlStandalone = TRUE;
+      DOMUtils::removeWhiteSpace($xmlNode);
+      $xmlData = $xmlNode->saveXML($xmlNode->documentElement, LIBXML_NOCDATA);
+      $xmlData = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' . "" . $xmlData;
+      return new Manifest($xmlData);
       //$manifestBytes = unpack('C*', $manifestStream);
       //return new Manifest($manifestBytes);
     } catch (UnsupportedFormatException $e) {

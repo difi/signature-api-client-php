@@ -2,6 +2,7 @@
 
 namespace Digipost\Signature\API\XML;
 
+use Digipost\Signature\Client\Core\Internal\Http\XMLStream;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
@@ -36,7 +37,7 @@ use JMS\Serializer\Annotation as Serializer;
  * @Serializer\XmlNamespace(uri="http://uri.etsi.org/2918/v1.2.1#", prefix="ns3")
  * @Serializer\XmlNamespace(uri="http://www.w3.org/2000/09/xmldsig#", prefix="ns2")
  */
-class XMLError {
+class XMLError extends XMLStream {
 
   /**
    * @Serializer\XmlElement(namespace="http://signering.posten.no/schema/v1")
@@ -90,5 +91,9 @@ class XMLError {
 
   public function setErrorType($value) {
     $this->errorType = $value;
+  }
+
+  public function __toString() {
+    return '[' . $this->getErrorType() . '] ' . $this->getErrorCode() . ': ' . $this->getErrorMessage();
   }
 }

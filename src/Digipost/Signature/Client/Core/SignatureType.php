@@ -7,7 +7,7 @@ use Digipost\Signature\Client\Core\Internal\MarshallableEnum;
 use MyCLabs\Enum\Enum;
 
 /**
- * Class SignatureType
+ * Specifies which type of signature to facilitate for a signer.
  *
  * @package Digipost\Signature\Client\Core
  *

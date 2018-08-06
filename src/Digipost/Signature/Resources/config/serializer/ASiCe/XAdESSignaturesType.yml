@@ -9,5 +9,5 @@ Digipost\Signature\API\XML\Thirdparty\ASiCe\XAdESSignaturesType:
             xml_map:
                 inline: true
                 entry_name: Signature
-                namespace: 'http://www.w3.org/2000/09/xmldsig#'
+                namespace: 'http://uri.etsi.org/2918/v1.2.1#'
             type: array<Digipost\Signature\API\XML\Thirdparty\XMLdSig\Signature>

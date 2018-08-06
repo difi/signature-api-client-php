@@ -1,5 +1,6 @@
 Digipost\Signature\API\XML\Thirdparty\XMLdSig\KeyName:
     xml_root_name: KeyName
+    xml_root_namespace: 'http://www.w3.org/2000/09/xmldsig#'
     properties:
         __value:
             expose: true

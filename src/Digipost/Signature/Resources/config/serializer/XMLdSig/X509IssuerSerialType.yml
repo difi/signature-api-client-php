@@ -1,4 +1,6 @@
 Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType:
+    xml_root_name: X509IssuerSerial
+    xml_root_namespace: 'http://www.w3.org/2000/09/xmldsig#'
     properties:
         x509IssuerName:
             expose: true
@@ -19,4 +21,4 @@ Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509IssuerSerialType:
             accessor:
                 getter: getX509SerialNumber
                 setter: setX509SerialNumber
-            type: integer
+            type: string

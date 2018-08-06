@@ -6,7 +6,10 @@ use Digipost\Signature\Client\Core\Exceptions\CertificateParsingFailedException;
 use Digipost\Signature\Client\Core\Exceptions\KeyStoreDecryptionFailedException;
 use Digipost\Signature\Client\Core\Exceptions\OpenSSLExtensionNotLoadedException;
 use Digipost\Signature\Client\Core\Exceptions\PrivateKeyDecryptionFailedException;
+use Digipost\Signature\Client\Core\Exceptions\RuntimeIOException;
 use Digipost\Signature\Loader\KeyStoreFileLoader;
+use Sop\CryptoEncoding\PEM;
+use Sop\CryptoEncoding\PEMBundle;
 
 class KeyStore {
 
@@ -26,7 +29,7 @@ class KeyStore {
   private $keystore = [];
 
   /**
-   * @var array
+   * @var Certificate[]
    */
   private $chain = [];
 
@@ -64,31 +67,34 @@ class KeyStore {
     $this->privateKey = new PrivateKey($this->keystore['pkey'], $privatekeyPassword);
 
     $this->chain = [];
-    foreach ($this->keystore['extracerts'] as $cert) {
+    $extraCerts =& $this->keystore['extracerts'];
+    end($extraCerts);
+    while ($cert = current($extraCerts)) {
       $this->chain[] = new X509Certificate($cert);
+      prev($extraCerts);
     }
     $this->chain[] = $this->X509Certificate;
-    //
+    krsort($this->chain);
     X509Certificate::buildChain($this->chain);
-    //X509Certificate::buildChain($this->keystore['extracerts']);
+//    asort($this->chain);
+//    X509Certificate::buildChain($this->chain);
   }
 
   /**
    * Initialize the PKCS12 keystore from a file.
    *
-   * @param string $keystoreLocation
-   * @param string $passphrase
+   * @param $keystoreLocation
+   * @param $passphrase
    *
    * @return KeyStore
+   * @throws CertificateParsingFailedException
    * @throws KeyStoreDecryptionFailedException
    * @throws OpenSSLExtensionNotLoadedException
    * @throws PrivateKeyDecryptionFailedException
-   * @throws CertificateParsingFailedException
-   * @throws \FileTransferException
    */
   public static function initFromFile($keystoreLocation, $passphrase) {
     if ($keystoreLocation instanceof KeyStoreFileLoader) {
-      $self = new self();
+      $self = new KeyStore();
       $self->load($keystoreLocation->load(), $passphrase, $passphrase);
       return $self;
     }
@@ -96,9 +102,9 @@ class KeyStore {
       throw new \RuntimeException("The keystore file '$keystoreLocation' does not exist.");
     }
     if (!is_readable($keystoreLocation)) {
-      throw new FileTransferException("The keystore file '$keystoreLocation' is not readable.");
+      throw new RuntimeIOException("The keystore file '$keystoreLocation' is not readable.");
     }
-    $self = new self();
+    $self = new KeyStore();
     $self->load(file_get_contents($keystoreLocation), $passphrase, $passphrase);
     return $self;
   }
@@ -155,6 +161,11 @@ class KeyStore {
   // TODO: Fix lookup by alias
   public function getCertificate($alias) {
     return $this->X509Certificate;
+//    $chain = \X509\Certificate\CertificateChain::fromPEMs(...PEMBundle::fromString($this->X509Certificate->getClearText()));
+//    $cert = $chain->endEntityCertificate();
+//    $x509 = new X509Certificate($cert->toPEM()->string());
+//    $x509->setIssuer($this->X509Certificate->getIssuer());
+//    return $x509;
   }
 
   public function getKey(String $alias, String $passphrase): PrivateKey {

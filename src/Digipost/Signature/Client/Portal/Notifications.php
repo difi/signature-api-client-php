@@ -2,6 +2,8 @@
 
 namespace Digipost\Signature\Client\Portal;
 
+use Digipost\Signature\Client\Core\Exceptions\IllegalStateException;
+
 class Notifications {
 
   protected $emailAddress = NULL;
@@ -28,17 +30,17 @@ class Notifications {
     return new NotificationsBuilder();
   }
 
-  public function toString() {
-    if ((($this->emailAddress . NULL) . ($this->mobileNumber . NULL))) {
-      return ((("Notifications to " . $this->emailAddress) . " and ") . $this->mobileNumber);
+  public function __toString() {
+    if ($this->emailAddress !== NULL && $this->mobileNumber !== NULL) {
+      return "Notifications to " . $this->emailAddress . " and " . $this->mobileNumber;
     }
     else {
-      if (($this->emailAddress . NULL)) {
-        return ("Notification to " . $this->emailAddress);
+      if ($this->emailAddress !== NULL) {
+        return "Notification to " . $this->emailAddress;
       }
       else {
-        if (($this->mobileNumber . NULL)) {
-          return ("Notification to " . $this->mobileNumber);
+        if ($this->mobileNumber !== NULL) {
+          return "Notification to " . $this->mobileNumber;
         }
         else {
           return "No notifications";
@@ -60,11 +62,13 @@ class NotificationsBuilder {
 
   public function withEmailTo(String $emailAddress) {
     $this->target->emailAddress = $emailAddress;
+
     return $this;
   }
 
   public function withSmsTo(String $mobileNumber) {
     $this->target->mobileNumber = $mobileNumber;
+
     return $this;
   }
 
@@ -76,6 +80,7 @@ class NotificationsBuilder {
       throw new IllegalStateException("At least one way of notifying the signer must be specified");
     }
     $this->built = TRUE;
+
     return $this->target;
   }
 }

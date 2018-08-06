@@ -9,15 +9,6 @@ Digipost\Signature\API\XML\Thirdparty\XMLdSig\ReferenceType:
                 setter: setId
             xml_attribute: true
             type: string
-        uRI:
-            expose: true
-            access_type: public_method
-            serialized_name: URI
-            accessor:
-                getter: getURI
-                setter: setURI
-            xml_attribute: true
-            type: string
         type:
             expose: true
             access_type: public_method
@@ -25,6 +16,15 @@ Digipost\Signature\API\XML\Thirdparty\XMLdSig\ReferenceType:
             accessor:
                 getter: getType
                 setter: setType
+            xml_attribute: true
+            type: string
+        uRI:
+            expose: true
+            access_type: public_method
+            serialized_name: URI
+            accessor:
+                getter: getURI
+                setter: setURI
             xml_attribute: true
             type: string
         transforms:

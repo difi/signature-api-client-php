@@ -2,6 +2,7 @@
 
 namespace Digipost\Signature\API\XML\Thirdparty\XMLdSig;
 
+use Digipost\Signature\API\XML\CustomBase64BinaryType;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestValue;
 
 /**
@@ -13,20 +14,21 @@ use Digipost\Signature\API\XML\Thirdparty\XMLdSig\DigestValue;
 class ReferenceType
 {
 
-    /**
+  /**
      * @property string $id
      */
     private $id = null;
 
-    /**
+
+  /**
+   * @property string $type
+   */
+    private $type = null;
+
+   /**
      * @property string $uRI
      */
     private $uRI = null;
-
-    /**
-     * @property string $type
-     */
-    private $type = null;
 
     /**
      * @property \Digipost\Signature\API\XML\Thirdparty\XMLdSig\Transform[] $transforms
@@ -200,7 +202,7 @@ class ReferenceType
     /**
      * Sets a new digestValue
      *
-     * @param DigestValue $digestValue
+     * @param DigestValue|CustomBase64BinaryType $digestValue
      * @return self
      */
     public function setDigestValue($digestValue)

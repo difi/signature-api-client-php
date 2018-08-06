@@ -3,24 +3,19 @@
 namespace Digipost\Signature\Client\ASiCe\Signature;
 
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\KeyInfo;
-use Digipost\Signature\API\XML\Thirdparty\XMLdSig\SignatureMethod;
 use Digipost\Signature\API\XML\Thirdparty\XMLdSig\X509Data;
+use Digipost\Signature\Client\ASiCe\Signature\Signature as SignatureManifest;
 use Digipost\Signature\Client\Core\Exceptions\ConfigurationException;
-use Digipost\Signature\Client\Core\Internal\NoSuchProviderException;
 use Digipost\Signature\Client\Core\Internal\Security\Certificate;
-use Digipost\Signature\Client\Core\Internal\SignatureCanonicalizationMethod;
-use Digipost\Signature\Client\Core\Internal\SignatureDigestMethod;
-use Digipost\Signature\Client\Core\Internal\Signer;
 use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
 use Digipost\Signature\Client\Core\Internal\XMLSignatureFactory;
 use Digipost\Signature\Client\Direct\DirectDocument;
 use Digipost\Signature\Client\Security\KeyStoreConfig;
 use Digipost\Signature\XSD\SignatureApiSchemas;
-use Digipost\XML\Crypto\dSig\DOM\DOMSignContext;
-use Digipost\XML\Crypto\dSig\KeyInfo\KeyInfoFactory;
-use DOMDocument as Document;
 use GoetasWebservices\XML\XSDReader\Schema\Exception\SchemaException;
-use GoetasWebservices\XML\XSDReader\SchemaReader;
+use Digipost\Signature\Client\Core\Internal\Security\Constants as C;
+use Digipost\Signature\Client\Core\Internal\Security\Signature;
+use SimpleSAML\XMLSec\Utils\DOMDocumentFactory;
 
 /**
  * Class CreateSignature
@@ -29,70 +24,67 @@ use GoetasWebservices\XML\XSDReader\SchemaReader;
  */
 class CreateSignature {
 
-  public static $C14V1 = "http://www.w3.org/TR/2001/REC-xml-c14n-20010315";
-
-  private $asicNamespace = "http://uri.etsi.org/2918/v1.2.1#";
-
-  private $signedPropertiesType = "http://uri.etsi.org/01903#SignedProperties";
-
   private $sha256DigestMethod;
-
-  /** @var SignatureCanonicalizationMethod */
-  private $canonicalizationMethod;
-
-  private $canonicalXmlTransform;
 
   private $createXAdESProperties;
 
-  private $transformerFactory;
-
   private $schema;
 
+  /** @var Signature */
+  private $signature;
+
+  /** @var \DOMElement */
+  private $sigElement;
+
+  /** @var \DOMDocument */
+  private $document;
+
   public function __construct(\DateTime $clock) {
+    $this->document = DOMDocumentFactory::fromString(
+      '<XAdESSignatures xmlns="http://uri.etsi.org/2918/v1.2.1#">'.
+        '<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature">'.
+          '<ds:SignedInfo>'.
+            '<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>'.
+            '<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>'.
+          '</ds:SignedInfo>'.
+          '<ds:Object>'.
+            '<xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature">'.
+              '<xades:SignedProperties Id="SignedProperties">'.
+                '<xades:SignedSignatureProperties>'.
+                  '<xades:SigningCertificate/>'.
+                '</xades:SignedSignatureProperties>'.
+              '</xades:SignedProperties>'.
+            '</xades:QualifyingProperties>'.
+          '</ds:Object>'.
+        '</ds:Signature>'.
+      '</XAdESSignatures>'
+    );
 
-    $this->createXAdESProperties = new CreateXAdESProperties($clock);
-
-    //$this->transformerFactory = TransformerFactory::newInstance();
     try {
-      $xmlSignatureFactory = $this->getSignatureFactory();
-      $this->sha256DigestMethod = $xmlSignatureFactory->newDigestMethod(
-        SignatureDigestMethod::SHA256()
-      );
-      $this->canonicalizationMethod = $xmlSignatureFactory->newCanonicalizationMethod(
-        self::$C14V1
-      );
-      $this->canonicalXmlTransform = $xmlSignatureFactory->newTransform(
-        self::$C14V1
-      );
+      $rootNode = $this->document->documentElement;
+      $this->signature = Signature::fromXML($rootNode);
+      $this->signature->setBlacklistedAlgorithms([]);
 
-      //    } catch (NoSuchAlgorithmException $e) {
-      //      throw new ConfigurationException("Failed to initialize XML-signing", $e);
-      //    } catch (InvalidAlgorithmParameterException $e) {
-      //      throw new ConfigurationException("Failed to initialize XML-signing", $e);
-      //    }
+      $this->createXAdESProperties = new CreateXAdESProperties($clock);
     } catch (\Exception $e) {
-      //throw new ConfigurationException("Failed to initialize XML-signing", $e);
-      throw $e;
+      throw new ConfigurationException("Failed to initialize XML-signing", $e);
     }
-
-    $this->schema = $this->loadSchema();
   }
 
   private function loadSchema() {
     try {
-      $reader = new SchemaReader();
-      $schema = $reader->getGlobalSchema();
-      $schema->addSchema(
-        $reader->readFile(SignatureApiSchemas::$XMLDSIG_SCHEMA)
-      );
-      $schema->addSchema($reader->readFile(SignatureApiSchemas::$ASICE_SCHEMA));
+
+      //      $reader = new SchemaReader();
+      $schema = SignatureApiSchemas::DIRECT_AND_PORTAL_API()->getSchema();
+      //      $schema = $reader->getGlobalSchema();
+      //      $schema->addSchema($reader->readFile(SignatureApiSchemas::DIRECT_AND_PORTAL_API()));
+      //      $fp = fopen(SignatureApiSchemas::DIRECT_AND_PORTAL_API(), 'r');
+      //      $data = '';
+      //      while (!feof($fp)) {
+      //        $data .= fread($fp, 2048);
+      //      }
+
       return $schema;
-      /*
-      return SchemaLoaderUtils::loadSchema(new Resource[] {
-        new ClassPathResource(SignatureApiSchemas::$XMLDSIG_SCHEMA),
-       new ClassPathResource(SignatureApiSchemas::$ASICE_SCHEMA)
-    }, XmlValidatorFactory . SCHEMA_W3C_XML);
-      */
     } catch (SchemaException $e) {
       throw new ConfigurationException(
         "Failed to load schemas for validating signatures",
@@ -105,101 +97,88 @@ class CreateSignature {
    * @param                $attachedFiles
    * @param KeyStoreConfig $keyStoreConfig
    *
-   * @return Signature
+   * @return SignatureManifest
    */
   public function createSignature(
     $attachedFiles,
     KeyStoreConfig $keyStoreConfig
   ) {
     $xmlSignatureFactory = $this->getSignatureFactory();
-    $signatureMethod = $this->getSignatureMethod($xmlSignatureFactory);
-
-    $signContext = $xmlSignatureFactory->getXMLSignatureContext();
+    //    $signatureMethod = $this->getSignatureMethod($xmlSignatureFactory);
+    //    $signContext = $xmlSignatureFactory->getXMLSignatureContext();
 
     // Create signature references for all files
-    $references = $this->references($xmlSignatureFactory, $attachedFiles);
+    //$references = $this->references($xmlSignatureFactory, $attachedFiles);
+    //$signContext->addReferencedFiles($attachedFiles);
+    //$schema = $this->loadSchema();
+    //$this->signature->add
+
+    //$this->signature->addObject()
 
     // Create signature reference for XAdES properties
-    array_push(
-      $references,
-      $xmlSignatureFactory->newReference(
-        "#SignedProperties",
-        $this->sha256DigestMethod,
-        $this->canonicalXmlTransform,
-        $this->signedPropertiesType
-      )
-    );
+    //    array_push(
+    //      $references,
+    //      $xmlSignatureFactory->newReference(
+    //        "#SignedProperties",
+    //        $this->sha256DigestMethod,
+    //        $this->canonicalXmlTransform,
+    //        $this->signedPropertiesType,
+    //        NULL
+    //      )
+    //    );
 
     // Generate XAdES document to sign, information about the key used for signing and information about what's signed
-    $document = $this->createXAdESProperties->createPropertiesToSign(
+    //$test = $this->document->importNode($qualifyingProperties->documentElement);
+    //$this->wrapSignatureInXADeSEnvelope($this->document);
+
+    $qualifyingProperties = $this->createXAdESProperties->createPropertiesToSign(
+      $this->signature,
       $attachedFiles,
       $keyStoreConfig->getCertificate()
     );
 
-    $keyInfo = $this->keyInfo(
-      $xmlSignatureFactory,
-      $keyStoreConfig->getCertificateChain()
-    );
-    $signedInfo = $xmlSignatureFactory->newSignedInfo(
-      $this->canonicalizationMethod,
-      $signatureMethod,
-      $references
-    );
+    //    $keyInfo = $this->keyInfo(
+    //      $xmlSignatureFactory,
+    //      ...$keyStoreConfig->getCertificateChain()
+    //    );
 
-    // Define signature over XAdES document
-    $xmlObject = $xmlSignatureFactory->newXMLObject(
-      $document->documentElement,
-      NULL, NULL, NULL
-    );
+    //    $signedInfo = $xmlSignatureFactory->newSignedInfo(
+    //      $this->canonicalizationMethod,
+    //      $signatureMethod,
+    //      $references
+    //    );
 
-    //
-    $xmlSignature = $xmlSignatureFactory->newXMLSignature(
-      $signedInfo, $keyInfo,
-      [$xmlObject],
-      "Signature"
-    );
-    $signer = new Signer($xmlSignature);
-
-    Marshalling::marshal($xmlSignature, $sigElement);
-    /** @var \DOMDocument $sigElement */
+    //    // Define signature over XAdES document
+    //    $xmlObject = $xmlSignatureFactory->newXMLObject(
+    //      [new XMLStructure($document->documentElement)],
+    //      NULL, NULL, NULL
+    //    );
 
     try {
-      //new DOMSignContext();
-      $signer->sign($signContext->configure($keyStoreConfig->getPrivateKey(), $document));
-      //$xmlSignatureFactory->
-      //$xmlSignature->sign
-      //$xmlSignature->sign2($document, $keyStoreConfig);
-      //$xmlSignature->sign(new DOMSignContext($keyStoreConfig->getPrivateKey(), $document));
+      $this->signature->sign($keyStoreConfig->getPrivateKey()->toXmlSecLibPrivateKey(), C::SIG_RSA_SHA256, TRUE);
     } catch (\Exception $e) {
       throw new ConfigurationException("Failed to initialize XML-signing", $e);
     }
 
-    $this->wrapSignatureInXADeSEnvelope($document);
-    //    $document->formatOutput = TRUE;
-    //
-    //    print $document->saveXML();
-    //    exit;
-    //$outputStream = NULL;
+    $root = $this->signature->getRoot();
+    $outputStream = $root->C14N(FALSE, FALSE);
+
     try {
-      $outputStream = $document->saveXML();
-      $outputStream = new \GuzzleHttp\Psr7\BufferStream();
+      //$this->wrapSignatureInXADeSEnvelope($root->ownerDocument);
+
+      $outputStream = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . $outputStream;
+
+      try {
+        //$this->validateXml($document);
+      } catch (\Exception $e) {
+        //        dump($e->getMessage());
+        //        print $outputStream;
+      }
     } catch (\RuntimeException $e) {
       throw $e;
     }
 
-    return new Signature($outputStream);
-  }
-
-  private function getSignatureMethod(XMLSignatureFactory $xmlSignatureFactory
-  ): SignatureMethod {
-    try {
-      return $xmlSignatureFactory->newSignatureMethod(
-        "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
-      );
-      //} catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
-    } catch (\Exception $e) {
-      throw new ConfigurationException("Failed to initialize XML-signing", $e);
-    }
+    return new SignatureManifest($outputStream);
   }
 
   /**
@@ -234,6 +213,7 @@ class CreateSignature {
         throw new \RuntimeException($e);
       }
     }
+
     return $result;
   }
 
@@ -245,7 +225,7 @@ class CreateSignature {
    */
   private function keyInfo(
     XMLSignatureFactory $xmlSignatureFactory,
-    array $certificates
+    Certificate ...$certificates
   ): KeyInfo {
     /** @var KeyInfoFactory $keyInfoFactory */
     //    $keyInfoFactory = $xmlSignatureFactory->getKeyInfoFactory();
@@ -256,26 +236,78 @@ class CreateSignature {
     //$x509Data = $keyInfoFactory->newX509Data($certificates);
     //return $keyInfoFactory->newKeyInfo($this->singletonList($x509Data));
     return $keyInfo;
-    //$key = new KeyInfo([], 'smt test');
-    //return $key;
   }
 
   //
-  private function wrapSignatureInXADeSEnvelope(Document $document) {
+  private function wrapSignatureInXADeSEnvelope(\DOMDocument $document) {
     $signatureElement = $document->removeChild($document->documentElement);
-    $xadesElement = $document->createElement("XAdESSignatures");
+    $xadesElement = $document->createElementNS(C::ASICENS, "XAdESSignatures");
+    $xadesElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', C::ASICENS);
     $xadesElement->appendChild($signatureElement);
     $document->appendChild($xadesElement);
+    return $document;
   }
 
   private function getSignatureFactory() {
-    try {
-      return XMLSignatureFactory::factory("DOM", "XMLdSig");
-    } catch (NoSuchProviderException $e) {
-      throw new ConfigurationException(
-        "Failed to find XML Digital Signature provided. The library depends on default Java-provider",
-        $e
-      );
+    return XMLSignatureFactory::factory("DOM", "XMLdSig");
+  }
+
+  /**
+   * Validate the XML document
+   *
+   * @param \DOMDocument $dom
+   * @throws SchemaException
+   */
+  protected function validateXml(\DOMDocument $dom) {
+    libxml_use_internal_errors(TRUE);
+    foreach (SignatureApiSchemas::ASICE_SCHEMA()->getFileNames() as $f) {
+      $dom->schemaValidate($f, Marshalling::LIBXML_OPTIONS);
+
+      if ($error = libxml_get_errors()) {
+        $error = $this->formatXmlValidationErrors();
+        throw new SchemaException($error);
+      }
     }
+  }
+
+  /**
+   * @param \LibXMLError $error
+   *
+   * @return string
+   */
+  static function displaySingleLibXmlError(\LibXMLError $error) {
+    $return = "\n";
+    switch ($error->level) {
+      case LIBXML_ERR_WARNING:
+        $return .= "Warning $error->code: ";
+        break;
+      case LIBXML_ERR_ERROR:
+        $return .= "Error $error->code: ";
+        break;
+      case LIBXML_ERR_FATAL:
+        $return .= "Fatal Error $error->code: ";
+        break;
+    }
+    $return .= trim($error->message);
+    if ($error->file) {
+      $return .= " in [" . $error->file . "]";
+    }
+    $return .= " on line [" . $error->line . "]\n";
+
+    return $return;
+  }
+
+  /**
+   * @return string
+   */
+  protected function formatXmlValidationErrors() {
+    $errors = libxml_get_errors();
+    $ret = '';
+    foreach ($errors as $error) {
+      $ret .= self::displaySingleLibXmlError($error) . "\n";
+    }
+    libxml_clear_errors();
+
+    return $ret;
   }
 }

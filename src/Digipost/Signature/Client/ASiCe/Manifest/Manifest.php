@@ -14,7 +14,7 @@ class Manifest implements ASiCEAttachable {
   protected $xmlBytes;
 
   public function __construct($xmlBytes) {
-    $this->xmlBytes = $xmlBytes;
+    $this->xmlBytes = trim($xmlBytes);
   }
 
   public function getFileName() {

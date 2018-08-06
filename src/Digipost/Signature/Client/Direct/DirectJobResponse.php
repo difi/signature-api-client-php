@@ -2,6 +2,8 @@
 
 namespace Digipost\Signature\Client\Direct;
 
+use Digipost\Signature\Client\Core\Exceptions\IllegalStateException;
+
 /**
  * Class DirectJobResponse
  *
@@ -11,6 +13,8 @@ class DirectJobResponse {
 
   protected $signatureJobId;
 
+  protected $reference;
+
   /**
    * @var RedirectUrls[]
    */
@@ -18,9 +22,9 @@ class DirectJobResponse {
 
   protected $statusUrl;
 
-  public function __construct($signatureJobId, array $redirectUrls, String $statusUrl)
-  {
+  public function __construct($signatureJobId, $reference, array $redirectUrls, $statusUrl) {
     $this->signatureJobId = $signatureJobId;
+    $this->reference = $reference;
     $this->redirectUrls = RedirectUrls::List($redirectUrls);
     $this->statusUrl = $statusUrl;
   }
@@ -29,6 +33,12 @@ class DirectJobResponse {
     return $this->signatureJobId;
   }
 
+  /**
+   * Gets the only redirect URL for this job.
+   * Convenience method for retrieving the redirect URL for jobs with exactly one signer.
+   * @throws IllegalStateException if there are multiple redirect URLs
+   * @see DirectJobResponse::getRedirectUrls
+   */
   public function getSingleRedirectUrl() {
     return $this->redirectUrls->getSingleRedirectUrl();
   }
@@ -39,6 +49,14 @@ class DirectJobResponse {
 
   public function getStatusUrl() {
     return $this->statusUrl;
+  }
+
+  /**
+   * @return string the signature job's custom reference as specified upon
+   * {@link DirectJobBuilder::withReference() creation}. May be `null`.
+   */
+  public function getReference() {
+    return $this->reference;
   }
 }
 

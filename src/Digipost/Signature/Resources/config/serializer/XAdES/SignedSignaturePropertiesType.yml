@@ -23,6 +23,8 @@ Digipost\Signature\API\XML\Thirdparty\XAdES\SignedSignaturePropertiesType:
             expose: true
             access_type: public_method
             serialized_name: SigningCertificate
+            xml_element:
+                namespace: 'http://uri.etsi.org/01903/v1.3.2#'
             accessor:
                 getter: getSigningCertificate
                 setter: setSigningCertificate

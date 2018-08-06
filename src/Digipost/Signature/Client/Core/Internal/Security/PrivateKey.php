@@ -29,6 +29,8 @@ class PrivateKey implements PrivateKeyInterface {
   private $keyResource = NULL;
 
   private $passphrase;
+  private $_privateKey;
+  private $_passphrase;
 
   /**
    * Holds a private key so you can sign or decrypt stuff with it, must be cleartext,
@@ -45,6 +47,8 @@ class PrivateKey implements PrivateKeyInterface {
       throw new OpenSSLExtensionNotLoadedException('The openssl module is not loaded.');
     }
 
+    $this->_privateKey = $privateKey;
+    $this->_passphrase = $passphrase;
     $this->keyResource = openssl_pkey_get_private($privateKey, $passphrase);
     if ($this->keyResource === FALSE) {
       throw new PrivateKeyDecryptionFailedException(
@@ -71,7 +75,7 @@ class PrivateKey implements PrivateKeyInterface {
     if (!is_readable($privatekeyLocation)) {
       throw new RuntimeIOException("The private key file '$privatekeyLocation' is not readable.");
     }
-    return new self(file_get_contents($privatekeyLocation), $passphrase);
+    return new PrivateKey(file_get_contents($privatekeyLocation), $passphrase);
   }
 
   /**
@@ -156,8 +160,19 @@ class PrivateKey implements PrivateKeyInterface {
   function getFormat(): String {
   }
 
-  function getEncoded(): String {
+  /**
+   * @return \SimpleSAML\XMLSec\Key\PrivateKey
+   */
+  public function toXmlSecLibPrivateKey() {
+    return new \SimpleSAML\XMLSec\Key\PrivateKey($this->getEncoded(), $this->_passphrase);
+  }
+
+  function getEncoded($passphrase = NULL): String {
     openssl_pkey_export($this->keyResource, $out);
+    if (isset($passphrase)) {
+      //openssl_private_decrypt($out, $out_decrypted, $passphrase);
+      //return $out_decrypted;
+    }
     return $out;
   }
 

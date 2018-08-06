@@ -1,7 +1,17 @@
-Digipost\Signature\API\XML\DirectSignatureJobStatusResponse:
+Digipost\Signature\API\XML\XMLDirectSignatureJobStatusResponse:
     xml_root_name: direct-signature-job-status-response
     xml_root_namespace: 'http://signering.posten.no/schema/v1'
     properties:
+        reference:
+            expose: true
+            access_type: public_method
+            serialized_name: reference
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            accessor:
+                getter: getReference
+                setter: setReference
+            type: string
         signatureJobId:
             expose: true
             access_type: public_method
@@ -21,16 +31,16 @@ Digipost\Signature\API\XML\DirectSignatureJobStatusResponse:
             accessor:
                 getter: getSignatureJobStatus
                 setter: setSignatureJobStatus
-            type: Digipost\Signature\API\XML\XMLDirectSignatureJobStatus
-        status:
+            type: string
+        statuses:
             expose: true
             access_type: public_method
             serialized_name: status
             xml_element:
                 namespace: 'http://signering.posten.no/schema/v1'
             accessor:
-                getter: getStatus
-                setter: setStatus
+                getter: getStatuses
+                setter: setStatuses
             xml_list:
                 inline: true
                 entry_name: status
@@ -56,27 +66,27 @@ Digipost\Signature\API\XML\DirectSignatureJobStatusResponse:
                 getter: getDeleteDocumentsUrl
                 setter: setDeleteDocumentsUrl
             type: string
-        xadesUrl:
+        xadesUrls:
             expose: true
             access_type: public_method
             serialized_name: xades-url
             xml_element:
                 namespace: 'http://signering.posten.no/schema/v1'
             accessor:
-                getter: getXadesUrl
-                setter: setXadesUrl
+                getter: getXadesUrls
+                setter: setXadesUrls
             xml_list:
                 inline: true
                 entry_name: xades-url
                 namespace: 'http://signering.posten.no/schema/v1'
             type: array<Digipost\Signature\API\XML\XMLSignerSpecificUrl>
-        padesUrl:
+        padesUrls:
             expose: true
             access_type: public_method
             serialized_name: pades-url
             xml_element:
                 namespace: 'http://signering.posten.no/schema/v1'
             accessor:
-                getter: getPadesUrl
-                setter: setPadesUrl
+                getter: getPadesUrls
+                setter: setPadesUrls
             type: string

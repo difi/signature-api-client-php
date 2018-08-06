@@ -3,20 +3,7 @@ namespace Digipost\Signature\Client\Core\Exceptions;
 
 class SignatureException extends \RuntimeException {
 
-//	public static function constructor__Exception ($e) // [final Exception e]
-//	{
-//		$me = new self();
-//		return $me;
-//	}
-//	public static function constructor__String ($message) // [final String message]
-//	{
-//		$me = new self();
-//		return $me;
-//	}
-//	public static function constructor__String_Throwable ($message, $cause) // [final String message, final Throwable cause]
-//	{
-//		$me = new self();
-//		return $me;
-//	}
+  public function __construct(string $message = "", \Throwable $previous = NULL) {
+    parent::__construct($message, 0, $previous);
+  }
 }
-

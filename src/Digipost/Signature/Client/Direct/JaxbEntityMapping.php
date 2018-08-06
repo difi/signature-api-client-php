@@ -18,8 +18,9 @@ use Digipost\Signature\Client\Core\XAdESReference;
 class JaxbEntityMapping {
 
   static function toJaxb(DirectJob $signatureJob, Sender $globalSender) {
-    $actualSender = ActualSender::getActualSender($signatureJob->getSender(),
-                                                  $globalSender);
+    $actualSender = ActualSender::getActualSender(
+      $signatureJob->getSender(),
+      $globalSender);
 
     $jobRequest = new XMLDirectSignatureJobRequest();
     $xmlExitUrls = new XMLExitUrls();
@@ -44,32 +45,48 @@ class JaxbEntityMapping {
     if (empty($xmlObject)) {
       throw new \InvalidArgumentException("The response object is empty");
     }
+
     switch (get_class($xmlObject)) {
       case XMLDirectSignatureJobResponse::class:
         return self::fromJaxb_XMLDirectSignatureJobResponse($xmlObject);
       case XMLDirectSignatureJobStatusResponse::class:
-
+        return self::fromJaxb_XMLDirectSignatureJobStatusResponse($xmlObject);
       default:
-        throw new \InvalidArgumentException("No method to handle fromJaxb for " . get_class($xmlObject));
+        if ($xmlObject instanceof \Exception) {
+          throw $xmlObject;
+        }
+        throw new \InvalidArgumentException(
+          "No method to handle fromJaxb for " . get_class($xmlObject));
     }
   }
 
-  static function fromJaxb_XMLDirectSignatureJobResponse(XMLDirectSignatureJobResponse $xmlSignatureJobResponse) {
-    $redirectUrls = array_map('RedirectUrl::fromJaxb',
-                              $xmlSignatureJobResponse->getRedirectUrls());
+  static function fromJaxb_XMLDirectSignatureJobResponse(
+    XMLDirectSignatureJobResponse $xmlSignatureJobResponse) {
+    $redirectUrls =
+      array_map([RedirectUrl::class, 'fromJaxb'], $xmlSignatureJobResponse->getRedirectUrl());
 
-    return new DirectJobResponse($xmlSignatureJobResponse->getSignatureJobId(),
-                                 $redirectUrls,
-                                 $xmlSignatureJobResponse->getStatusUrl());
+    return new DirectJobResponse(
+      $xmlSignatureJobResponse->getSignatureJobId(),
+      $xmlSignatureJobResponse->getReference(),
+      $redirectUrls,
+      $xmlSignatureJobResponse->getStatusUrl());
   }
 
-  static function fromJaxb_XMLDirectSignatureJobStatusResponse(XMLDirectSignatureJobStatusResponse $statusResponse,
-                                                               $nextPermittedPollTime) {
+  /**
+   * @param XMLDirectSignatureJobStatusResponse $statusResponse
+   * @param null                                $nextPermittedPollTime
+   *
+   * @return DirectJobStatusResponse
+   */
+  static function fromJaxb_XMLDirectSignatureJobStatusResponse(
+    XMLDirectSignatureJobStatusResponse $statusResponse,
+    $nextPermittedPollTime = NULL) {
     $signatures = [];
     foreach ($statusResponse->getStatuses() as $signerStatus) {
       /** @var XMLSignerSpecificUrl[] $xAdESUrls */
       /** @var XMLSignerStatus $signerStatus */
-      $xAdESUrls = array_filter($statusResponse->getXadesUrls(),
+      $xAdESUrls = array_filter(
+        $statusResponse->getXadesUrls(),
         function ($url) use ($signerStatus) {
           /** @var XMLSignerSpecificUrl $url */
           return $url->getSigner() === $signerStatus->getSigner();
@@ -80,7 +97,7 @@ class JaxbEntityMapping {
       $signatures[] = new Signature(
         $signerStatus->getSigner(),
         SignerStatus::fromXmlType($signerStatus->getValue()),
-        new \DateTime($signerStatus->getSince()->getTimestamp()),
+        $signerStatus->getSince(),
         XAdESReference::of($xAdESUrl)
       );
     }
@@ -91,7 +108,7 @@ class JaxbEntityMapping {
       ConfirmationReference::of($statusResponse->getConfirmationUrl()),
       DeleteDocumentsUrl::of($statusResponse->getDeleteDocumentsUrl()),
       $signatures,
-      PAdESReference::of($statusResponse->getPadesUrl()),
+      PAdESReference::of($statusResponse->getPadesUrls()),
       $nextPermittedPollTime);
   }
 }

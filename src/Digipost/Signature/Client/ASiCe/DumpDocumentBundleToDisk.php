@@ -19,6 +19,7 @@ class DumpDocumentBundleToDisk implements DocumentBundleProcessor {
 
   private $directory;
 
+  /** @var \DateTime */
   private $clock;
 
   function __construct(ContainerInterface $container) {
@@ -55,8 +56,6 @@ class DumpDocumentBundleToDisk implements DocumentBundleProcessor {
     else {
       throw new InvalidDirectoryException($this->directory);
     }
-    //static final Function<String, String> referenceFilenamePart = reference -> reference.replace(' ', '_') + "-";
-    //}
   }
 
   static final function referenceFilenamePart(String $reference) {

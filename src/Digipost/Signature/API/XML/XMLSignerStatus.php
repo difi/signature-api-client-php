@@ -66,7 +66,7 @@ class XMLSignerStatus {
   protected $signer;
 
   /**
-   * @Serializer\Type("DateTime")
+   * @Serializer\Type("DateTime<'Y-m-d\TH:i:s.uP'>")
    * @Serializer\XmlAttribute()
    */
   protected $since;

@@ -7,6 +7,7 @@ use Digipost\Signature\Client\Core\DeleteDocumentsUrl;
 use Digipost\Signature\Client\Core\Internal\Cancellable;
 use Digipost\Signature\Client\Core\Internal\Confirmable;
 use Digipost\Signature\Client\Core\PAdESReference;
+use Ds\Set;
 
 /**
  * Indicates a job which has got a new {@link PortalJobStatus status}
@@ -32,36 +33,29 @@ class PortalJobStatusChanged implements Confirmable, Cancellable {
     return new PortalJobStatusChanged(NULL, PortalJobStatus::NO_CHANGES(), NULL,
                                       NULL, NULL, NULL,
                                       NULL, $nextPermittedPollTime);
-    //    {
-    //      public
-    //      function getSignatureJobId() {
-    //        throw new IllegalStateException(
-    //          "There were " . get_class($this) . ", and querying the job ID is a programming error. " .
-    //          "Use the method is(" . PortalJobStatus::class . "." . NO_CHANGES::name() . ") " .
-    //        "to check if there were any status change before attempting to get any further information.");
-    //            }
-    //
-    //      public
-    //      function toString() {
-    //        return "no portal jobs with updated status";
-    //      }
-    //    };
   }
-
+  /** @var int */
   private $signatureJobId;
 
+  /** @var PortalJobStatus */
   private $status;
 
+  /** @var DeleteDocumentsUrl */
   private $deleteDocumentsUrl;
 
+  /** @var PAdESReference */
   private $pAdESReference;
 
+  /** @var ConfirmationReference */
   private $confirmationReference;
 
+  /** @var CancellationUrl */
   private $cancellationUrl;
 
+  /** @var Signature[] */
   private $signatures;
 
+  /** @var \DateTime */
   private $nextPermittedPollTime;
 
   function __construct(int $signatureJobId,
@@ -78,7 +72,7 @@ class PortalJobStatusChanged implements Confirmable, Cancellable {
     $this->deleteDocumentsUrl = $deleteDocumentsUrl;
     $this->pAdESReference = $pAdESReference;
     $this->confirmationReference = $confirmationReference;
-    $this->signatures = $signatures;
+    $this->signatures = new Set($signatures);
     $this->nextPermittedPollTime = $nextPermittedPollTime;
   }
 
@@ -120,25 +114,27 @@ class PortalJobStatusChanged implements Confirmable, Cancellable {
    *                                 <sup>2</sup>: using contact information from a lookup service.
    *                                 </p>
    *
-   * @return
-   * @throws IllegalArgumentException if the job response doesn't contain a signature from this signer
+   * @return Signature
+   * @throws \InvalidArgumentException if the job response doesn't contain a signature from this signer
    */
   public function getSignatureFrom(SignerIdentifier $signer) {
-    //    return $this->signatures->stream()
-    //      ->filter($this->signatureFrom($signer))
-    //      ->findFirst()
-    //      ->orElseThrow(()-> new IllegalArgumentException("Unable to find signature from this signer"));
+    try {
+      return $this->signatures->filter(Signature::signatureFrom($signer))
+                              ->first();
+    } catch (\UnderflowException $e) {
+      throw new \InvalidArgumentException('Unable to find signature from this signer');
+    }
   }
 
   public function getNextPermittedPollTime() {
     return $this->nextPermittedPollTime;
   }
 
-  public function getConfirmationReference() {
+  public function getConfirmationReference(): ConfirmationReference {
     return $this->confirmationReference;
   }
 
-  public function getCancellationUrl() {
+  public function getCancellationUrl(): CancellationUrl {
     return $this->cancellationUrl;
   }
 

@@ -2,7 +2,10 @@ services:
   _defaults:
     autowire: true
     public: true
-    autoconfigure: true
+    autoconfigure: false
+
+  digipost_signature.event_dispatcher:
+    class: Symfony\Component\EventDispatcher\EventDispatcher
 
   digipost_signature.keystore_file_loader:
     class: Digipost\Signature\Loader\KeyStoreFileLoader
@@ -20,33 +23,46 @@ services:
 
   digipost_signature.keystore:
     class: Digipost\Signature\Client\Core\Internal\Security\KeyStore
+    autowire: false
     calls:
       - [initFromFile, ['@digipost_signature.keystore_file_loader', '%digipost_signature.keystore.password%', '%digipost_signature.keystore.key.password%']]
 
   digipost_signature.client_guzzle_config:
-    class: Digipost\Signature\Client\Core\Internal\Http\ClientConfig
-    factory: ['Digipost\Signature\Client\Core\Internal\Http\ClientConfig', factory]
+    class: Digipost\Signature\Client\Core\Internal\Http\ClientGuzzleConfig
+    factory: ['Digipost\Signature\Client\Core\Internal\Http\ClientGuzzleConfig', factory]
     autowire: false
-    arguments: ['@service_container']
+    arguments: ['@service_container', '@digipost_signature.event_dispatcher']
 
-  Digipost\Signature\Client\ClientConfigurationBuilder:
+  digipost_signature.certificate_trust_strategy:
+    class: Digipost\Signature\Client\Core\Internal\Http\PostenEnterpriseCertificateStrategy
+    autowire: false
+    arguments: ['@digipost_signature.keystore', '@digipost_signature.event_dispatcher']
+
+  digipost_signature.client_configuration_builder:
     class: Digipost\Signature\Client\ClientConfigurationBuilder
     factory: 'Digipost\Signature\Client\ClientConfiguration::builder'
     autowire: false
     arguments:
       - '@service_container'
       - '@digipost_signature.keystore_config'
+      - '@digipost_signature.event_dispatcher'
 
-  Digipost\Signature\Client\ClientConfiguration:
+  digipost_signature.client_helper:
+    class: Digipost\Signature\Client\Core\Internal\ClientHelper
+    autowire: false
+    arguments:
+      ['@?', '@?', '@logger']
+
+  digipost_signature.client_configuration:
     class: Digipost\Signature\Client\ClientConfiguration
     factory_service: 'Digipost\Signature\Client\ClientConfigurationBuilder'
     autowire: false
     arguments:
       - '@digipost_signature.keystore_config'
       - '@digipost_signature.client_guzzle_config'
+      - '@digipost_signature.event_dispatcher'
 
-
-  Digipost\Signature\Client\Core\Internal\XML\Marshalling:
+  digipost_signature.xml_marshaller:
     class: Digipost\Signature\Client\Core\Internal\XML\Marshalling
     factory: ['Digipost\Signature\Client\Core\Internal\XML\Marshalling', factory]
     autowire: false
@@ -54,7 +70,8 @@ services:
     arguments:
       - '@service_container'
 
-  Digipost\Signature\Client\Core\Internal\XMLSignatureFactory:
+  digipost_signature.xml_signature_factory:
+    class: Digipost\Signature\Client\Core\Internal\XMLSignatureFactory
     arguments:
       ['@service_container']
 
@@ -63,7 +80,7 @@ services:
     factory: ['Digipost\Signature\Client\Core\Internal\XMLDigitalSignatureContext', factory]
     arguments: ['@service_container', '@sabre_io.xml.service']
 
-  Digipost\Signature\Client\ASiCe\DumpDocumentBundleToDisk:
+  digipost_signature.asice.document_bundle_dumper:
     class: Digipost\Signature\Client\ASiCe\DumpDocumentBundleToDisk
     factory: ['Digipost\Signature\Client\ASiCe\DumpDocumentBundleToDisk', factory]
     autowire: false
@@ -74,7 +91,7 @@ services:
     factory_method: locateResource
     synthetic: true
 
-  Digipost\Signature\Client\Certificates:
+  digipost_signature.client_certificates:
     class: Digipost\Signature\Client\Certificates
     factory: ['Digipost\Signature\Client\Certificates', build]
     autowire: false

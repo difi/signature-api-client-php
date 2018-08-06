@@ -1,2 +1,3 @@
 Digipost\Signature\API\XML\Thirdparty\ASiCe\Extension:
     xml_root_name: Extension
+    xml_root_namespace: 'http://uri.etsi.org/2918/v1.2.1#'

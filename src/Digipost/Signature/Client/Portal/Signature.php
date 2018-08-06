@@ -9,12 +9,16 @@ use Digipost\Signature\Client\Core\XAdESReference;
 
 class Signature {
 
+  /** @var Signer */
   private $signer;
 
+  /** @var SignatureStatus */
   private $status;
 
+  /** @var \DateTime */
   private $statusDateTime;
 
+  /** @var XAdESReference */
   private $xAdESReference;
 
   function __construct(String $personalIdentificationNumber,
@@ -50,7 +54,10 @@ class Signature {
   }
 
   static function signatureFrom(SignerIdentifier $signer) {
-    //return signature -> signature . signer . isSameAs(signer);
+    return function ($signature) use ($signer) {
+      /** @var Signature $signature */
+      return $signature->signer->isSameAs($signer);
+    };
   }
 
   /**
@@ -70,7 +77,7 @@ class Signature {
   }
 
   public function toString() {
-    return "Signature from " . $this->signer . " with status '" . $this->status . "' since " . $this->statusDateTime . "" .
+    return "Signature from " . $this->signer . " with status '" . $this->status . "' since " . $this->statusDateTime->format(\DateTime::RFC3339) .
       ($this->xAdESReference !== NULL ? ". XAdES available at " . $this->xAdESReference->getxAdESUrl() : "");
   }
 }
@@ -123,10 +130,10 @@ class Signer {
     return $this->personalIdentificationNumber !== NULL;
   }
 
-  public function toString() {
+  public function __toString() {
 
     if ($this->personalIdentificationNumber !== NULL) {
-      PersonalIdentificationNumbers::mask($this->personalIdentificationNumber);
+      return PersonalIdentificationNumbers::mask($this->personalIdentificationNumber);
     }
     else {
       if ($this->emailAddress !== NULL && $this->mobileNumber === NULL) {
