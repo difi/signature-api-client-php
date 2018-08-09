@@ -1,6 +1,7 @@
 /app/config/parameters.yml
-/app/Resources/config/*.*
+/app/Resources/config/*
 !/app/Resources/config/*.dist
+!/app/Resources/config/.gitkeep
 /build/
 /node_modules/
 /phpunit.xml
@@ -23,6 +24,8 @@
 /web/bundles/
 /web/build/fonts/glyphicons-*
 /web/build/images/glyphicons-*
+/composer.lock
 
 *.pem
 *.p12
+!/tests/Resources/config/selfsigned-keystore.p12
