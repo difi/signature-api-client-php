@@ -11,9 +11,9 @@ use MyCLabs\Enum\Enum;
  *
  * @package Digipost\Signature\Client\Core
  *
- * @method static IdentifierInSignedDocuments PERSONAL_IDENTIFICATION_NUMBER_AND_NAME
- * @method static IdentifierInSignedDocuments DATE_OF_BIRTH_AND_NAME
- * @method static IdentifierInSignedDocuments NAME
+ * @method static IdentifierInSignedDocuments PERSONAL_IDENTIFICATION_NUMBER_AND_NAME()  Personal identification number and name.
+ * @method static IdentifierInSignedDocuments DATE_OF_BIRTH_AND_NAME()                   Date of birth and name.
+ * @method static IdentifierInSignedDocuments NAME()                                     Name
  */
 class IdentifierInSignedDocuments extends Enum implements MarshallableEnum {
 

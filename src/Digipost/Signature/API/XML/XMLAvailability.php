@@ -28,7 +28,6 @@ use JMS\Serializer\Annotation as Serializer;
  *   "activationTime",
  *   "availableSeconds"
  * })
- * @Serializer\XmlNamespace(prefix="")
  */
 class XMLAvailability {
 

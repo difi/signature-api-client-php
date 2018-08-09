@@ -55,18 +55,9 @@ class PortalSigner {
     return $this;
   }
 
-  public static function identifiedByPersonalIdentificationNumber_String_Notifications(
+  public static function identifiedByPersonalIdentificationNumber(
     String $personalIdentificationNumber,
-    Notifications $notifications) {
-    return new PortalSignerBuilder(
-      IdentifierType::PERSONAL_IDENTIFICATION_NUMBER(),
-      $personalIdentificationNumber,
-      $notifications);
-  }
-
-  public static function identifiedByPersonalIdentificationNumber_String_NotificationsUsingLookup(
-    $personalIdentificationNumber,
-    $notificationsUsingLookup) // [String personalIdentificationNumber, NotificationsUsingLookup notificationsUsingLookup]
+    NotificationsUsingLookup $notificationsUsingLookup)
   {
     return new PortalSignerBuilder(
       IdentifierType::PERSONAL_IDENTIFICATION_NUMBER(),
@@ -128,7 +119,10 @@ class PortalSigner {
     return $this->notificationsUsingLookup;
   }
 
-  public function getSignatureType(): SignatureType {
+  /**
+   * @return SignatureType
+   */
+  public function getSignatureType() {
     return $this->signatureType;
   }
 
@@ -150,9 +144,9 @@ class PortalSignerBuilder implements SignerCustomizations {
   private $built = FALSE;
 
   function __construct(
-    IdentifierType $identifierType,
-    String $personalIdentificationNumber,
-    Notifications $notifications,
+    IdentifierType $identifierType = NULL,
+    String $personalIdentificationNumber = NULL,
+    Notifications $notifications = NULL,
     NotificationsUsingLookup $notificationsUsingLookup = NULL) {
     $this->target = new PortalSigner(
       $identifierType,

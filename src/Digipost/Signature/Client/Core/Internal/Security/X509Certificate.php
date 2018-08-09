@@ -533,7 +533,10 @@ End;
   /**
    * @return string
    */
-  public function getCrlUri(): string {
+  public function getCrlUri() {
+    if (!isset($this->info['extensions']['crlDistributionPoints'])) {
+      return NULL;
+    }
     if (preg_match('/URI:([^\\n]+)\\n/',
                    $this->info['extensions']['crlDistributionPoints'],
                    $matches)) {

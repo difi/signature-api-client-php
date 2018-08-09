@@ -3,18 +3,28 @@
 namespace Digipost\Signature\API\XML;
 
 use Digipost\Signature\JAXB\XMLDocument;
+use JMS\Serializer\Annotation as Serializer;
 
-class XMLPortalDocument implements XMLDocument, ToString2 {
+class XMLPortalDocument implements XMLDocument {
 
-  protected $title;  // String
+  protected $title;
 
-  protected $nonsensitiveTitle;  // String
+  protected $nonsensitiveTitle;
 
-  protected $description;  // String
+  protected $description;
 
-  protected $href;  // String
+  /**
+   * @var String
+   * @Serializer\Type("string")
+   * @Serializer\XmlAttribute()
+   */
+  protected $href;
 
-  protected $mime;  // String
+  /**
+   * @Serializer\Type("string")
+   * @Serializer\XmlAttribute()
+   */
+  protected $mime;
 
   /**
    * XMLPortalDocument constructor.

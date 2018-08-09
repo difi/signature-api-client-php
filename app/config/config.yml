@@ -30,6 +30,7 @@ digipost_signature:
     key:
       alias: '%digipost_signature.keystore.key.alias%'
       password: '%digipost_signature.keystore.key.password%'
+    ca_path: '%digipost_signature.keystore.ca_path%'
     client_cert: '%digipost_signature.keystore.client_cert%'
     client_key: '%digipost_signature.keystore.client_key%'
   client:

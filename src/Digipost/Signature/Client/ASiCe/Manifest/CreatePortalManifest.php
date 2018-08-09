@@ -69,12 +69,12 @@ class CreatePortalManifest extends ManifestCreator {
     $sender = new XMLSender();
     $xmlPortalDocument = new XMLPortalDocument();
     $xmlAvailability = new XMLAvailability();
-    return $xmlPortalSignerJobManifest
+
+    $requiredAuthentication = $job->getRequiredAuthentication();
+    $identifierInSignedDocuments = $job->getIdentifierInSignedDocuments();
+
+    $manifest = $xmlPortalSignerJobManifest
       ->withSigners($xmlSigners)
-      ->withRequiredAuthentication(
-        $job->getRequiredAuthentication()
-            ->getXmlEnumValue() || NULL
-      )
       ->withSender(
         $sender->withOrganizationNumber($sender->getOrganizationNumber())
       )
@@ -90,31 +90,36 @@ class CreatePortalManifest extends ManifestCreator {
         $xmlAvailability
           ->withActivationTime($activationTime)
           ->withAvailableSeconds($job->getAvailableSeconds())
-      )
-      ->withIdentifierInSignedDocuments(
-        $job->getIdentifierInSignedDocuments()
-            ->getXmlEnumValue() || NULL
       );
+    if ($requiredAuthentication) {
+      $manifest->withRequiredAuthentication($requiredAuthentication->getXmlEnumValue());
+    }
+    if ($identifierInSignedDocuments) {
+      $manifest->withIdentifierInSignedDocuments($identifierInSignedDocuments->getXmlEnumValue());
+    }
+
+    return $manifest;
   }
 
   private function generateSigner(PortalSigner $signer) {
 
+    $signatureType = $signer->getSignatureType();
+    $onBehalfOf = $signer->getOnBehalfOf();
     $xmlSigner = new XMLPortalSigner();
     $xmlSigner
-      ->withOrder($signer->getOrder())
-      ->withSignatureType(
-        $signer->getSignatureType()
-               ->getXmlEnumValue() || NULL
-      )
-      ->withOnBehalfOf($signer->getOnBehalfOf()->getXmlEnumValue() || NULL);
+      ->withOrder($signer->getOrder());
+    if ($signatureType) {
+      $xmlSigner->withSignatureType($signatureType->getXmlEnumValue());
+    }
+    if ($onBehalfOf) {
+      $xmlSigner->withOnBehalfOf($onBehalfOf->getXmlEnumValue());
+    }
 
     if ($signer->isIdentifiedByPersonalIdentificationNumber()) {
-
       $xmlSigner->setPersonalIdentificationNumber(
         $signer->getIdentifier() /* TODO .orElseThrow(SIGNER_NOT_SPECIFIED) */
       );
     }
-
     else {
       $xmlSigner->setIdentifiedByContactInformation(new XMLEnabled());
     }

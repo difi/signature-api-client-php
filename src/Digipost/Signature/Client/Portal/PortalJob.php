@@ -7,6 +7,7 @@ use Digipost\Signature\Client\Core\IdentifierInSignedDocuments;
 use Digipost\Signature\Client\Core\Internal\JobCustomizations;
 use Digipost\Signature\Client\Core\JOB;
 use Digipost\Signature\Client\Core\Sender;
+use MyCLabs\Enum\Enum;
 
 /**
  * Class PortalJob
@@ -52,13 +53,17 @@ class PortalJob implements JOB {
     return $this->sender;
   }
 
-
-  public function getRequiredAuthentication(): AuthenticationLevel {
+  /**
+   * @return AuthenticationLevel
+   */
+  public function getRequiredAuthentication() {
     return $this->requiredAuthentication;
   }
 
-
-  public function getIdentifierInSignedDocuments(): IdentifierInSignedDocuments {
+  /**
+   * @return IdentifierInSignedDocuments
+   */
+  public function getIdentifierInSignedDocuments() {
     return $this->identifierInSignedDocuments;
   }
 
@@ -75,7 +80,7 @@ class PortalJob implements JOB {
   }
 
 
-  public function builder(PortalDocument $document, $signers) {
+  public static function builder(PortalDocument $document, $signers) {
     if (!is_array($signers)) {
       $signers = [$signers];
     }
@@ -175,20 +180,11 @@ class PortalJobBuilder implements JobCustomizations {
     return $this;
   }
 
-//  public function availableFor(int $duration, TimeUnitInterface $unit) {
-//    $seconds = $duration;
-//    switch (get_class($unit)) {
-//      case TimeUnitDay::class:
-//        $seconds = TimeUnitDay::toSeconds($duration); break;
-//      case TimeUnitHour::class:
-//        $seconds = TimeUnitHour::toSeconds($duration); break;
-//      case TimeUnitMinute::class:
-//        $seconds = TimeUnitMinute::toSeconds($duration); break;
-//    }
-//
-//    $this->target->setAvailableSeconds($seconds);
-//    return $this;
-//  }
+  public function availableFor(int $duration, TimeUnit $unit) {
+    $seconds = $duration;
+    $this->target->setAvailableSeconds($unit->toSeconds($seconds));
+    return $this;
+  }
 
   public function build() {
     if ($this->built) {

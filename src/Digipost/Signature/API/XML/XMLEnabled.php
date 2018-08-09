@@ -2,6 +2,9 @@
 
 namespace Digipost\Signature\API\XML;
 
+use JMS\Serializer\Annotation as Serializer;
+use phpDocumentor\Reflection\Types\String_;
+
 /**
  * Class XMLEnabled
  *

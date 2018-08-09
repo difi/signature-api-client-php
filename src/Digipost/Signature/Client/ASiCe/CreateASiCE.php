@@ -7,6 +7,7 @@ use Digipost\Signature\Client\ASiCe\Manifest\ManifestCreator;
 use Digipost\Signature\Client\ASiCe\Signature\CreateSignature;
 use Digipost\Signature\Client\Core\Exceptions\SenderNotSpecifiedException;
 use Digipost\Signature\Client\Core\SignatureJob;
+use GoetasWebservices\XML\XSDReader\Schema\Exception\SchemaException;
 use function GuzzleHttp\Psr7\stream_for;
 
 /**
@@ -47,6 +48,7 @@ class CreateASiCE {
    * @param SignatureJob $job
    *
    * @return DocumentBundle
+   * @throws SchemaException
    */
   public function createASiCE(SignatureJob $job) {
     $sender = $job->getSender();

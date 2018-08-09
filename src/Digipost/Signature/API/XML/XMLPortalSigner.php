@@ -3,6 +3,7 @@
 namespace Digipost\Signature\API\XML;
 
 use Digipost\Signature\JAXB\XMLSigner;
+use JMS\Serializer\Annotation as Serializer;
 
 class XMLPortalSigner implements XMLSigner {
 
@@ -14,11 +15,20 @@ class XMLPortalSigner implements XMLSigner {
 
   protected $notifications;  // XMLNotifications
 
-  protected $notificationsUsingLookup;  // XMLNotificationsUsingLookup
+  /**
+   * @var XMLNotificationsUsingLookup
+   * @Serializer\Type("Digipost\Signature\API\XML\XMLNotificationsUsingLookup")
+   */
+  protected $notificationsUsingLookup;
 
-  protected $onBehalfOf;  // XMLSigningOnBehalfOf
+  protected $onBehalfOf;
 
-  protected $order;  // Integer
+  /**
+   * @var int
+   * @Serializer\Type("integer")
+   * @Serializer\XmlAttribute()
+   */
+  protected $order;
 
   function __construct(XMLEnabled $identifiedByContactInformation = NULL,
                        String $personalIdentificationNumber = NULL,

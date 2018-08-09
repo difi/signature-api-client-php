@@ -8,7 +8,7 @@ interface XMLManifest {
 
 	function getDocument() : XMLDocument;
 
-	function getRequiredAuthentication() : XMLAuthenticationLevel;
+	function getRequiredAuthentication();
 
   /**
    * @return XMLSigner[] | XMLSigner

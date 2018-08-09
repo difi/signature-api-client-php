@@ -60,7 +60,7 @@ class XMLPortalSignatureJobManifest implements XMLManifest {
     return $this;
   }
 
-  public function getRequiredAuthentication(): XMLAuthenticationLevel {
+  public function getRequiredAuthentication() {
     return $this->requiredAuthentication;
   }
 

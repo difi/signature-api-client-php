@@ -28,9 +28,17 @@ use JMS\Serializer\Annotation as Serializer;
  */
 class XMLNotificationsUsingLookup {
 
-  protected $email;  // XMLEnabled
+  /**
+   * @Serializer\Type("Digipost\Signature\API\XML\XMLEnabled")
+   * @Serializer\XmlElement(namespace="http://signering.posten.no/schema/v1")
+   */
+  protected $email;
 
-  protected $sms;  // XMLEnabled
+  /**
+   * @Serializer\Type("Digipost\Signature\API\XML\XMLEnabled")
+   * @Serializer\XmlElement(namespace="http://signering.posten.no/schema/v1")
+   */
+  protected $sms;
 
   function __construct(XMLEnabled $email = NULL, XMLEnabled $sms = NULL) {
     $this->email = $email;
