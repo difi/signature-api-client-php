@@ -3,14 +3,18 @@
 namespace Digipost\Signature\Client\Core\Internal\Security;
 
 use Digipost\Signature\Client\Core\Exceptions\CertificateParsingFailedException;
+use Digipost\Signature\Client\Core\Exceptions\KeyException;
 use Digipost\Signature\Client\Core\Exceptions\KeyStoreDecryptionFailedException;
 use Digipost\Signature\Client\Core\Exceptions\OpenSSLExtensionNotLoadedException;
 use Digipost\Signature\Client\Core\Exceptions\PrivateKeyDecryptionFailedException;
 use Digipost\Signature\Client\Core\Exceptions\RuntimeIOException;
 use Digipost\Signature\Loader\KeyStoreFileLoader;
-use Sop\CryptoEncoding\PEM;
-use Sop\CryptoEncoding\PEMBundle;
+use Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser;
 
+/**
+ * @property-read PublicKey publicKey
+ * @property-read X509Certificate certificate
+ */
 class KeyStore {
 
   /**
@@ -54,7 +58,7 @@ class KeyStore {
    * @throws KeyStoreDecryptionFailedException
    * @throws OpenSSLExtensionNotLoadedException
    * @throws PrivateKeyDecryptionFailedException
-     * @throws CertificateParsingFailedException
+   * @throws CertificateParsingFailedException
    */
   public function load(String $contents, String $passphrase, String $privatekeyPassword) {
     if (!openssl_pkcs12_read($contents, $this->keystore, $passphrase)) {
@@ -65,19 +69,20 @@ class KeyStore {
     }
     $this->X509Certificate = new X509Certificate($this->keystore['cert']);
     $this->privateKey = new PrivateKey($this->keystore['pkey'], $privatekeyPassword);
-
     $this->chain = [];
     $extraCerts =& $this->keystore['extracerts'];
-    end($extraCerts);
-    while ($cert = current($extraCerts)) {
-      $this->chain[] = new X509Certificate($cert);
-      prev($extraCerts);
+    if (is_array($extraCerts)) {
+      end($extraCerts);
+      while ($cert = current($extraCerts)) {
+        $this->chain[] = new X509Certificate($cert);
+        prev($extraCerts);
+      }
     }
     $this->chain[] = $this->X509Certificate;
     krsort($this->chain);
     X509Certificate::buildChain($this->chain);
-//    asort($this->chain);
-//    X509Certificate::buildChain($this->chain);
+    //    asort($this->chain);
+    //    X509Certificate::buildChain($this->chain);
   }
 
   /**
@@ -107,6 +112,70 @@ class KeyStore {
     $self = new KeyStore();
     $self->load(file_get_contents($keystoreLocation), $passphrase, $passphrase);
     return $self;
+  }
+
+  /**
+   * Convert a keystore file to PKCS#12 format using [Java Keytool](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html) cli command.
+   *
+   * @param string $filename  The source filename of the keystore to be converted.
+   * @param string $password  The keystore password
+   * @param string $storeType [optional] The store type, or (default) <em>auto</em> to autodetect from
+   *                          file type.
+   *
+   * @return string The converted filename (same as $filename, but with .p12 file ending).
+   *
+   * @throws KeyException on invalid store type (or unable to detect from filename).
+   * @throws KeyException on <em>keytool</em> command error.
+   */
+  public static function convertKeyStore($filename, $password, $storeType = 'auto') {
+    if ($storeType === 'auto') {
+      $fileInfo = new FileinfoMimeTypeGuesser();
+      $mime = $fileInfo->guess($filename);
+      switch ($mime) {
+        case 'application/x-java-jce-keystore':
+          $storeType = 'JCEKS';
+          break;
+        case 'application/x-java-keystore':
+          $storeType = 'JKS';
+          break;
+        default:
+          throw new KeyException('Unable to detect valid KeyStore file type: ' . $mime);
+      }
+    }
+
+    $newFilename = substr($filename, 0, strrpos($filename, '.')) . '.p12';
+
+    if (file_exists($newFilename)) {
+      throw new KeyException("Can't convert keystore, because destination file already exists: $newFilename");
+    }
+
+    $args = [
+      '-noprompt', '-importkeystore',
+      '-srckeystore' => $filename,
+      '-destkeystore' => $newFilename,
+      '-srcstoretype' => $storeType,
+      '-deststoretype' => 'PKCS12',
+      '-srcstorepass' => $password,
+      '-deststorepass' => $password,
+    ];
+    array_walk($args, function (&$v, $k) {
+      if (!is_numeric($k)) {
+        $v = $k . ' ' . escapeshellarg($v);
+      }
+    });
+    $cmd = 'keytool ' . implode(' ', array_values($args)) . ' 2>&1';
+    exec($cmd, $out, $ret);
+    if ($ret === 0) {
+      trigger_error(
+        'Converted JCEKS keystore "' . basename($filename) . '" to PKCS#12 (saved as "' .
+        realpath($newFilename) . '")', E_USER_NOTICE);
+    }
+    else {
+      throw new KeyException(
+        "Invalid keystore type (JCEKS). Was unable to convert to PKCS#12: \n[keytool] " .
+        implode("\n[keytool] ", $out));
+    }
+    return $newFilename;
   }
 
   public function __get($name) {
@@ -145,7 +214,7 @@ class KeyStore {
   }
 
   public static function getDefaultType() {
-
+    return 'pkcs12';
   }
 
   public function getClientCertificate() {
@@ -153,19 +222,12 @@ class KeyStore {
   }
 
   public function getCertificateChain($alias = '') {
-    //print_r($this->keystore);
     return $this->chain;
-    //return $this->X509Certificate->;
   }
 
   // TODO: Fix lookup by alias
   public function getCertificate($alias) {
     return $this->X509Certificate;
-//    $chain = \X509\Certificate\CertificateChain::fromPEMs(...PEMBundle::fromString($this->X509Certificate->getClearText()));
-//    $cert = $chain->endEntityCertificate();
-//    $x509 = new X509Certificate($cert->toPEM()->string());
-//    $x509->setIssuer($this->X509Certificate->getIssuer());
-//    return $x509;
   }
 
   public function getKey(String $alias, String $passphrase): PrivateKey {

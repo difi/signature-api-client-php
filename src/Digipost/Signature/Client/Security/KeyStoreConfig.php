@@ -11,6 +11,7 @@ use Digipost\Signature\Client\Core\Internal\Security\PrivateKeyInterface;
 use Digipost\Signature\Client\Core\Internal\Security\X509Certificate;
 use Digipost\Signature\Loader\KeyStoreFileLoader;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser;
 
 /**
  * Class KeyStoreConfig
@@ -130,7 +131,15 @@ class KeyStoreConfig {
         "Failed to initialize key store from '$filename'. Are you sure the file exists?"
       );
     }
-    $data = file_get_contents($filename);
+    $fileInfo = new FileinfoMimeTypeGuesser();
+    $info = $fileInfo->guess($filename);
+    if ($info === 'application/x-java-jce-keystore') {
+      $newFilename = KeyStore::convertKeyStore($filename, $keyStorePassword, 'JCEKS');
+      $data = file_get_contents($newFilename);
+    } else {
+      $data = file_get_contents($filename);
+    }
+
     return KeyStoreConfig::fromKeyStore(
       $data,
       $alias,

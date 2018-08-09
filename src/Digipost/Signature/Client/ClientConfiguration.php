@@ -92,7 +92,7 @@ class ClientConfiguration implements ProvidesCertificateResourcePaths,
   /** @var ContainerInterface */
   private $container;
 
-  function __staticInit() {
+  public static function __staticInit() {
     self::$MANDATORY_USER_AGENT =
       "Posten signering PHP API Client/" . ClientMetadata::$VERSION . " (PHP " . PHP_VERSION . ")";
   }
@@ -156,6 +156,9 @@ class ClientConfiguration implements ProvidesCertificateResourcePaths,
     return $this->guzzleConfig;
   }
 
+  /**
+   * @return ContainerInterface
+   */
   public function getContainer(): ContainerInterface {
     return $this->container;
   }
@@ -348,8 +351,8 @@ class ClientConfigurationBuilder {
    * Set the sender used globally for every signature job.
    * <p>
    * Use
-   * {@link \Digipost\Signature\Client\Portal\PortalJobBuilder::withSender(Sender)} or
-   * {@link \Digipost\Signature\Client\Direct\DirectJobBuilder::withSender(Sender)} if you need
+   * {@link PortalJobBuilder::withSender() PortalJobBuilder->withSender(Sender)} or
+   * {@link DirectJobBuilder::withSender() DirectJobBuilder->withSender(Sender)} if you need
    * to specify different senders per signature job (typically when acting as a broker on behalf of
    * multiple other organizations)
    *
@@ -364,7 +367,7 @@ class ClientConfigurationBuilder {
   }
 
   /**
-   * Customize the {@link HttpHeaders#USER_AGENT User-Agent} header value
+   * Customize the `User-Agent` header value
    * to include the given string.
    *
    * @param String $userAgentCustomPart
@@ -380,7 +383,7 @@ class ClientConfigurationBuilder {
   /**
    * Makes the client log the sent requests and received responses to the
    * logger named
-   * {@link ClientConfiguration#HTTP_REQUEST_RESPONSE_LOGGER_NAME}.
+   * {@link ClientConfiguration::HTTP_REQUEST_RESPONSE_LOGGER_NAME}.
    */
   public function enableRequestAndResponseLogging() {
     //loggingFeature = Optional . of(new LoggingFeature(java . util . logging . Logger . getLogger(HTTP_REQUEST_RESPONSE_LOGGER_NAME), 16 * 1024));
@@ -395,14 +398,13 @@ class ClientConfigurationBuilder {
    * `timestamp-[reference_from_job-]asice.zip}`
    * The <em>timestamp</em> part may use a clock of your choosing, make
    * sure to override the system clock with
-   * {@link ::usingClock()} before calling this method if that is
+   * {@link ClientConfigurationBuilder::usingClock() #usingClock()} before calling this method if that is
    * desired.
    * <p>
    * The <em>reference_from_job</em> part is only included if the job is
    * given such a reference using
-   * {@link DirectJobBuilder#withReference(UUID)
-   * DirectJobBuilder#withReference} or
-   * {@link PortalJobBuilder#withReference(UUID) PortalJobBuilder#withReference(..)}.
+   * {@link DirectJobBuilder::withReference() DirectJobBuilder#withReference} or
+   * {@link PortalJobBuilder::withReference() PortalJobBuilder#withReference}.
    *
    * @param String $directory The directory to dump to. This directory must
    *                          already exist, or creating new signature jobs
@@ -487,7 +489,7 @@ class ClientConfigurationBuilder {
   }
 
   /**
-   * @return \Digipost\Signature\Client\ClientConfiguration
+   * @return ClientConfiguration
    */
   public function build(): ClientConfiguration {
     $this->guzzleConfig->property(
@@ -498,10 +500,6 @@ class ClientConfigurationBuilder {
       RequestOptions::CONNECT_TIMEOUT,
       $this->connectTimeoutMs
     );
-
-    //$this->guzzleConfig->register(MultiPartFeature::class);
-    //$this->guzzleConfig->property(RequestOptions::MULTIPART, []);
-    //$this->guzzleConfig->register(JaxbMessageReaderWriterProvider::class);
 
     $client_cert = $this->container->getParameter(
       'digipost_signature.keystore.client_cert'
@@ -539,8 +537,6 @@ class ClientConfigurationBuilder {
     );
 
     $this->setTrustStrategy();
-    //$this->guzzleConfig->mapRequestHandler($this->requestHandlerEventDispatcher(), 'push', 'client_configure');
-    //$this->loggingFeature->ifPresent($this->guzzleConfig::register);
 
     return new ClientConfiguration(
       $this->keyStoreConfig,
@@ -554,10 +550,12 @@ class ClientConfigurationBuilder {
     );
   }
 
-  function createUserAgentString() {
-    return ClientConfiguration::$MANDATORY_USER_AGENT . $this->customUserAgentPart ? sprintf(
+  public function createUserAgentString() {
+    return ClientConfiguration::$MANDATORY_USER_AGENT . ($this->customUserAgentPart ? sprintf(
       " (%s)",
       $this->customUserAgentPart
-    ) : '';
+    ) : '');
   }
 }
+
+ClientConfiguration::__staticInit();
