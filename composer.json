@@ -61,6 +61,7 @@
         "cweagans/composer-patches": "^1.6",
         "digipost/signature-api-specification": "^2.3",
         "goetas-webservices/xsd2php-runtime": "^0.2.8",
+        "goetas-webservices/xsd-reader": "^0.2.6",
         "guzzlehttp/guzzle": "^6.3",
         "guzzlehttp/psr7": "^1.4",
         "incenteev/composer-parameter-handler": "^2.0",

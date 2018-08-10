@@ -10,11 +10,10 @@ xsd2php:
     'Digipost\Signature\API\XML\Thirdparty\XAdES': '%kernel.project_dir%/src/Digipost/Signature/API/XML/Thirdparty/XAdES'
     'Digipost\Signature\API\XML': '%kernel.project_dir%/src/Digipost/Signature/API/XML'
   destinations_jms:
-    'Digipost\Signature\API\XML\Thirdparty\XMLdSig': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer/XMLdSig'
-    'Digipost\Signature\API\XML\Thirdparty\ASiCe': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer/ASiCe'
-    'Digipost\Signature\API\XML\Thirdparty\XAdES': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer/XAdES'
-    'Digipost\Signature\API\XML': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer'
-#    'Digipost\Signature\Client\Core\Internal\XML': '%kernel.project_dir%/src/Digipost/Signature/Resources/config/serializer'
+    'Digipost\Signature\API\XML\Thirdparty\XMLdSig': '%digipost_signature.serializer_config_dir%/XMLdSig'
+    'Digipost\Signature\API\XML\Thirdparty\ASiCe': '%digipost_signature.serializer_config_dir%/ASiCe'
+    'Digipost\Signature\API\XML\Thirdparty\XAdES': '%digipost_signature.serializer_config_dir%/XAdES'
+    'Digipost\Signature\API\XML': '%digipost_signature.serializer_config_dir%'
   aliases:
     'http://signering.posten.no/schema/v1':
       'authentication-level': 'Digipost\Signature\API\XML\XMLAuthenticationLevel'

@@ -17,6 +17,9 @@ class DigipostSignatureBundle extends Bundle {
   public function build(ContainerBuilder $container) {
     parent::build($container);
 
+    $serializer_dir = __DIR__ . '/Resources/config/serializer';
+    $container->setParameter('digipost_signature.serializer_config_dir', $serializer_dir);
+
     if (class_exists('Xsd2PhpExtension')) {
       $container->registerExtension(new Xsd2PhpExtension());
       $container->addCompilerPass(new Xsd2PhpLoaderPass());
@@ -27,7 +30,9 @@ class DigipostSignatureBundle extends Bundle {
     $root_dir = $container->getParameter(
         'kernel.project_dir'
       ) . '/app/Resources/config';
-    $resource = new FileResource($root_dir);
-    $container->addResource($resource);
+    if (file_exists($root_dir)) {
+      $resource = new FileResource($root_dir);
+      $container->addResource($resource);
+    }
   }
 }
