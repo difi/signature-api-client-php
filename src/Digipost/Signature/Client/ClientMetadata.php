@@ -48,5 +48,5 @@ function findFileInParents(
       "Unable to resolve file '$filename' library version, starting from directory '$startDir'"
     );
   }
-  return $fileContents;
+  return trim($fileContents);
 }

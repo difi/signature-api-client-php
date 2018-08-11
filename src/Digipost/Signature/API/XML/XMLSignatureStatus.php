@@ -2,6 +2,8 @@
 
 namespace Digipost\Signature\API\XML;
 
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * Class XMLSignatureStatus
  *
@@ -9,10 +11,16 @@ namespace Digipost\Signature\API\XML;
  */
 class XMLSignatureStatus {
 
-  /** @var String */
+  /**
+   * @var String
+   * @Serializer\XmlValue()
+   */
   protected $value;
 
-  /** @var \DateTime */
+  /**
+   * @var \DateTime
+   * @Serializer\XmlAttribute()
+   */
   protected $since;
 
   function __construct(String $value = NULL, \DateTime $since = NULL) {

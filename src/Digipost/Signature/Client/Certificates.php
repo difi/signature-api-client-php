@@ -68,7 +68,7 @@ class Certificates extends Enum {
 
   public static function build(ContainerInterface $container, String $path) {
     $resolvedPath = $path;
-    if ($path[0] === '@') {
+    if (!empty($path) && $path[0] === '@') {
       $resolvedPath = $container->get('kernel')->locateResource($path);
     }
     $bundlePath = $container->getParameter('digipost_signature.ca_bundle.path');

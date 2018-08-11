@@ -7,7 +7,6 @@ use Digipost\Signature\Client\Core\IdentifierInSignedDocuments;
 use Digipost\Signature\Client\Core\Internal\JobCustomizations;
 use Digipost\Signature\Client\Core\JOB;
 use Digipost\Signature\Client\Core\Sender;
-use MyCLabs\Enum\Enum;
 
 /**
  * Class PortalJob
@@ -16,20 +15,28 @@ use MyCLabs\Enum\Enum;
  */
 class PortalJob implements JOB {
 
+  /** @var PortalSigner[] */
   private $signers;
 
+  /** @var PortalDocument */
   private $document;
 
+  /** @var String */
   private $reference;
 
+  /** @var \DateTime */
   private $activationTime = NULL;
 
+  /** @var integer */
   private $availableSeconds;
 
+  /** @var Sender */
   private $sender = NULL;
 
+  /** @var AuthenticationLevel */
   private $requiredAuthentication = NULL;
 
+  /** @var IdentifierInSignedDocuments */
   private $identifierInSignedDocuments = NULL;
 
   function __construct(array $signers, PortalDocument $document) {
@@ -53,16 +60,10 @@ class PortalJob implements JOB {
     return $this->sender;
   }
 
-  /**
-   * @return AuthenticationLevel
-   */
   public function getRequiredAuthentication() {
     return $this->requiredAuthentication;
   }
 
-  /**
-   * @return IdentifierInSignedDocuments
-   */
   public function getIdentifierInSignedDocuments() {
     return $this->identifierInSignedDocuments;
   }
@@ -88,35 +89,35 @@ class PortalJob implements JOB {
   }
 
   /**
-   * @param null $activationTime
+   * @param \DateTime $activationTime
    */
   public function setActivationTime($activationTime) {
     $this->activationTime = $activationTime;
   }
 
   /**
-   * @param mixed $availableSeconds
+   * @param integer $availableSeconds
    */
   public function setAvailableSeconds($availableSeconds) {
     $this->availableSeconds = $availableSeconds;
   }
 
   /**
-   * @param null $sender
+   * @param Sender $sender
    */
   public function setSender($sender) {
     $this->sender = $sender;
   }
 
   /**
-   * @param null $requiredAuthentication
+   * @param AuthenticationLevel $requiredAuthentication
    */
   public function setRequiredAuthentication($requiredAuthentication) {
     $this->requiredAuthentication = $requiredAuthentication;
   }
 
   /**
-   * @param null $identifierInSignedDocuments
+   * @param IdentifierInSignedDocuments $identifierInSignedDocuments
    */
   public function setIdentifierInSignedDocuments($identifierInSignedDocuments) {
     $this->identifierInSignedDocuments = $identifierInSignedDocuments;
@@ -192,13 +193,5 @@ class PortalJobBuilder implements JobCustomizations {
     }
     $this->built = TRUE;
     return $this->target;
-  }
-
-  function withReference_UUID($uuid) {
-    return $this->withReference_String((string) $uuid);
-  }
-
-  function withReference_String(String $reference) {
-    return $this->withReference($reference);
   }
 }

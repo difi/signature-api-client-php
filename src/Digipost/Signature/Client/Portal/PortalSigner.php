@@ -39,30 +39,33 @@ class PortalSigner {
     String $personalIdentificationNumber = NULL,
     Notifications $notifications = NULL,
     NotificationsUsingLookup $notificationsUsingLookup = NULL) {
-    if (isset($identifierType)) {
-      $this->identifierType = $identifierType;
-    }
-    if (isset($personalIdentificationNumber)) {
-      $this->identifier = $personalIdentificationNumber;
-    }
-    if (isset($notifications)) {
-      $this->notifications = $notifications;
-    }
-    if (isset($notificationsUsingLookup)) {
-      $this->notificationsUsingLookup = $notificationsUsingLookup;
-    }
-
-    return $this;
+    $this->identifierType = $identifierType;
+    $this->identifier = $personalIdentificationNumber;
+    $this->notifications = $notifications;
+    $this->notificationsUsingLookup = $notificationsUsingLookup;
   }
 
+  /**
+   * @param String                   $personalIdentificationNumber
+   * @param Notifications|NotificationsUsingLookup $notificationParam
+   *
+   * @return PortalSignerBuilder
+   */
   public static function identifiedByPersonalIdentificationNumber(
-    String $personalIdentificationNumber,
-    NotificationsUsingLookup $notificationsUsingLookup)
-  {
+    String $personalIdentificationNumber, $notificationParam) {
+    $notificationsUsingLookup = NULL;
+    $notifications = NULL;
+    if ($notificationParam instanceof NotificationsUsingLookup) {
+      $notificationsUsingLookup = $notificationParam;
+    } else if ($notificationParam instanceof Notifications) {
+      $notifications = $notificationParam;
+    } else if ($notificationParam !== NULL) {
+      throw new \InvalidArgumentException("Invalid type '" . gettype($notificationParam) . "' for notificationParam argument accepts Notifications|NotificationsUsingLookup.");
+    }
+
     return new PortalSignerBuilder(
       IdentifierType::PERSONAL_IDENTIFICATION_NUMBER(),
-      $personalIdentificationNumber, NULL,
-      $notificationsUsingLookup);
+      $personalIdentificationNumber, $notifications, $notificationsUsingLookup);
   }
 
   public static function identifiedByEmail(String $emailAddress) {
@@ -96,7 +99,7 @@ class PortalSigner {
   }
 
   public function isIdentifiedByPersonalIdentificationNumber() {
-    return ($this->identifierType === IdentifierType::PERSONAL_IDENTIFICATION_NUMBER());
+    return $this->identifierType->equals(IdentifierType::PERSONAL_IDENTIFICATION_NUMBER());
   }
 
   public function getIdentifier() {
@@ -152,7 +155,8 @@ class PortalSignerBuilder implements SignerCustomizations {
       $identifierType,
       $personalIdentificationNumber,
       $notifications,
-      $notificationsUsingLookup);
+      $notificationsUsingLookup
+    );
   }
 
   public function withOrder(int $order) {

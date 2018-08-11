@@ -25,12 +25,18 @@ class PortalClient {
         $this->aSiCECreator = new CreateASiCE(new CreatePortalManifest($config->getClock()), $config);
     }
 
-
-    public function create(PortalJob $job) {
+  /**
+   * @param PortalJob $job
+   *
+   * @return PortalJobStatusChanged
+   * @throws \GoetasWebservices\XML\XSDReader\Schema\Exception\SchemaException
+   */
+  public function create(PortalJob $job) {
         $documentBundle = $this->aSiCECreator->createASiCE($job);
         $signatureJobRequest = JaxbEntityMapping::toJaxb($job, $this->clientConfiguration->getGlobalSender());
 
         $xmlPortalSignatureJobResponse = $this->client->sendPortalSignatureJobRequest($signatureJobRequest, $documentBundle, $job->getSender());
+
         return JaxbEntityMapping::fromJaxb($xmlPortalSignatureJobResponse);
     }
 
@@ -60,11 +66,11 @@ class PortalClient {
 
 
   /**
-   * Confirms that the status retrieved from {@link #getStatusChange()} is received and may
+   * Confirms that the status retrieved from {@link PortalClient::getStatusChange() #getStatusChange()} is received and may
    * be discarded by the Signature service and not retrieved again. Calling this method on
    * a status update with no {@link ConfirmationReference} has no effect.
    *
-   * @param \Digipost\Signature\Client\Portal\PortalJobStatusChanged $receivedStatusChanged
+   * @param PortalJobStatusChanged $receivedStatusChanged
    */
     public function confirm(PortalJobStatusChanged $receivedStatusChanged) {
         $this->client->confirm($receivedStatusChanged);
@@ -77,7 +83,6 @@ class PortalClient {
     public function getXAdES(XAdESReference $xAdESReference) {
         return $this->client->getSignedDocumentStream($xAdESReference->getxAdESUrl());
     }
-
 
     public function getPAdES(PAdESReference $pAdESReference) {
         return $this->client->getSignedDocumentStream($pAdESReference->getpAdESUrl());

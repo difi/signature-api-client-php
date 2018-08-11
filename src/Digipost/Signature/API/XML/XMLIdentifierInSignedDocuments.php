@@ -22,12 +22,10 @@ use MyCLabs\Enum\Enum;
  * </pre>s
  *
  * @package Digipost\Signature\API\XML
- */
+ * @Serializer\Exclude()
+  */
 class XMLIdentifierInSignedDocuments extends Enum {
-
   const PERSONAL_IDENTIFICATION_NUMBER_AND_NAME = 'PERSONAL_IDENTIFICATION_NUMBER_AND_NAME';
-
   const DATE_OF_BIRTH_AND_NAME = 'DATE_OF_BIRTH_AND_NAME';
-
   const NAME = 'NAME';
 }

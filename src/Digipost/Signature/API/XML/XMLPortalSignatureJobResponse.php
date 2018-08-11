@@ -4,12 +4,19 @@ namespace Digipost\Signature\API\XML;
 
 class XMLPortalSignatureJobResponse {
 
-  protected $signatureJobId;  // long
+  /** @var String */
+  private $reference;
 
-  protected $cancellationUrl;  // String
+  /** @var int */
+  protected $signatureJobId;
 
-  function __construct(int $signatureJobId = NULL,
+  /** @var String */
+  protected $cancellationUrl;
+
+  function __construct(String $reference = NULL,
+                       int $signatureJobId = NULL,
                        String $cancellationUrl = NULL) {
+    $this->reference = $reference;
     $this->signatureJobId = $signatureJobId;
     $this->cancellationUrl = $cancellationUrl;
   }
@@ -28,6 +35,14 @@ class XMLPortalSignatureJobResponse {
 
   public function setCancellationUrl($value) {
     $this->cancellationUrl = $value;
+  }
+
+  public function getReference(): String {
+    return $this->reference;
+  }
+
+  public function setReference(String $reference) {
+    $this->reference = $reference;
   }
 }
 

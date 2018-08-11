@@ -14,6 +14,7 @@ use MyCLabs\Enum\Enum;
  * @method static IdentifierInSignedDocuments PERSONAL_IDENTIFICATION_NUMBER_AND_NAME()  Personal identification number and name.
  * @method static IdentifierInSignedDocuments DATE_OF_BIRTH_AND_NAME()                   Date of birth and name.
  * @method static IdentifierInSignedDocuments NAME()                                     Name
+ * @Serializer\Exclude()
  */
 class IdentifierInSignedDocuments extends Enum implements MarshallableEnum {
 

@@ -9,9 +9,11 @@ namespace Digipost\Signature\API\XML;
  */
 class XMLPortalSignatureJobRequest {
 
-  protected $reference;  // String
+  /** @var String */
+  protected $reference;
 
-  protected $pollingQueue;  // String
+  /** @var String */
+  protected $pollingQueue;
 
   function __construct(String $reference = NULL, String $pollingQueue = NULL) {
     $this->reference = $reference;

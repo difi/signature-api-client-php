@@ -9,7 +9,7 @@ use Digipost\Signature\Client\Core\Internal\Confirmable;
 use Digipost\Signature\Client\Core\PAdESReference;
 use Ds\Set;
 
-class DirectJobStatusResponse implements Confirmable {
+class DirectJobStatusResponse implements Confirmable, \Serializable, \JsonSerializable {
 
   /**
    * This instance indicates that there has been no status updates since the last poll request for
@@ -20,9 +20,10 @@ class DirectJobStatusResponse implements Confirmable {
    * @return DirectJobStatusResponse
    */
   static function noUpdatedStatus(\DateTime $nextPermittedPollTime) {
-    return new DirectJobStatusResponse(NULL, DirectJobStatus::NO_CHANGES(),
-                                       NULL, NULL, NULL, NULL,
-                                       $nextPermittedPollTime);
+    return new DirectJobStatusResponse(
+      NULL, DirectJobStatus::NO_CHANGES(),
+      NULL, NULL, NULL, NULL,
+      $nextPermittedPollTime);
   }
 
   /** @var int */
@@ -46,13 +47,14 @@ class DirectJobStatusResponse implements Confirmable {
   /** @var \DateTime */
   private $nextPermittedPollTime;
 
-  public function __construct(int $signatureJobId = NULL,
-                              DirectJobStatus $signatureJobStatus = NULL,
-                              ConfirmationReference $confirmationUrl = NULL,
-                              DeleteDocumentsUrl $deleteDocumentsUrl = NULL,
-                              array $signatures = NULL,
-                              PAdESReference $pAdESReference = NULL,
-                              \DateTime $nextPermittedPollTime = NULL) {
+  public function __construct(
+    int $signatureJobId = NULL,
+    DirectJobStatus $signatureJobStatus = NULL,
+    ConfirmationReference $confirmationUrl = NULL,
+    DeleteDocumentsUrl $deleteDocumentsUrl = NULL,
+    array $signatures = NULL,
+    PAdESReference $pAdESReference = NULL,
+    \DateTime $nextPermittedPollTime = NULL) {
     $this->signatureJobId = $signatureJobId;
     $this->status = $signatureJobStatus;
     $this->confirmationReference = $confirmationUrl;
@@ -116,25 +118,32 @@ class DirectJobStatusResponse implements Confirmable {
    * @return \Closure
    */
   static private function signatureFrom(String $signer) {
-    return function($signature) use ($signer) {
+    return function ($signature) use ($signer) {
       /** @var Signature $signature */
       return $signature->isFrom($signer);
     };
   }
   /**
-   * Gets the point in time where you are allowed to {@link DirectClient::getStatusChange() get status changes}.
+   * Gets the point in time where you are allowed to
+   * {@link DirectClient::getStatusChange() get status changes}.
    * <p>
-   * Only applicable for jobs with {@link DirectJobBuilder::retrieveStatusBy() status retrieval method}
-   * set to {@link StatusRetrievalMethod::POLLING POLLING}.
+   * Only applicable for jobs with
+   * {@link DirectJobBuilder::retrieveStatusBy() status retrieval method} set to
+   * {@link StatusRetrievalMethod::POLLING POLLING}.
    *
-   * @throws IllegalStateException for jobs with {@link DirectJobBuilder::retrieveStatusBy() status retrieval method}
+   * @throws IllegalStateException for jobs with
+   *                               {@link DirectJobBuilder::retrieveStatusBy() status retrieval method}
    * <b>not</b> set to {@link StatusRetrievalMethod::POLLING POLLING}.
    */
   public function getNextPermittedPollTime(): \DateTime {
     if ($this->nextPermittedPollTime === NULL) {
-      throw new IllegalStateException("Retrieving the next permitted poll time for " . get_class($this) . " is a programming error. " .
-                                      "This is only allowed for jobs with status retrieval method set to '" . StatusRetrievalMethod::POLLING() . "'.");
+      throw new IllegalStateException(
+        "Retrieving the next permitted poll time for " . get_class($this) .
+        " is a programming error. " .
+        "This is only allowed for jobs with status retrieval method set to '" .
+        StatusRetrievalMethod::POLLING() . "'.");
     }
+
     return $this->nextPermittedPollTime;
   }
 
@@ -148,5 +157,25 @@ class DirectJobStatusResponse implements Confirmable {
 
   public function __toString() {
     return "status for direct job with ID " . $this->signatureJobId . ": " . $this->status;
+  }
+
+  public function serialize() {
+    $obj = get_object_vars($this);
+
+    return \serialize($obj);
+  }
+
+  public function unserialize($serialized) {
+    $v = \unserialize($serialized);
+    $this->__construct(
+      $v['signatureJobId'], $v['signatureJobStatus'], $v['confirmationUrl'],
+      $v['deleteDocumentsUrl'], $v['signatures'], $v['pAdESReference'],
+      $v['nextPermittedPollTime']);
+    // TODO: Implement unserialize() method.
+  }
+
+  public function jsonSerialize() {
+    $obj = get_object_vars($this);
+    return json_encode($obj);
   }
 }

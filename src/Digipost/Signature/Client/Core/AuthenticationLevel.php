@@ -10,8 +10,8 @@ use MyCLabs\Enum\Enum;
  *
  * @package Digipost\Signature\Client\Core
  *
- * @method static AuthenticationLevel THREE
- * @method static AuthenticationLevel FOUR
+ * @method static AuthenticationLevel THREE()
+ * @method static AuthenticationLevel FOUR()
  */
 class AuthenticationLevel extends Enum implements MarshallableEnum {
 	const THREE = XMLAuthenticationLevel::THREE;
@@ -21,4 +21,3 @@ class AuthenticationLevel extends Enum implements MarshallableEnum {
     return new XMLAuthenticationLevel($this->value);
   }
 }
-

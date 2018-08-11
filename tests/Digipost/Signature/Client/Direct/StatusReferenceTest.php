@@ -1,6 +1,6 @@
 <?php
 
-namespace Digipost\Signature\Client\Direct;
+namespace Tests\DigipostSignatureBundle\Client\Direct;
 
 use PHPUnit\Framework\TestCase;
 

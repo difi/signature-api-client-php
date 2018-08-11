@@ -256,7 +256,8 @@ class ClientConfigurationBuilder {
   ) {
     $this->container = $container;
     $this->serviceRoot = ServiceUri::PRODUCTION()->uri();
-    $this->certificatePaths = Certificates::PRODUCTION()->certificatePaths();
+    //$this->certificatePaths = Certificates::PRODUCTION()->certificatePaths();
+    $this->trustStore(Certificates::PRODUCTION());
     $this->keyStoreConfig = $keyStoreConfig;
     $this->guzzleConfig = $container->get(
       'digipost_signature.client_guzzle_config'

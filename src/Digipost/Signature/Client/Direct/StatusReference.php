@@ -7,7 +7,7 @@ use GuzzleHttp\Psr7\Uri;
 /**
  * A `StatusReference` is constructed from the url acquired from
  * {@link DirectJobResponse::getStatusUrl()}, and a token provided as a
- * {@link ::$STATUS_QUERY_TOKEN_PARAM_NAME query parameter} which is
+ * {@link StatusReference::STATUS_QUERY_TOKEN_PARAM_NAME query parameter} which is
  * added to the {@link ExitUrls exit URL} the signer is redirected to when
  * the signing ceremony is completed/aborted/failed.
  *
@@ -20,7 +20,7 @@ use GuzzleHttp\Psr7\Uri;
  */
 class StatusReference {
 
-  public static $STATUS_QUERY_TOKEN_PARAM_NAME = "status_query_token";
+  const STATUS_QUERY_TOKEN_PARAM_NAME = 'status_query_token';
 
   protected $statusUrl;
 
@@ -42,7 +42,7 @@ class StatusReference {
    *
    * @return StatusUrlConstruction partially constructed {@link StatusReference} which
    *         must be completed with a status query token using
-   *         {@link StatusUrlConstruction::withStatusQueryToken #withStatusQueryToken(token)}
+   *         {@link StatusUrlConstruction::withStatusQueryToken() #withStatusQueryToken(token)}
    */
   public static function ofUrl(String $statusUrl) {
     return new StatusUrlConstruction($statusUrl);
@@ -51,7 +51,7 @@ class StatusReference {
   public function __construct(String $statusUrl, String $statusQueryToken) {
     $this->statusUrl = $statusUrl;
     $this->statusQueryToken = (isset($statusQueryToken) &&
-      isset(self::$STATUS_QUERY_TOKEN_PARAM_NAME)) ? $statusQueryToken : NULL;
+      isset(self::STATUS_QUERY_TOKEN_PARAM_NAME)) ? $statusQueryToken : NULL;
   }
 
   public function getStatusUrl() {
@@ -59,7 +59,7 @@ class StatusReference {
 
     return (string) Uri::withQueryValue(
       $uri,
-      self::$STATUS_QUERY_TOKEN_PARAM_NAME,
+      self::STATUS_QUERY_TOKEN_PARAM_NAME,
       $this->statusQueryToken);
   }
 }

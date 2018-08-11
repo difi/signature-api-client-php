@@ -7,13 +7,26 @@ use JMS\Serializer\Annotation as Serializer;
 
 class XMLPortalSigner implements XMLSigner {
 
-  protected $identifiedByContactInformation;  // XMLEnabled
+  /**
+   * @var XMLEnabled
+   */
+  protected $identifiedByContactInformation;
 
-  protected $personalIdentificationNumber;  // String
+  /**
+   * @var String
+   */
+  protected $personalIdentificationNumber;
 
-  protected $signatureType;  // XMLSignatureType
+  /**
+   * @var XMLSignatureType
+   * @Serializer\Type("string")
+   */
+  protected $signatureType;
 
-  protected $notifications;  // XMLNotifications
+  /**
+   * @var XMLNotifications
+   */
+  protected $notifications;
 
   /**
    * @var XMLNotificationsUsingLookup
@@ -21,6 +34,9 @@ class XMLPortalSigner implements XMLSigner {
    */
   protected $notificationsUsingLookup;
 
+  /**
+   * @var XMLSigningOnBehalfOf
+   */
   protected $onBehalfOf;
 
   /**

@@ -79,11 +79,11 @@ class ClientHelper {
       $signatureJobRequest,
       'application/xml'
     );
-
     $documentBundleBodyPart = new BodyPart(
       $documentBundle->getInputStream(),
       'application/octet-stream'
     );
+
     return $this->call(
       function () use (
         $signatureJobBodyPart,
@@ -104,10 +104,17 @@ class ClientHelper {
     );
   }
 
+  /**
+   * @param XMLPortalSignatureJobRequest $signatureJobRequest
+   * @param DocumentBundle               $documentBundle
+   * @param Sender|NULL                  $sender
+   *
+   * @return XMLPortalSignatureJobResponse
+   */
   public function sendPortalSignatureJobRequest(
     XMLPortalSignatureJobRequest $signatureJobRequest,
     DocumentBundle $documentBundle,
-    Sender $sender
+    Sender $sender = NULL
   ) {
     $actualSender = ActualSender::getActualSender($sender, $this->globalSender);
 
