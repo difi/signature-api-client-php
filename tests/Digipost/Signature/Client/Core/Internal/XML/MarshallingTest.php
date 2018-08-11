@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bendik
- * Date: 10.07.18
- * Time: 10:13
- */
-
 namespace Tests\DigipostSignatureBundle\Client\Core\Internal\XML;
 
 use Digipost\Signature\API\XML\CustomBase64BinaryType;

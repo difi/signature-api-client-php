@@ -11,8 +11,8 @@ use MyCLabs\Enum\Enum;
  *
  * @package Digipost\Signature\Client\Core
  *
- * @method static SignatureType AUTHENTICATED_SIGNATURE
- * @method static SignatureType ADVANCED_SIGNATURE
+ * @method static SignatureType AUTHENTICATED_SIGNATURE()
+ * @method static SignatureType ADVANCED_SIGNATURE()
  */
 class SignatureType extends Enum implements MarshallableEnum {
 

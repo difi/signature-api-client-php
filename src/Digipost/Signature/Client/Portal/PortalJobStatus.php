@@ -17,7 +17,8 @@ use MyCLabs\Enum\Enum;
  */
 class PortalJobStatus extends Enum {
   /**
-   * Indicates that there has been a change to the job, but that it has not been signed by all signers yet. For details about the state, see the {@link SignatureStatus status} of each signer.
+   * Indicates that there has been a change to the job, but that it has not been signed by all signers yet.
+   * For details about the state, see the {@link SignatureStatus status} of each signer.
    *
    * When the client {@link Confirmable confirms} a job with this status,
    * the job is removed from the queue and will not be returned upon subsequent polling,
@@ -34,7 +35,8 @@ class PortalJobStatus extends Enum {
   const COMPLETED_SUCCESSFULLY = 'COMPLETED_SUCCESSFULLY';
 
   /**
-   * Indicates that the signature job failed. For details about the failure, see the {@link SignatureStatus status} of each signer.
+   * Indicates that the signature job failed. For details about the failure, see the
+   * {@link SignatureStatus status} of each signer.
    *
    * When the client {@link Confirmable confirms} a job with this status,
    * the job and its associated resources will become unavailable through the Signature API.

@@ -5,9 +5,9 @@
 # files that define the values for important parts of the Symfony application,
 # such as the security component and the dependency injection services
 imports:
-- { resource: parameters.yml }
-- { resource: services.yml }
-- { resource: xsd2php.yml }
+  - { resource: parameters.yml }
+  - { resource: services.yml }
+  - { resource: xsd2php.yml }
 
 # Basic configuration for the Symfony framework features
 framework:

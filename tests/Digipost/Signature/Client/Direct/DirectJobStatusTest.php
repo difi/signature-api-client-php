@@ -1,20 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bendik
- * Date: 10.07.18
- * Time: 08:55
- */
-
-namespace Digipost\Signature\Client\Direct;
+namespace Tests\DigipostSignatureBundle\Client\Direct;
 
 use Digipost\Signature\API\XML\XMLDirectSignatureJobResponse;
 use Digipost\Signature\API\XML\XMLDirectSignatureJobStatus;
 use Digipost\Signature\API\XML\XMLDirectSignatureJobStatusResponse;
-use Digipost\Signature\API\XML\XMLSignerSpecificUrl;
 use Digipost\Signature\Client\Core\ConfirmationReference;
 use Digipost\Signature\Client\Core\DeleteDocumentsUrl;
-use Digipost\Signature\Client\Core\Internal\JobStatusResponse;
 use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
 use Digipost\Signature\Client\Core\PAdESReference;
 use Digipost\Signature\Client\Core\XAdESReference;

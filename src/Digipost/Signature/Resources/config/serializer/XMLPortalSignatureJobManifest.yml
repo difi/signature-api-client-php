@@ -46,7 +46,7 @@ Digipost\Signature\API\XML\XMLPortalSignatureJobManifest:
             accessor:
                 getter: getRequiredAuthentication
                 setter: setRequiredAuthentication
-            type: Digipost\Signature\API\XML\XMLAuthenticationLevel
+            type: string
         availability:
             expose: true
             access_type: public_method
@@ -66,4 +66,4 @@ Digipost\Signature\API\XML\XMLPortalSignatureJobManifest:
             accessor:
                 getter: getIdentifierInSignedDocuments
                 setter: setIdentifierInSignedDocuments
-            type: Digipost\Signature\API\XML\XMLIdentifierInSignedDocuments
+            type: string

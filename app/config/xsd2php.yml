@@ -5,10 +5,10 @@ xsd2php:
     'http://uri.etsi.org/2918/v1.2.1#': 'Digipost\Signature\API\XML\Thirdparty\ASiCe'
     'http://uri.etsi.org/01903/v1.3.2#': 'Digipost\Signature\API\XML\Thirdparty\XAdES'
   destinations_php:
-    'Digipost\Signature\API\XML\Thirdparty\XMLdSig': '%kernel.project_dir%/src/Digipost/Signature/API/XML/Thirdparty/XMLdSig'
-    'Digipost\Signature\API\XML\Thirdparty\ASiCe': '%kernel.project_dir%/src/Digipost/Signature/API/XML/Thirdparty/ASiCe'
-    'Digipost\Signature\API\XML\Thirdparty\XAdES': '%kernel.project_dir%/src/Digipost/Signature/API/XML/Thirdparty/XAdES'
-    'Digipost\Signature\API\XML': '%kernel.project_dir%/src/Digipost/Signature/API/XML'
+    'Digipost\Signature\API\XML\Thirdparty\XMLdSig': '%digipost_signature.serializer_php_dir%/Thirdparty/XMLdSig'
+    'Digipost\Signature\API\XML\Thirdparty\ASiCe': '%digipost_signature.serializer_php_dir%/Thirdparty/ASiCe'
+    'Digipost\Signature\API\XML\Thirdparty\XAdES': '%digipost_signature.serializer_php_dir%/Thirdparty/XAdES'
+    'Digipost\Signature\API\XML': '%digipost_signature.serializer_php_dir%'
   destinations_jms:
     'Digipost\Signature\API\XML\Thirdparty\XMLdSig': '%digipost_signature.serializer_config_dir%/XMLdSig'
     'Digipost\Signature\API\XML\Thirdparty\ASiCe': '%digipost_signature.serializer_config_dir%/ASiCe'

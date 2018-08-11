@@ -1,4 +1,4 @@
-Digipost\Signature\API\XML\PortalSignatureJobResponse:
+Digipost\Signature\API\XML\XMLPortalSignatureJobResponse:
     xml_root_name: portal-signature-job-response
     xml_root_namespace: 'http://signering.posten.no/schema/v1'
     properties:

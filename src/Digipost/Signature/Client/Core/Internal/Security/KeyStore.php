@@ -114,6 +114,10 @@ class KeyStore {
     return $self;
   }
 
+  public function setCertificateEntry($fileName, $certificate) {
+
+  }
+
   /**
    * Convert a keystore file to PKCS#12 format using [Java Keytool](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/keytool.html) cli command.
    *

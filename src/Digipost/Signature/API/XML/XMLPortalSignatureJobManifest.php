@@ -7,17 +7,35 @@ use Digipost\Signature\JAXB\XMLDocument;
 
 class XMLPortalSignatureJobManifest implements XMLManifest {
 
-  protected $signers;  // List<XMLPortalSigner>
+  /**
+   * @var array
+   */
+  protected $signers;
 
-  protected $sender;  // XMLSender
+  /**
+   * @var XMLSender
+   */
+  protected $sender;
 
-  protected $document;  // XMLPortalDocument
+  /**
+   * @var XMLPortalDocument
+   */
+  protected $document;
 
-  protected $requiredAuthentication;  // XMLAuthenticationLevel
+  /**
+   * @var XMLAuthenticationLevel
+   */
+  protected $requiredAuthentication;
 
-  protected $availability;  // XMLAvailability
+  /**
+   * @var XMLAvailability
+   */
+  protected $availability;
 
-  protected $identifierInSignedDocuments;  // XMLIdentifierInSignedDocuments
+  /**
+   * @var XMLIdentifierInSignedDocuments
+   */
+  protected $identifierInSignedDocuments;
 
   function __construct(array $signers = NULL,
                        XMLSender $sender = NULL,

@@ -28,12 +28,16 @@ use JMS\Serializer\Annotation as Serializer;
  * </pre>
  *
  * @package Digipost\Signature\API\XML
+ *
+ * @Serializer\XmlNamespace("http://signering.posten.no/schema/v1")
+ * @Serializer\AccessorOrder("custom", custom={"organizationNumber"})
  */
 class XMLSender {
 
   /**
    * @Serializer\Type("string")
-   * @Serializer\XmlElement()
+   * @Serializer\SerializedName("organization-number")
+   * @Serializer\XmlElement(namespace="http://signering.posten.no/schema/v1")
    */
   protected $organizationNumber;
 

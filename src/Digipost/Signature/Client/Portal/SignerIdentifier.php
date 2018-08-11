@@ -8,7 +8,8 @@ namespace Digipost\Signature\Client\Portal;
  * @package Digipost\Signature\Client\Portal
  */
 class SignerIdentifier {
-  /** @var String  */
+
+  /** @var String */
   protected $personalIdentificationNumber;
 
   /** @var String */
@@ -17,15 +18,14 @@ class SignerIdentifier {
   /** @var String */
   protected $mobileNumber;
 
-  function __construct(String $personalIdentificationNumber = NULL,
-                       String $emailAddress = NULL,
-                       String $mobileNumber = NULL) {
+  function __construct(String $personalIdentificationNumber = NULL, String $emailAddress = NULL, String $mobileNumber = NULL) {
     $this->personalIdentificationNumber = $personalIdentificationNumber;
     $this->emailAddress = $emailAddress;
     $this->mobileNumber = $mobileNumber;
   }
 
-  public static function identifiedByPersonalIdentificationNumber(String $personalIdentificationNumber) {
+  public static function identifiedByPersonalIdentificationNumber(
+    String $personalIdentificationNumber) {
     return new SignerIdentifier($personalIdentificationNumber);
   }
 
@@ -37,15 +37,16 @@ class SignerIdentifier {
     return new SignerIdentifier(NULL, NULL, $mobileNumber);
   }
 
-  public static function identifiedByEmailAddressAndMobileNumber(String $emailAddress,
-                                                                 String $mobileNumber) {
+  public static function identifiedByEmailAddressAndMobileNumber(
+    String $emailAddress,
+    String $mobileNumber) {
     return new SignerIdentifier(NULL, $emailAddress, $mobileNumber);
   }
 
   /**
    * @return String
    */
-  public function getPersonalIdentificationNumber(): String {
+  public function getPersonalIdentificationNumber() {
     return $this->personalIdentificationNumber;
   }
 
@@ -59,7 +60,7 @@ class SignerIdentifier {
   /**
    * @return String
    */
-  public function getEmailAddress(): String {
+  public function getEmailAddress() {
     return $this->emailAddress;
   }
 
@@ -73,7 +74,7 @@ class SignerIdentifier {
   /**
    * @return String
    */
-  public function getMobileNumber(): String {
+  public function getMobileNumber() {
     return $this->mobileNumber;
   }
 

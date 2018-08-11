@@ -66,7 +66,7 @@ class CreatePortalManifest extends ManifestCreator {
     $activationTime = NULL; // TODO
 
     $xmlPortalSignerJobManifest = new XMLPortalSignatureJobManifest();
-    $sender = new XMLSender();
+    $xmlSender = new XMLSender($sender->getOrganizationNumber());
     $xmlPortalDocument = new XMLPortalDocument();
     $xmlAvailability = new XMLAvailability();
 
@@ -75,9 +75,7 @@ class CreatePortalManifest extends ManifestCreator {
 
     $manifest = $xmlPortalSignerJobManifest
       ->withSigners($xmlSigners)
-      ->withSender(
-        $sender->withOrganizationNumber($sender->getOrganizationNumber())
-      )
+      ->withSender($xmlSender)
       ->withDocument(
         $xmlPortalDocument
           ->withTitle($document->getTitle())
@@ -109,7 +107,7 @@ class CreatePortalManifest extends ManifestCreator {
     $xmlSigner
       ->withOrder($signer->getOrder());
     if ($signatureType) {
-      $xmlSigner->withSignatureType($signatureType->getXmlEnumValue());
+      //$xmlSigner->withSignatureType($signatureType->getXmlEnumValue());
     }
     if ($onBehalfOf) {
       $xmlSigner->withOnBehalfOf($onBehalfOf->getXmlEnumValue());

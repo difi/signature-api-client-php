@@ -6,9 +6,14 @@ use Digipost\Signature\Client\Core\Exceptions\IllegalStateException;
 
 class Notifications {
 
-  protected $emailAddress = NULL;
+  protected $emailAddress;
 
-  protected $mobileNumber = NULL;
+  protected $mobileNumber;
+
+  public function __construct(String $emailAddress = NULL, String $mobileNumber = NULL) {
+    $this->emailAddress = $emailAddress;
+    $this->mobileNumber = $mobileNumber;
+  }
 
   public function getEmailAddress() {
     return $this->emailAddress;
@@ -55,19 +60,21 @@ class NotificationsBuilder {
   private $target;
 
   private $built = FALSE;
+  private $emailAddress;
+  private $mobileNumber;
 
-  function NotificationsBuilder() {
+  function __construct() {
     $this->target = new Notifications();
   }
 
   public function withEmailTo(String $emailAddress) {
-    $this->target->emailAddress = $emailAddress;
+    $this->emailAddress = $emailAddress;
 
     return $this;
   }
 
   public function withSmsTo(String $mobileNumber) {
-    $this->target->mobileNumber = $mobileNumber;
+    $this->mobileNumber = $mobileNumber;
 
     return $this;
   }
@@ -76,11 +83,10 @@ class NotificationsBuilder {
     if ($this->built) {
       throw new IllegalStateException("Can't build twice");
     }
-    if ($this->target->emailAddress === NULL && $this->target->mobileNumber === NULL) {
+    if ($this->emailAddress === NULL && $this->mobileNumber === NULL) {
       throw new IllegalStateException("At least one way of notifying the signer must be specified");
     }
     $this->built = TRUE;
-
-    return $this->target;
+    return new Notifications($this->emailAddress, $this->mobileNumber);
   }
 }

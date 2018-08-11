@@ -14,7 +14,7 @@ class PortalSignatureJobStatusChangeResponse
     private $signatureJobId = null;
 
     /**
-     * @property \Digipost\Signature\API\XML\XMLPortalSignatureJobStatus $status
+     * @property XMLPortalSignatureJobStatus $status
      */
     private $status = null;
 
@@ -41,7 +41,7 @@ class PortalSignatureJobStatusChangeResponse
     private $deleteDocumentsUrl = null;
 
     /**
-     * @property \Digipost\Signature\API\XML\XMLSignatures $signatures
+     * @property XMLSignatures $signatures
      */
     private $signatures = null;
 
@@ -70,7 +70,7 @@ class PortalSignatureJobStatusChangeResponse
     /**
      * Gets as status
      *
-     * @return \Digipost\Signature\API\XML\XMLPortalSignatureJobStatus
+     * @return XMLPortalSignatureJobStatus
      */
     public function getStatus()
     {
@@ -80,10 +80,11 @@ class PortalSignatureJobStatusChangeResponse
     /**
      * Sets a new status
      *
-     * @param \Digipost\Signature\API\XML\XMLPortalSignatureJobStatus $status
+     * @param XMLPortalSignatureJobStatus $status
+     *
      * @return self
      */
-    public function setStatus(\Digipost\Signature\API\XML\XMLPortalSignatureJobStatus $status)
+    public function setStatus(XMLPortalSignatureJobStatus $status)
     {
         $this->status = $status;
         return $this;
@@ -172,7 +173,7 @@ class PortalSignatureJobStatusChangeResponse
     /**
      * Gets as signatures
      *
-     * @return \Digipost\Signature\API\XML\XMLSignatures
+     * @return XMLSignatures
      */
     public function getSignatures()
     {
@@ -182,10 +183,11 @@ class PortalSignatureJobStatusChangeResponse
     /**
      * Sets a new signatures
      *
-     * @param \Digipost\Signature\API\XML\XMLSignatures $signatures
+     * @param XMLSignatures $signatures
+     *
      * @return self
      */
-    public function setSignatures(\Digipost\Signature\API\XML\XMLSignatures $signatures)
+    public function setSignatures(XMLSignatures $signatures)
     {
         $this->signatures = $signatures;
         return $this;

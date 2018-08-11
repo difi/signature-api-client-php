@@ -1,0 +1,14 @@
+Digipost\Signature\API\XML\XMLIdentifierInSignedDocuments:
+    xml_root_name: 'identifier-in-signed-documents'
+    xml_root_namespace: 'http://signering.posten.no/schema/v1'
+    properties:
+        value:
+            expose: true
+            access_type: public_method
+            accessor:
+                getter: getValue
+                setter: setValue
+            xml_value: true
+            xml_element:
+                namespace: 'http://signering.posten.no/schema/v1'
+            type: string

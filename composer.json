@@ -1,6 +1,6 @@
 {
     "name": "difi/signature-api-client-php",
-    "version": "1.0.0-alpha",
+    "version": "1.0.1-alpha",
     "license": "MIT",
     "type": "library",
     "description": "Client library for Digipost Signature API",
@@ -20,14 +20,10 @@
             "package": {
                 "name": "digipost/signature-api-specification",
                 "version": "2.3",
-                "dist": {
-                    "url": "https://github.com/digipost/signature-api-specification/archive/2.3.zip",
-                    "type": "zip"
-                },
                 "source": {
                     "url": "https://github.com/digipost/signature-api-specification.git",
                     "type": "git",
-                    "reference": "tag/2.3"
+                    "reference": "2c241b7"
                 }
             }
         }
@@ -59,7 +55,7 @@
         "ext-pdo_sqlite": "*",
         "ext-zip": "*",
         "cweagans/composer-patches": "^1.6",
-        "digipost/signature-api-specification": "^2.3",
+        "digipost/signature-api-specification": "2.3",
         "goetas-webservices/xsd2php-runtime": "^0.2.8",
         "goetas-webservices/xsd-reader": "^0.2.6",
         "guzzlehttp/guzzle": "^6.3",

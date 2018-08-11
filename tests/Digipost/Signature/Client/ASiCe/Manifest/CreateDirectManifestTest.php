@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bendik
- * Date: 21.06.18
- * Time: 01:18
- */
 
 namespace Tests\DigipostSignatureBundle\Client\ASiCe\Manifest;
 
