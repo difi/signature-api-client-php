@@ -23,7 +23,7 @@ class KeyStoreFileLoader {
   ) {
     $kernel = $container->get('kernel');
     $path = $filename;
-    if ($filename[0] === '@') {
+    if (!empty($filename) && $filename[0] === '@') {
       $path = $kernel->locateResource($filename);
     }
     if (!file_exists($path)) {
