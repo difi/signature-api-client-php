@@ -91,9 +91,10 @@ class SignatureApiSchemas extends Enum {
       $this->filename = $value;
     }
 
-//    if (is_array($value)) {
-//      $this->filename = 'xsd://' . $this->getKey();
-//    }
+    if ($this->filename && $dir = $this->resolveVendorDir()) {
+      $dir .= '/digipost/signature-api-specification/schema/xsd';
+      $this->filename = $dir . $this->filename;
+    }
   }
 
   private static function create($value) {
@@ -102,6 +103,31 @@ class SignatureApiSchemas extends Enum {
 
   public function getValue() {
     return $this;
+  }
+
+  private function resolveVendorDir() {
+    if ($file = self::findFileInParents('vendor/autoload.php')) {
+      return dirname($file);
+    }
+    return FALSE;
+  }
+
+  private static function findFileInParents(
+    string $filename,
+    $startDir = __DIR__,
+    $maxIterations = 20
+  ) {
+    $path = $startDir;
+    do {
+      $path = realpath($path . implode(DIRECTORY_SEPARATOR, ['', '..', '']));
+      $filePath = $path . DIRECTORY_SEPARATOR . $filename;
+      $fileFound = file_exists($filePath);
+    } while (--$maxIterations > 0 && !file_exists($filePath) && $path !== DIRECTORY_SEPARATOR);
+
+    if (!$fileFound) {
+      return FALSE;
+    }
+    return $filePath;
   }
 
   /**
@@ -115,7 +141,7 @@ class SignatureApiSchemas extends Enum {
         //$schema->addSchema($reader->readFile($fileName));
       //}
       $schema = $reader->readFile($this->filename);
-    } catch (SchemaException $e) {
+    } catch (\Exception $e) {
       throw new \RuntimeException("An error occoured during merging of schemas", 0, $e);
     }
 
@@ -142,7 +168,11 @@ class SignatureApiSchemas extends Enum {
 
     $imports = array_map(function($schema) {
       /** @var SignatureApiSchemas $schema */
-      $ns = $schema->getSchema()->getTargetNamespace();
+      try {
+        $ns = $schema->getSchema()->getTargetNamespace();
+      } catch (\Exception $e) {
+        return '';
+      }
       return '<xsd:import namespace="' . $ns . '" schemaLocation="' . $schema->filename . '"/>' . "\n";
     }, $values);
 

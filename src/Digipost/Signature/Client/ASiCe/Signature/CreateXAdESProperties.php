@@ -10,7 +10,6 @@ use Digipost\Signature\Client\Core\Exceptions\XmlConfigurationException;
 use Digipost\Signature\Client\Core\Internal\Security\X509Certificate;
 use Digipost\Signature\Client\Core\Internal\XML\Marshalling;
 use DOMDocument as Document;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use Digipost\Signature\Client\Core\Internal\Security\Constants as C;
 use Digipost\Signature\Client\Core\Internal\Security\Signature;
 
@@ -38,7 +37,7 @@ class CreateXAdESProperties {
    */
   function __construct(\DateTime $clock) {
     $this->sha1DigestMethod = new DigestMethod();
-    $this->sha1DigestMethod->setAlgorithm(XMLSecurityDSig::SHA1);
+    $this->sha1DigestMethod->setAlgorithm(C::DIGEST_SHA1);
     $this->clock = $clock;
   }
 

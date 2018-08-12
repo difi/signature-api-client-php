@@ -81,7 +81,7 @@ class CreateSignature {
     $attachedFiles,
     KeyStoreConfig $keyStoreConfig
   ) {
-    $xmlSignatureFactory = $this->getSignatureFactory();
+    //$xmlSignatureFactory = $this->getSignatureFactory();
     //    $signatureMethod = $this->getSignatureMethod($xmlSignatureFactory);
     //    $signContext = $xmlSignatureFactory->getXMLSignatureContext();
 
@@ -233,10 +233,15 @@ class CreateSignature {
    * @throws SchemaException
    */
   protected function validateXml(\DOMDocument $dom) {
-    libxml_use_internal_errors(TRUE);
+    libxml_use_internal_errors(FALSE);
 
     $xsd = SignatureApiSchemas::ASICE_AND_XADES_SCHEMA()->getXSD();
-    $dom->schemaValidateSource($xsd, Marshalling::LIBXML_OPTIONS);
+    try {
+      $dom->schemaValidateSource($xsd, Marshalling::LIBXML_OPTIONS);
+    } catch (\Exception $e) {
+      print $e->getMessage();
+    }
+    print "OK";
     if ($errors = $this->getXmlValidationErrors()) {
       $error = $this->formatXmlValidationErrors();
 
