@@ -13,11 +13,12 @@ class Signature {
 
   private $statusDateTime;
 
+  /** @var XAdESReference */
   private $xAdESReference;
 
   public function __construct(String $signer, SignerStatus $status,
                               \DateTime $statusDateTime,
-                              XAdESReference $xAdESReference) {
+                              $xAdESReference) {
     $this->signer = $signer;
     $this->status = $status;
     $this->statusDateTime = $statusDateTime;

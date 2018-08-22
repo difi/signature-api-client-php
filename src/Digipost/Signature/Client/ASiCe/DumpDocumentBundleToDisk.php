@@ -45,7 +45,6 @@ class DumpDocumentBundleToDisk implements DocumentBundleProcessor {
       $filename = $timestampFormat . '-' . self::referenceFilenamePart(
           $job->getReference()
         ) . 'asice.zip';
-      //$target = directory.resolve(filename);
       $target = $this->directory . DIRECTORY_SEPARATOR . $filename;
       //LOG.info("Dumping document bundle{}to {}", reference.map(ref -> format(" for job with reference '%s' ", ref)).orElse(" "), target);
       //copy($documentBundle, $target);
