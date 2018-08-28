@@ -1,6 +1,5 @@
 {
     "name": "difi/signature-api-client-php",
-    "version": "1.0.5-alpha",
     "license": "MIT",
     "type": "library",
     "description": "Client library for Digipost Signature API",
