@@ -241,7 +241,6 @@ class CreateSignature {
     } catch (\Exception $e) {
       print $e->getMessage();
     }
-    print "OK";
     if ($errors = $this->getXmlValidationErrors()) {
       $error = $this->formatXmlValidationErrors();
 

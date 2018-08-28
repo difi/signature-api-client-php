@@ -17,8 +17,6 @@ class Document implements ASiCEAttachable {
 
   protected $fileType;
 
-  //const FileType_PDF = DocumentFileType::PDF;
-  //const FileType_TXT = DocumentFileType::TXT;
   public function __construct(
     String $title,
     String $message = NULL,
@@ -34,7 +32,7 @@ class Document implements ASiCEAttachable {
   }
 
   public function getFileName() {
-    return $this->fileName;
+    return self::sanitizeFileName($this->fileName);
   }
 
   public function getBytes() {
@@ -52,6 +50,14 @@ class Document implements ASiCEAttachable {
   public function getMessage() {
     return $this->message;
   }
+
+  private static function sanitizeFileName($fileName) {
+    return strtr($fileName, [
+      ' ' => '_',
+      '(' => '',
+      ')' => '',
+    ]);
+  }
 }
 
 /**
@@ -67,4 +73,4 @@ class DocumentFileType extends Enum {
   const PDF = "application/pdf";
 
   const TXT = "text/plain";
-  }
+}
