@@ -26,6 +26,7 @@
 /web/build/images/glyphicons-*
 /composer.lock
 
+*.php.bak
 *.pem
 *.p12
 !/tests/Resources/config/selfsigned-keystore.p12
