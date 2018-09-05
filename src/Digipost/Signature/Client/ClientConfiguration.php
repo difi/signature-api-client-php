@@ -342,6 +342,10 @@ class ClientConfigurationBuilder {
     return $this->setCertificatePaths($certificates);
   }
 
+  private function getCertificatePaths(): array {
+    return $this->certificatePaths;
+  }
+
   private function setCertificatePaths(array $certificatePaths) {
     $this->certificatePaths = $certificatePaths;
 
@@ -530,7 +534,7 @@ class ClientConfigurationBuilder {
 
     // TODO: The CA-bundle has a self-signed root certificate, so we need to verify manually
     $this->guzzleConfig->property(
-      RequestOptions::VERIFY, Certificates::TEST()->getCABundle()
+      RequestOptions::VERIFY, Certificates::PRODUCTION()->getCABundle()
     );
 
     $this->guzzleConfig->registerRequestFilter(
