@@ -52,11 +52,7 @@ class Document implements ASiCEAttachable {
   }
 
   private static function sanitizeFileName($fileName) {
-    return strtr($fileName, [
-      ' ' => '_',
-      '(' => '',
-      ')' => '',
-    ]);
+    return preg_replace('/([^\w_\-\.\d]+)/', '', $fileName);
   }
 }
 
