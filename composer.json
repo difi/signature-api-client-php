@@ -18,11 +18,11 @@
             "type": "package",
             "package": {
                 "name": "digipost/signature-api-specification",
-                "version": "2.3",
+                "version": "2.6",
                 "source": {
                     "url": "https://github.com/digipost/signature-api-specification.git",
                     "type": "git",
-                    "reference": "2c241b7"
+                    "reference": "1cb3efb"
                 }
             }
         }
@@ -43,7 +43,7 @@
         "files": [ "vendor/symfony/var-dumper/Resources/functions/dump.php" ]
     },
     "require": {
-        "php": "^7.0",
+        "php": "^7.2",
         "ext-SimpleXML": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -54,29 +54,29 @@
         "ext-pdo_sqlite": "*",
         "ext-zip": "*",
         "cweagans/composer-patches": "^1.6",
-        "digipost/signature-api-specification": "2.3",
-        "goetas-webservices/xsd2php-runtime": "^0.2.8",
-        "goetas-webservices/xsd-reader": "^0.2.6",
+        "digipost/signature-api-specification": "2.6",
+        "goetas-webservices/xsd2php-runtime": "^0.2.10",
+        "goetas-webservices/xsd-reader": "^0.2.8",
         "guzzlehttp/guzzle": "^6.3",
-        "guzzlehttp/psr7": "^1.4",
-        "incenteev/composer-parameter-handler": "^2.0",
+        "guzzlehttp/psr7": "^1.6",
+        "incenteev/composer-parameter-handler": "^2.1",
         "indigophp/doctrine-annotation-autoload": "^0.1.0",
-        "jms/serializer": "^1.13",
-        "myclabs/php-enum": "^1.6",
+        "jms/serializer": "^3.1",
+        "myclabs/php-enum": "^1.7",
         "php-ds/php-ds": "^1.2",
         "phpseclib/phpseclib": "^2.0",
         "simplesamlphp/xmlseclibs": "dev-xmlsec-ng",
-        "sop/x509": "^0.6.0",
-        "symfony/console": "^3.4",
-        "symfony/event-dispatcher": "^3.4",
-        "symfony/framework-bundle": "^3.4",
-        "symfony/validator": "^3.4"
+        "sop/x509": "^0.7",
+        "symfony/console": "^4.3",
+        "symfony/event-dispatcher": "^4.3",
+        "symfony/framework-bundle": "^4.3",
+        "symfony/validator": "^4.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.5",
-        "symfony/phpunit-bridge": "^3.4",
-        "goetas-webservices/xsd2php": "0.3.2",
-        "symfony/var-dumper": "^3.4"
+        "phpunit/phpunit": "^8.3",
+        "symfony/phpunit-bridge": "^4.3",
+        "goetas-webservices/xsd2php": "0.3.9",
+        "symfony/var-dumper": "^4.3"
     },
     "scripts": {
         "test": "vendor/bin/simple-phpunit",
