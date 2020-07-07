@@ -703,7 +703,7 @@ class UsingBodyParts {
                 'Accept' => 'application/xml',
               ],
               'body' => $body,
-              'allow_redirects' => FALSE,
+              'allow_redirects' => TRUE,
             ]
           );
 
